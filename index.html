@@ -832,11 +832,11 @@
     zm.style.left = r.left - w - 12 + 'px';
     zm.style.top = Math.max(16, Math.min(r.top, innerHeight - h - 28 - 60 - 16)) + 'px';
   }
-  const 큰그림칸 = t => t && t.closest('img, .cv, .cr, [data-z]');
+  const 큰그림칸 = t => t && t.closest('[data-z]');
   function 크게(e) {
     const zm = $('zoom'), el = e.type === 'mouseover' && matchMedia('(hover:hover)').matches && 큰그림칸(e.target);
     if (e.type === 'mouseout' && 큰그림칸(e.target) === 큰그림칸(e.relatedTarget)) return;
-    const u = el && (el.dataset.z || el.src || (el.style.backgroundImage.match(/url\("(.+)"\)/) || [])[1]);
+    const u = el && el.dataset.z;
     if (!u) { zm.classList.remove('show'); zm.dataset.u = ''; return; }
     if (zm.dataset.u === u) return;
     const im = new Image();
@@ -1492,7 +1492,7 @@
     if (n && confirm(`모든 담당자 쿠폰을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
   }
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
-  ['list', 'detail'].forEach(id => ['mouseover', 'mouseout', 'click'].forEach(t => $(id).addEventListener(t, 크게)));
+  ['mouseover', 'mouseout', 'click'].forEach(t => $('detail').addEventListener(t, 크게));
   ['code', 'pw'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && enter()));
   ['pw1', 'pw2'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && !$('pwgo').disabled && pwChange()));
   addItem();
