@@ -1323,7 +1323,7 @@
       + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span></td>`
       + `<td class="dl"><input type="number" min="0" value="${x.daily}" onchange="cpOp(this, ${x.row}, 'daily', this.value)"> 장</td>`
       + `<td><button class="ghost" onclick="cpOp(this, ${x.row}, 'reset', 0)">리셋</button></td>`
-      + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
+      + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
       + `<td><span class="step"><button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button><button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
   }
@@ -1334,6 +1334,7 @@
     if (!v.name || !v.channel) { $('err4').textContent = '이름과 채널을 넣어 주세요.'; return; }
     call('계정', [code, 'add', v], b, 'err4', r => { cpDraw(r); $('an').value = $('ac').value = $('ae').value = ''; });
   }
+  function pwUnlock(b, row) { call('unlock', [code, row], b, 'err4', cpDraw); }
   function pwReset(b, row) { if (confirm('이 담당자에게 새 임시 비밀번호를 발급할까요?\n그 사람의 로그인이 모두 끝나요. 표에 뜨는 임시 비밀번호를 그 사람에게만 알려 주세요.')) call('pwreset', [code, row], b, 'err4', cpDraw); }
   function cpLoad() {
     type($('coup').querySelector('h1'));
