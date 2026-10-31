@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Do+Hyeon&display=swap">
 <style>
   :root { --bg:#0B0B0C; --grid:#18181B; --win:#141416; --bar:#1B1B1E; --field:#0E0E10; --chip:#000; --line:#2E2E33; --text:#F2F2F4; --dim:#8A8A90; --navy:#1E3A8A; --navy2:#6F8FE0;
-    --wait:#7CC4FF; --run:#FFC46B; --ok:#5EE6A8; --bad:#FF8A8A; --eta:#C3A6FF; } /* 상태 색: 접수 · 진행 · 끝 · 실패 · 예상 시간 */
+    --wait:#7CC4FF; --run:#FFC46B; --ok:#5EE6A8; --bad:#FF8A8A; --eta:#C3A6FF; } 
   #cost .kp { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; } #cost .kp div { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; min-width:0; } #cost .kp span { display:block; color:var(--dim); font-size:12px; } #cost .kp b { display:block; font-size:22px; font-weight:700; margin:2px 0; font-variant-numeric:tabular-nums; } #cost .kp small { color:var(--dim); font-size:11px; }
   #cost .cc { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:12px; } #cost .lb { font-size:13px; color:var(--dim); margin-bottom:6px; }
   #cost .bars { display:flex; gap:10px; align-items:flex-end; height:165px; } #cost .co { flex:1; min-width:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px; height:100%; } #cost .co small { font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; } #cost .co span { font-size:12px; color:var(--dim); border-top:1px solid var(--line); width:100%; text-align:center; padding-top:3px; white-space:nowrap; }
@@ -26,9 +26,9 @@
   #cost .two ul { list-style:none; padding:0; margin:0; font-size:12px; } #cost .two li { display:grid; grid-template-columns:96px 1fr 66px; gap:6px; align-items:center; padding:3px 0; } #cost .two li u { display:block; height:6px; background:var(--bar); border-radius:3px; overflow:hidden; } #cost .two li u i { display:block; height:100%; background:var(--navy2); } #cost .two li b { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
   #cost .nt { color:var(--dim); font-size:11px; margin-top:8px; line-height:1.5; } #cost .box button { margin-top:10px; width:100%; } #cost .ft { color:var(--dim); font-size:12px; margin-top:10px; line-height:1.6; } #cost .ft a { color:var(--navy2); font-weight:700; cursor:pointer; }
   @media (max-width:640px) { #cost .kp { grid-template-columns:repeat(2,1fr); gap:8px; } #cost .kp b { font-size:19px; } #cost .rw { grid-template-columns:40px minmax(0,1fr) 78px; gap:10px; } #cost .th { width:40px; height:53px; } #cost .tt b { font-size:13px; } #cost .tt small { font-size:11px; } #cost .rw .mix, #cost .rw .go { display:none; } #cost .won { font-size:14px; } #cost .two { grid-template-columns:1fr; gap:10px; } #cost .co small { font-size:10px; } #cost .bars { gap:6px; } }
-  :root { color-scheme:dark; } /* 표 가로 스크롤바 · 입력칸 스크롤 · 고르기 목록이 흰색으로 뜨지 않게 */
+  :root { color-scheme:dark; } 
   * { box-sizing:border-box; margin:0; }
-  body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Pretendard,sans-serif; letter-spacing:-.04em; word-break:keep-all; overflow-wrap:anywhere; /* 한글이 낱말 중간에서 꺾이지 않게(긴 주소는 꺾임) */
+  body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Pretendard,sans-serif; letter-spacing:-.04em; word-break:keep-all; overflow-wrap:anywhere; 
     background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px); background-size:40px 40px;
     display:flex; flex-direction:column; align-items:center; padding:28px 16px 60px; }
   .top { width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
@@ -40,11 +40,11 @@
   #chs .chip small { font-size:11px; font-weight:500; margin-left:4px; }
   .cnt { font-weight:500; color:var(--dim); font-size:12px; margin-left:6px; }
   .cnt.bad { color:#FF8A8A; }
-  .win { width:100%; max-width:900px; background:var(--win); border:2px solid var(--line); border-radius:22px; overflow:clip; box-shadow:0 20px 60px rgba(0,0,0,.5); } /* clip: hidden 이면 위 막대 고정(sticky)이 안 됨 */
+  .win { width:100%; max-width:900px; background:var(--win); border:2px solid var(--line); border-radius:22px; overflow:clip; box-shadow:0 20px 60px rgba(0,0,0,.5); } 
   .bar { height:52px; background:var(--bar); border-bottom:2px solid var(--line); display:flex; align-items:center; padding:0 18px; position:relative; }
   .dots i { display:inline-block; width:12px; height:12px; border:2px solid var(--dim); border-radius:50%; margin-right:6px; }
   .bar b { position:absolute; left:50%; transform:translateX(-50%); font-size:15px; white-space:nowrap; }
-  /* 위 막대(제목 · 뒤로 · 탭) = 아이폰 내비 막대처럼 스크롤해도 위에 붙어 있음 */
+  
   .head { position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--win) 88%, transparent); -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px); }
   .head .bar { background:transparent; }
   .nb { position:relative; z-index:1; display:flex; align-items:center; gap:2px; min-height:44px; margin-left:-8px; padding:0 8px; color:var(--navy2); font-weight:700; font-size:15px; cursor:pointer; }
@@ -60,14 +60,14 @@
   .cur { display:inline-block; width:3px; height:30px; background:var(--navy2); margin-left:6px; vertical-align:-4px; animation:blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity:0; } }
   .sub { color:var(--dim); font-size:14px; margin:14px 0 24px; line-height:1.5; }
-  @media (max-width:640px) { h1 { font-size:25px; } .cur { height:25px; } } /* 휴대폰 = 긴 제목(상세 '채널 · 날짜 제작')도 덜 꺾이게 */
-  .sub:empty { margin:0; height:24px; } /* 설명 없는 화면(제작 현황) = 제목 밑줄과 카드 사이 빈칸만 */
-  #detail h1 { font-size:24px; line-height:1.45; } #detail h1 .num { color:var(--navy2); } /* 상세 제목 = #번호 + 주제 */
+  @media (max-width:640px) { h1 { font-size:25px; } .cur { height:25px; } } 
+  .sub:empty { margin:0; height:24px; } 
+  #detail h1 { font-size:24px; line-height:1.45; } #detail h1 .num { color:var(--navy2); } 
   @media (max-width:640px) { #detail h1 { font-size:20px; } }
   .meta { color:var(--dim); font-size:14px; margin-top:12px; } .meta b { color:var(--text); font-weight:600; } #detail .meta + .sub { margin-top:4px; }
   .tagk { display:inline-block; background:var(--bar); border:1px solid var(--line); border-radius:8px; font-size:12px; font-weight:700; padding:2px 8px; color:#C9C9CF; margin-right:6px; }
   label { display:block; font-weight:700; font-size:14px; margin:18px 0 8px; }
-  input[type=text], input[type=url], input[type=password] { width:100%; background:var(--field); border:2px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--text); font:inherit; font-size:16px; outline:none; } /* 16px 밑이면 아이폰이 누를 때 화면을 확대함 */
+  input[type=text], input[type=url], input[type=password] { width:100%; background:var(--field); border:2px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--text); font:inherit; font-size:16px; outline:none; } 
   input:focus { border-color:var(--navy2); }
   .drop { border:2px dashed var(--line); border-radius:14px; padding:22px; text-align:center; color:var(--dim); font-size:14px; cursor:pointer; display:block; font-weight:500; margin:0; }
   .drop:hover { border-color:var(--navy2); color:var(--text); }
@@ -76,11 +76,11 @@
   button { width:100%; margin-top:26px; background:var(--navy); color:#fff; border:0; border-radius:14px; padding:16px; font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
   button:disabled { background:var(--line); color:var(--dim); cursor:default; }
   button.busy:disabled { background:var(--navy); color:#fff; animation:숨쉼 1.8s cubic-bezier(.45,0,.55,1) infinite; }
-  button.busy::before, button.busy::after { display:inline-block; width:1.2em; text-align:left; content:''; } button.busy::after { content:attr(data-dots); } /* 앞뒤 같은 폭 = 점이 늘어도 글이 안 움직임 */
+  button.busy::before, button.busy::after { display:inline-block; width:1.2em; text-align:left; content:''; } button.busy::after { content:attr(data-dots); } 
   @keyframes 숨쉼 { 0%, 100% { box-shadow:0 0 0 0 rgba(111,143,224,0); filter:brightness(1); } 50% { box-shadow:0 0 24px 3px rgba(111,143,224,.5); filter:brightness(1.2); } }
   .note { color:var(--dim); font-size:12px; text-align:center; margin-top:10px; }
   .links { display:flex; justify-content:center; gap:18px; margin-top:14px; font-size:13px; } .links a { color:var(--dim); cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
-  #pwbox:not([hidden]) ~ #in { display:none; } /* 새 비밀번호 칸이 열리면 로그인 버튼 대신 바꾸기 버튼 */
+  #pwbox:not([hidden]) ~ #in { display:none; } 
   .pwst { display:inline-block; font-size:11px; padding:2px 7px; border-radius:8px; border:1px solid var(--line); color:var(--dim); margin-right:6px; } .pwst.ask { border-color:#FF8A8A; color:#FF8A8A; }
   .done { text-align:center; padding:20px 26px 28px; }
   .done .tag { font-size:15px; display:inline-block; margin:14px 0 18px; }
@@ -89,7 +89,7 @@
   .done .two .more { background:transparent; border:2px solid var(--navy2); color:var(--navy2); }
   .err { color:#FF8A8A; font-size:13px; text-align:center; margin-top:10px; min-height:1em; }
   .sub a { color:var(--navy2); font-weight:700; cursor:pointer; }
-  /* 메인 통로 = 큰 카드 버튼(B안) — 할 일 한 줄 · 제작 현황엔 진행 중 건수 */
+  
   .tabs { display:flex; gap:10px; padding:12px 14px; border-bottom:2px solid var(--line); }
   .tabs a { flex:1; min-width:0; display:flex; align-items:center; gap:12px; min-height:62px; padding:10px 14px; border:2px solid var(--line); border-radius:14px; background:var(--field); color:var(--dim); cursor:pointer; }
   .tabs .ic { flex:none; width:36px; height:36px; border-radius:10px; display:grid; place-items:center; background:var(--bar); }
@@ -99,19 +99,19 @@
   .tabs a.on { background:var(--navy); border-color:var(--navy2); color:#C9D6FF; }
   .tabs a.on b, .tabs a.on .ic { color:#fff; } .tabs a.on .ic { background:rgba(255,255,255,.14); }
   .tabs a:active { transform:scale(.98); }
-  .tabs b { white-space:nowrap; } .tabs:has(#t-cost:not([hidden])) em::after { content:''; } /* 관리자 5탭 = 진행 건수는 숫자만 */
+  .tabs b { white-space:nowrap; } .tabs:has(#t-cost:not([hidden])) em::after { content:''; } 
   @media (hover:hover) { .tabs a:not(.on):hover { border-color:var(--navy2); color:var(--text); } }
   .tabs em { flex:none; font-style:normal; background:var(--run); color:#3A2600; font-size:11px; font-weight:700; padding:1px 7px; border-radius:999px; } .tabs em::after { content:' 진행'; }
-  /* 좁은 화면(태블릿까지) = 아이콘 위 · 글 아래(4탭이면 가로로 놓을 폭이 없음) · 진행 건수는 탭 안 오른쪽 위에 숫자만 */
+  
   @media (max-width:860px) { .tabs { gap:8px; padding:10px; } .tabs a { position:relative; flex-direction:column; justify-content:center; gap:4px; min-height:60px; padding:7px 2px; } .tabs .ic { width:26px; height:26px; } .tabs b { font-size:13px; white-space:nowrap; } .tabs span { display:none; } .tabs em { position:absolute; top:4px; right:4px; padding:1px 6px; } .tabs em::after { content:none; } }
   @media (max-width:360px) { .tabs { gap:6px; padding:8px; } .tabs b { font-size:12px; } }
   .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
-  @media (max-width:640px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .card p { padding:8px 10px; font-size:12px; } } /* 휴대폰 = 두 줄로(한 줄이면 카드 하나가 화면을 다 채움) */
+  @media (max-width:640px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .card p { padding:8px 10px; font-size:12px; } } 
   .card { background:var(--field); border:2px solid var(--line); border-radius:14px; overflow:hidden; cursor:pointer; }
   .card:hover { border-color:var(--navy2); }
   .card .cv { aspect-ratio:3/4; background:var(--bar) center/cover; display:flex; align-items:center; justify-content:center; color:var(--dim); font-size:13px; }
   .card .cv { position:relative; }
-  .wh { position:absolute; right:8px; bottom:8px; max-width:calc(100% - 16px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:rgba(0,0,0,.74); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:99px; padding:3px 10px; font-size:12px; font-weight:700; } /* 의뢰자 이름표 = 오른쪽 아래(왼쪽은 썸네일 제목 · 위는 로고 · 채널 도장) */
+  .wh { position:absolute; right:8px; bottom:8px; max-width:calc(100% - 16px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:rgba(0,0,0,.74); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:99px; padding:3px 10px; font-size:12px; font-weight:700; } 
   @media (max-width:640px) { .wh { right:5px; bottom:5px; padding:2px 8px; font-size:11px; } }
   .card p { padding:10px 12px; font-size:13px; display:flex; justify-content:space-between; gap:6px; }
   .card p > span:first-child { min-width:0; } .card .st { flex:none; max-width:46%; }
@@ -119,7 +119,7 @@
   .st small { display:block; font-weight:500; font-size:11px; color:var(--dim); margin-top:2px; }
   .pages { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr)); gap:18px; margin-top:4px; }
   .pages img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:2px solid var(--line); display:block; background:var(--bar); }
-  /* 쌍둥이 판 = 본 장 위에 겹쳐 두고 왼쪽 위 알약으로 바꿔 봄 */
+  
   .ph { position:relative; }
   .ph > a + a { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .25s; }
   .ph.tw > a + a { opacity:1; pointer-events:auto; }
@@ -132,13 +132,13 @@
   .rev .both { display:block; color:var(--dim); font-size:12px; margin:-4px 0 8px; }
   .rev.all b { font-size:18px; }
   textarea { width:100%; min-height:72px; resize:vertical; background:var(--field); border:2px solid var(--line); border-radius:12px; padding:10px 12px; color:var(--text); font:inherit; font-size:16px; outline:none; transition:border-color .15s, box-shadow .15s; }
-  .rev textarea::placeholder { color:color-mix(in srgb, var(--dim) 60%, transparent); font-size:13px; } /* 안내 글 = 연하고 작게 */
-  textarea:not(:placeholder-shown) { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.2); } /* 쓰기 시작하면 테두리 켜짐 */
+  .rev textarea::placeholder { color:color-mix(in srgb, var(--dim) 60%, transparent); font-size:13px; } 
+  textarea:not(:placeholder-shown) { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.2); } 
   .acts { display:flex; gap:6px; justify-content:flex-end; margin-top:6px; }
   .acts button { width:auto; margin:0; min-height:40px; padding:8px 16px; font-size:13px; border-radius:10px; }
   .acts .ghost { background:transparent; border:1.5px solid var(--line); color:var(--text); }
   .rev:has(textarea:placeholder-shown) .acts button { opacity:.35; pointer-events:none; }
-  /* 장 수정 모아 보내기 — 장마다 칸에 적고 이 버튼 하나로 한 묶음(그 장들만 고침) · 화면 아래에 붙어 따라옴 */
+  
   .sendbar { position:sticky; bottom:0; z-index:3; display:flex; align-items:center; justify-content:space-between; gap:10px; margin:18px -4px 0; padding:12px 14px; background:var(--bar); border:2px solid var(--line); border-radius:14px; font-size:13px; color:var(--dim); }
   .sendbar button { flex:none; width:auto; margin:0; min-height:42px; padding:8px 18px; font-size:14px; border-radius:10px; white-space:nowrap; }
   .sendbar:not(.has) button { opacity:.35; pointer-events:none; }
@@ -149,7 +149,7 @@
   .sent .eta, .st small.eta { display:block; margin:2px 0 4px; color:var(--eta); font-size:11px; font-weight:600; }
   .s-wait { color:var(--wait); } .s-run { color:var(--run); } .s-ok { color:var(--ok); }
   .st.ok { color:var(--ok); } .st.bad { color:var(--bad); } .st.run { color:var(--run); } .st.wait { color:var(--wait); }
-  /* 단계 게이지 — 채움이 차오르고(grow), 채움 끝 점 · 지금 단계 점이 숨 쉬듯 커졌다 작아짐(breathe) · 위로 빛이 흐름(flow) */
+  
   .gauge { --c:var(--run); margin:8px 0 6px; }
   .gauge.wait { --c:var(--wait); }
   .gauge .track { position:relative; height:6px; border-radius:999px; background:var(--line); }
@@ -157,7 +157,7 @@
     background:linear-gradient(90deg, color-mix(in srgb, var(--c) 30%, transparent), var(--c));
     animation:grow 1.6s cubic-bezier(.22,1,.36,1) both, glow 4.2s cubic-bezier(.45,0,.55,1) 1.6s infinite; }
   .gauge .track i::before { content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(90deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%) 0 0/200% 100%; animation:flow 2.6s linear infinite; }
-  .gauge .track i::after, .gauge li.now::before { animation:breathe 4.2s cubic-bezier(.45,0,.55,1) infinite; will-change:transform, box-shadow; } /* 숨 = 채움 빛과 같은 4.2초 · 부드러운 곡선 */
+  .gauge .track i::after, .gauge li.now::before { animation:breathe 4.2s cubic-bezier(.45,0,.55,1) infinite; will-change:transform, box-shadow; } 
   .gauge .track i::after { content:""; position:absolute; right:-6px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; background:var(--c); }
   .gauge ol { list-style:none; padding:0; display:flex; justify-content:space-between; margin-top:8px; font-size:11px; font-weight:700; color:var(--dim); }
   .gauge li { display:flex; align-items:center; gap:4px; animation:rise .7s cubic-bezier(.22,1,.36,1) both; }
@@ -165,7 +165,7 @@
   .gauge li.on { color:var(--c); } .gauge li.on::before { background:currentColor; }
   .gauge li.now { color:var(--text); } .gauge li.now::before { background:var(--c); border-color:var(--c); }
   .card .gauge { margin:0 12px 12px; } .card .gauge ol { display:none; }
-  #detail > .gauge { margin:26px 0 10px; } #detail > .gauge .track { height:18px; } #detail > .gauge ol { margin-top:12px; font-size:13px; } /* 상세 = 3배 굵게 · 제목과 띄움 */
+  #detail > .gauge { margin:26px 0 10px; } #detail > .gauge .track { height:18px; } #detail > .gauge ol { margin-top:12px; font-size:13px; } 
   #detail .left { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:18px 0 4px; } #detail .left b { font-size:40px; font-weight:800; color:var(--run); letter-spacing:-.03em; }
   #detail .left span { color:var(--text); font-size:15px; font-weight:700; } #detail .left small { display:block; color:var(--dim); font-size:12px; font-weight:500; margin-top:2px; }
   #detail .ahead { color:var(--dim); font-size:14px; margin:4px 0 0; } #detail .ahead b { color:var(--wait); }
@@ -192,12 +192,12 @@
   .hint.ok { color:var(--navy2); }
   .hint.bad { color:#FF8A8A; }
   .hint.warn { color:#FFC46B; }
-  /* 이미 만든 게시물 — 링크를 넣으면 팝업 · 현황 카드 · 상세에 표시 */
+  
   #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
   #dupDlg::backdrop, #blkDlg::backdrop { background:rgba(0,0,0,.6); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
   #dupDlg h2 { font-size:19px; margin-bottom:10px; color:#FFC46B; }
   #dupDlg p, #blkDlg p { font-size:14px; line-height:1.6; color:#C9C9CF; white-space:pre-line; }
-  /* 블랙리스트 계정 게시물 — 포자가 거절한 건이 보이면 한 번 팝업 */
+  
   #blkDlg { border-color:var(--bad); } #blkDlg h2 { font-size:19px; margin-bottom:10px; color:var(--bad); }
   #blkDlg button { margin-top:18px; width:100%; }
   #dupDlg .two { display:flex; gap:8px; margin-top:18px; } #dupDlg .two button { margin:0; flex:1; }
@@ -207,7 +207,7 @@
   .add { background:transparent; border:2px dashed var(--line); color:var(--text); margin-top:16px; font-size:15px; padding:14px; }
   .add:hover:not(:disabled) { border-color:var(--navy2); }
   .add:disabled { background:transparent; }
-  /* 템플릿 고르기 — 카드 = 포자 지침 템플릿 미리보기(도식 HTML) · 왼쪽 카드 | 오른쪽 크게(따라 내려옴) · 올리면 그 꼴 · 떼면 고른 꼴 */
+  
   .dz { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:0 12px; align-items:start; }
   .dz label { grid-column:1/-1; margin:16px 0 8px; font-size:13px; display:flex; justify-content:space-between; gap:8px; }
   .dz label small { color:var(--dim); font-weight:500; }
@@ -230,15 +230,15 @@
   #zoom p { padding:10px 14px; font-size:13px; color:var(--dim); background:var(--field); }
   #zoom p b { color:var(--text); }
   .mini { position:relative; overflow:hidden; border-radius:3px; flex:none; background:#fff; }
-  /* 도식 */
+  
   .pg { position:absolute; left:0; top:0; width:1080px; transform-origin:0 0; overflow:hidden; font-family:Pretendard,sans-serif; letter-spacing:0; background:#fff; color:#111; }
   .pg * { position:absolute; box-sizing:border-box; margin:0; }
   .pg .f, .pg .f * { position:static; }
   .pg .bg { left:0; top:0; width:1080px; height:100%; object-fit:cover; }
   .pg .ph { display:flex; align-items:center; justify-content:center; text-align:center; font:700 44px Pretendard; color:#1E3A8A; background:repeating-linear-gradient(135deg,rgba(30,58,138,.2) 0 8px,rgba(30,58,138,.05) 8px 30px); border:5px dashed rgba(30,58,138,.55); }
   .pg .ph.full { color:#fff; background:repeating-linear-gradient(135deg,#5B6B86 0 8px,#46546C 8px 30px); border:0; }
-  /* 도식 끝 */
-  /* 쿠폰 관리(관리자) — 줄마다 담당자 · 채널 | 남은 쿠폰 −/+ | 하루 제공 | 리셋 */
+  
+  
   .cpt { width:100%; border-collapse:collapse; font-size:14px; }
   .cpt th { text-align:left; color:var(--dim); font-weight:700; font-size:12px; padding:0 8px 8px; border-bottom:2px solid var(--line); }
   .cpt td { padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle; }
@@ -250,13 +250,13 @@
   .cpt .ghost, .cpbar .ghost { background:transparent; border:1.5px solid var(--line); color:var(--text); }
   .cpt tr.off td.ch { color:var(--dim); }
   .cpt td.nm { font-weight:700; vertical-align:top; }
-  .cpt td.nm, .cpt td.ch, .cpt th, .cpt button { white-space:nowrap; } /* 폰에서 이름 · 채널이 한 글자씩 꺾이지 않게 */
-  .cpt tr:has(+ tr.more) td:not([rowspan]) { border-bottom-style:dashed; } /* 같은 사람 채널 줄 사이 = 점선 */
+  .cpt td.nm, .cpt td.ch, .cpt th, .cpt button { white-space:nowrap; } 
+  .cpt tr:has(+ tr.more) td:not([rowspan]) { border-bottom-style:dashed; } 
   .cpbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:-6px 0 18px; }
   .cpbar input { width:64px; background:var(--field); border:2px solid var(--line); border-radius:10px; padding:7px 6px; color:var(--text); font:inherit; text-align:center; }
   .cpbar select { background:var(--field); border:2px solid var(--line); border-radius:10px; padding:7px 8px; color:var(--text); font:inherit; font-size:14px; }
   #coup .cpbar input { text-align:left; }
-  /* 레퍼런스(관리자) — 후보 카드 체크 + 채널 고름 → 아래 막대에서 한 번에 제작(A안) */
+  
   #ref .card { position:relative; cursor:default; }
   #ref .card.on { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.28); }
   #ref .cv { position:relative; overflow:hidden; cursor:pointer; }
@@ -273,7 +273,7 @@
   #ref .in select { width:100%; margin-top:8px; background:var(--bar); border:1.5px solid var(--line); border-radius:8px; color:var(--text); padding:6px; font:inherit; font-size:12.5px; }
   #ref .in select:invalid { color:var(--dim); border-style:dashed; }
   #ref .scan { color:var(--run); font-weight:700; }
-  /* 레퍼런스 채널 · 분석(관리자, C안) — 지표 4칸 · 채택률 순위 · 계정 × 유형 · 꼴 고른 길 · 채널 목록(줄 누르면 펼침) */
+  
   #acc h3 { font-size:13px; color:var(--dim); font-weight:700; margin:0 0 12px; }
   #acc h3.sec { font-size:16px; color:var(--text); margin:28px 0 14px; }
   .kpi { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
@@ -290,13 +290,13 @@
   .act select { background:var(--field); border:1.5px solid var(--line); border-radius:8px; color:var(--text); padding:5px; font:inherit; font-size:13px; }
   .act td.x { background:var(--field); padding:14px 14px 18px; } .act td.x p { font-size:13px; color:var(--dim); line-height:1.5; margin:0 0 10px; } .act td.x p b { color:var(--text); }
   .act td.x input { width:100%; text-align:left; font-size:14px; padding:8px 10px; }
-  @media (max-width:640px) { .act th:nth-child(3), .act th:nth-child(6), .act tr.r td:nth-child(3), .act tr.r td:nth-child(6) { display:none; } .act td.x { white-space:normal; } } /* 휴대폰 = 수집 · 마지막 제작 숨김(채택률 칸에 수집이 보임) */
+  @media (max-width:640px) { .act th:nth-child(3), .act th:nth-child(6), .act tr.r td:nth-child(3), .act tr.r td:nth-child(6) { display:none; } .act td.x { white-space:normal; } } 
   .act .pl { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:6px; } .act .pl td { padding:6px 4px; border-bottom:1px solid var(--line); } .act .pl a { color:var(--navy2); text-decoration:none; }
-  @media (max-width:640px) { .cpt .dl { display:none; } } /* 하루 제공 — rowspan 묶음이라 칸 차례(nth-child) 대신 class */
+  @media (max-width:640px) { .cpt .dl { display:none; } } 
   @media (max-width:640px) { .cols { grid-template-columns:1fr; gap:0; } .body { padding:20px 18px 24px; } }
-  @media (max-width:640px) { .pick { grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; } .pc .th { height:100px; } .pc .th .mini { transform:scale(.72); } .pc span { padding:6px 7px 7px; font-size:11px; } .pc span small { font-size:10px; } } /* 휴대폰 = 템플릿 카드 세 줄 */
-  @media (max-width:640px) { .dz { grid-template-columns:1fr; } .pv { order:-1; margin-bottom:8px; z-index:3; display:flex; align-items:center; } .pv .stage { flex:none; } .pv p { flex:1; min-width:0; } .dz label { order:-2; } } /* 휴대폰 = 카드 위 작은 가로 띠(따라 내려옴) */
-  @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpt button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt .step button { min-width:40px; } } /* 손가락으로 누르는 칸 = 40px 이상 */
+  @media (max-width:640px) { .pick { grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; } .pc .th { height:100px; } .pc .th .mini { transform:scale(.72); } .pc span { padding:6px 7px 7px; font-size:11px; } .pc span small { font-size:10px; } } 
+  @media (max-width:640px) { .dz { grid-template-columns:1fr; } .pv { order:-1; margin-bottom:8px; z-index:3; display:flex; align-items:center; } .pv .stage { flex:none; } .pv p { flex:1; min-width:0; } .dz label { order:-2; } } 
+  @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpt button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt .step button { min-width:40px; } } 
   [hidden] { display:none !important; }
 </style>
 </head>
@@ -311,7 +311,7 @@
   </span>
 </div>
 
-<!-- 로그인 -->
+
 <div class="win" id="login">
   <div class="bar"><span class="dots"><i></i><i></i><i></i></span><b>login.exe</b></div>
   <div class="body">
@@ -332,7 +332,7 @@
   </div>
 </div>
 
-<!-- 제작 -->
+
 <div class="win" id="make" hidden>
   <div class="head">
     <div class="bar"><span class="dots" id="dots"><i></i><i></i><i></i></span><a class="nb" id="back" hidden onclick="goBack()"></a><b id="ttl"></b></div>
@@ -402,7 +402,7 @@
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
     <h1>제작 후보</h1><span class="cur"></span>
-    <p class="sub">포자 '레퍼런스' 탭 채널들의 최근 72시간 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 걸 체크하고 채널을 확인한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
+    <p class="sub">'레퍼런스' 탭 채널들의 최근 72시간 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 걸 체크하고 채널을 확인한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
     <div class="cpbar"><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span id="rstate" class="scan"></span>
       <button class="ghost" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button>
       <span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> 안 만든 것만</label></div>
@@ -413,7 +413,7 @@
   <div class="body" id="acc" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스 › 채널 · 분석</div>
     <h1>레퍼런스 채널</h1><span class="cur"></span>
-    <p class="sub">포자 '레퍼런스' 탭 계정마다 모은 게시물 · 고른 것 · 만든 게시물이에요. 계정 줄을 누르면 유형 · 꼴 · 비용 · 평가 · 만든 게시물이 펼쳐져요. 제작에 한 번 쓴 계정은 저절로 더해져요(<span class="tg auto">자동</span>).</p>
+    <p class="sub">'레퍼런스' 탭 계정마다 모은 게시물 · 고른 것 · 만든 게시물이에요. 계정 줄을 누르면 유형 · 꼴 · 비용 · 평가 · 만든 게시물이 펼쳐져요. 제작에 한 번 쓴 계정은 저절로 더해져요(<span class="tg auto">자동</span>).</p>
     <div class="cpbar"><select id="ach" onchange="accDraw()"></select><span style="flex:1"></span><span class="note" id="ameta" style="margin:0"></span></div>
     <div class="kpi" id="akpi"></div>
     <div class="g2">
@@ -450,10 +450,8 @@
 </div>
 
 <script>
-  // GitHub Pages 판 — 구글 계정이 여럿 로그인된 폰에서 웹앱 주소가 '파일을 열 수 없습니다'로 막혀, 쿠키 없이 doPost 로 서버를 부름
   if (location.hostname.endsWith('github.io')) {
-    if (top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); } // 다른 사이트가 이 화면을 틀에 넣어 누르게 하지 못하게(doGet 의 XFrame 대신)
-    // 스크립트가 끼어도 토큰을 다른 곳으로 못 보내게 — 서버 · 그림 · 글꼴 주소만 허용(새 주소가 필요하면 여기에)
+    if (top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); }
     const 정책 = document.createElement('meta');
     정책.httpEquiv = 'Content-Security-Policy';
     정책.content = ['default-src \'none\'', 'script-src \'unsafe-inline\'', 'style-src \'unsafe-inline\' https://cdn.jsdelivr.net https://fonts.googleapis.com',
@@ -473,36 +471,29 @@
     } } };
   }
   const $ = id => document.getElementById(id);
-  const MAX = 20 * 1024 * 1024; // 한 번에 올리는 자료 합계 한도
-  let code = '', who = {}, chan = ''; // code = 로그인 때 서버가 준 세션 토큰(이름이 아님) — 모든 서버 부름에 이것만 보냄
-
-  // 서버 함수 부르기 — 실패하면 그 화면 아래에 빨간 글
+  const MAX = 20 * 1024 * 1024;
+  let code = '', who = {}, chan = '';
   function call(fn, args, btn, err, ok) {
     const label = btn.textContent;
     btn.disabled = true; btn.textContent = '잠시만요…'; $(err).textContent = '';
     google.script.run
       .withSuccessHandler(r => { btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; ok(r); })
-      
       .withFailureHandler(e => { btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; if (fn === 'login' || fn === '나') { store(''); code = ''; $('code').disabled = false; } $(err).textContent = e.message.replace(/^Error:\s*/, ''); check(); })[fn](...args);
   }
-
-  // 로그인 = 누른 그 순간의 입력값 한 번만 보냄 — 성공 뒤 입력칸을 다시 읽지 않음(자동완성이 칸을 바꿔도 상관없음)
-  // auto = 저장된 토큰으로 바로 들어감(이름을 다시 안 보냄)
   function enter(auto) {
-    if ($('in').disabled || (!auto && code)) return; // 보내는 중 · 이미 들어감 — Enter 가 한 번 더 와도(한글 입력 Enter 두 번) 로그인 · 빨려 들어가기 한 번만
+    if ($('in').disabled || (!auto && code)) return;
     const name = $('code').value.trim();
     const pw = $('pw').value;
     if (!auto && !name) { $('err1').textContent = '이름을 넣어 주세요.'; return; }
     if (!auto && !pw) { $('err1').textContent = '비밀번호를 넣어 주세요.'; return; }
     const w = auto && 화면기억_();
-    if (w) { // 지난 화면 정보로 바로 들어가고 토큰 확인은 뒤에서 — 틀리면 로그인 창으로 되돌림
+    if (w) {
       들어감_(saved(), w);
       return google.script.run.withSuccessHandler(새로_).withFailureHandler(쫓겨남_).나(code);
     }
     call(auto ? '나' : 'login', auto ? [saved()] : [name, pw], $('in'), 'err1', r => r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
     로그인중_(auto ? '이전 계정으로 로그인 중' : '로그인 중');
   }
-  // 비밀번호 변경 — 위 이름 · 비밀번호 칸 = 지금 것(처음이면 임시 비밀번호) · 아래 두 칸 = 새것. 바꾸면 서버가 바로 로그인시켜 줌
   function pwMode(on, msg) {
     $('pwbox').hidden = !on; $('err1').textContent = '';
     $('pwmsg').textContent = msg || '위에 이름과 지금 비밀번호(처음이면 관리자에게 받은 임시 비밀번호)를 넣고, 아래에 새 비밀번호를 정해 주세요.';
@@ -515,7 +506,6 @@
     if (틀림) return $('err1').textContent = 틀림;
     call('비번변경', [name, cur, a], $('pwgo'), 'err1', r => { $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
   }
-  // 비밀번호 찾기 = 관리자에게 초기화 요청(쿠폰 관리 화면에 표시) → 관리자가 초기화(무작위 임시 비밀번호)
   function pwFind(a) {
     const name = $('code').value.trim();
     if (!name) return $('err1').textContent = '위에 이름을 넣고 비밀번호 찾기를 눌러 주세요.';
@@ -531,15 +521,15 @@
     warp();
     google.script.history.replace({ v: home() });
     const j = 현황기억_();
-    if (j) 현황그림_(j, true); // 지난 목록 먼저 — 받은 새 목록이 오면 바꿈
-    if (!who.admin) load(true); // 제작 현황 카드 버튼의 진행 중 건수
+    if (j) 현황그림_(j, true);
+    if (!who.admin) load(true);
   }
   function 채움_(r) {
     who = r;
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name || '내 계정') + '<small>로그아웃</small>';
-    $('drive').hidden = true; // 채널을 고르면 그 채널 폴더(관리자 = 그 채널 담당자 폴더)
+    $('drive').hidden = true;
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
-    $('lf').hidden = !r.admin; // 관리자 현황 거르기 — 채널 · 담당자
+    $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(채널마다 하루 7장 · 매일 00:00 에 다시 채워져요).';
     if (r.admin) {
       const o = (l, all) => `<option value="">${all}</option>` + l.map(x => `<option>${esc(x)}</option>`).join('');
@@ -548,38 +538,32 @@
     $('chpick').hidden = !(r.channels.length > 1);
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
   }
-  // 뒤에서 확인한 최신 정보 — 채널이 그대로면 이름 · 티켓 · 폴더만 고침(고르던 템플릿은 그대로)
   function 새로_(r) {
     화면기억_(r);
     const k = x => x.channels.map(c => c.name + c.demo).join() + x.admin;
     if (k(r) !== k(who)) return 채움_(r);
     r.channels.forEach((c, i) => Object.assign(who.channels[i], { coupon: c.coupon, folder: c.folder }));
     who.name = r.name; who.folder = r.folder;
-    if (mine.length) 현황그림_(mine, true); // 이름을 알게 됐으니 의뢰자 표시 다시
+    if (mine.length) 현황그림_(mine, true);
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
     const ch = who.channels.find(x => x.name === chan);
     if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
     check();
   }
-  // 토큰이 끝났거나 이름이 지워짐 → 로그인 창 · 잠깐 통신 문제면 지난 화면 그대로 둠
   async function 쫓겨남_(e) {
     const m = String(e && e.message || e).replace(/^Error:\s*/, '');
     if (!/로그인|이름|채널/.test(m)) return;
     await logout();
     $('err1').textContent = m;
   }
-  // 로그인 버튼 = '로그인 중' + 점 0~3개(0.4초마다) + 숨쉬는 빛 — call 이 끝나면 busy 를 떼고 원래 글로
   function 로그인중_(t) {
     const b = $('in');
-    if (!b.disabled) return; // call 이 바로 실패해 이미 풀림
+    if (!b.disabled) return;
     b.textContent = t; b.classList.add('busy');
     let k = 0;
     const id = setInterval(() => b.classList.contains('busy') ? b.dataset.dots = '.'.repeat(++k % 4) : clearInterval(id), 400);
   }
-
-  // 토큰 기억 — 새로고침 · 다시 열어도 바로 들어감(이 기기 이 브라우저만 · 30일 · 로그아웃하면 서버에서도 지움). 이름은 저장하지 않음
   function store(t) { try { localStorage.removeItem('pp_name'); t ? localStorage.setItem('pp_t', t) : ['pp_t', 'pp_w', 'pp_j'].forEach(k => localStorage.removeItem(k)); } catch (e) {} }
-  // 지난 화면 정보(채널 · 티켓 · 폴더 — 이름은 빼고) — 다시 열 때 서버를 안 기다리고 바로 그림. 인자 없으면 읽기
   function 화면기억_(r) {
     try {
       if (r) return localStorage.setItem('pp_w', JSON.stringify(Object.assign({}, r, { name: '', token: '' })));
@@ -589,31 +573,30 @@
   }
   function saved() { try { return localStorage.getItem('pp_t') || ''; } catch (e) { return ''; } }
   async function logout() {
-    if (!code || document.body.dataset.out) return; // 터지는 중엔 한 번만
+    if (!code || document.body.dataset.out) return;
     const t = code;
-    google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t); // 끊겨도 한 번 더 — 서버 세션이 남지 않게
-    store(''); code = ''; // 토큰은 바로 지움 — 효과(1.5초)는 그 뒤 화면만
+    google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
+    store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; mine = []; $('cards').innerHTML = $('cards').html = '';
-    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = ''); // 임시 비밀번호 표 등 — 같은 탭 다음 사람에게 안 남게
+    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
-    $('login').getAnimations().forEach(x => x.cancel()); // 들어갈 때 흐려진 채(forwards) 남은 로그인 창 되돌림
+    $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
       $('login').animate([{ transform: 'scale(.6)', filter: 'blur(10px)', opacity: 0 }, { transform: 'none', filter: 'blur(0px)', opacity: 1 }], { duration: 250, easing: 'cubic-bezier(.16,1,.3,1)' });
   }
-  // 로그아웃 → 작업 창이 묵직하게 하얘지며 살짝 눌리다(0.8초) 뿅 터져 흰 조각으로 흩어짐(0.45초) · 끝나면 로그인 창이 떠오름(logout · 0.25초) = 모두 1.5초
   async function 터짐_() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const T = 800, d = document.body.dataset, win = $('make'), me = $('me');
     d.out = 1; document.body.style.overflow = 'hidden';
     const r = win.getBoundingClientRect(), top = Math.max(0, r.top), bot = Math.min(innerHeight, r.bottom);
-    const cx = r.left + r.width / 2, cy = (top + bot) / 2, w = r.width, h = bot - top; // 창의 화면에 보이는 부분
-    const p = document.createElement('div'); // 흰 판 = 보이는 부분 위에 겹쳐 점점 짙어짐
+    const cx = r.left + r.width / 2, cy = (top + bot) / 2, w = r.width, h = bot - top;
+    const p = document.createElement('div');
     p.style.cssText = `position:fixed;left:${r.left}px;top:${top}px;width:${w}px;height:${h}px;border-radius:22px;background:#fff;z-index:9;pointer-events:none;opacity:0`;
     document.body.append(p);
     win.style.transformOrigin = `${cx - r.left}px ${cy - r.top}px`;
-    const E = 'cubic-bezier(.6,0,.85,.25)', 눌림 = i => `scale(${1 - i * .035})`; // 묵직하게 = 천천히 시작해 점점 빨리 · 제자리에서 살짝 눌림
+    const E = 'cubic-bezier(.6,0,.85,.25)', 눌림 = i => `scale(${1 - i * .035})`;
     const a = [
       win.animate([0, 1].map(i => ({ transform: 눌림(i), filter: `brightness(${1 + i * 1.5})` })), { duration: T, easing: E, fill: 'forwards' }),
       me.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T, easing: E, fill: 'forwards' }),
@@ -626,7 +609,6 @@
     win.style.opacity = win.style.transformOrigin = '';
     delete d.out; document.body.style.overflow = '';
   }
-  // 뿅 — 흰 판 자리에서 흰 조각이 바깥으로 튀어 나가 느려지며 사라지고, 빛 고리가 퍼지고 화면이 한 번 번쩍(0.45초)
   function 조각_(cx, cy, w, h) {
     const cv = document.createElement('canvas'), x = cv.getContext('2d'), W = cv.width = innerWidth, H = cv.height = innerHeight, L = 450;
     cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:10;pointer-events:none';
@@ -639,16 +621,16 @@
     let last = t0;
     return new Promise(done => {
       const f = now => {
-        const t = Math.min(1, (now - t0) / L), dt = (now - last) / 1000, k = Math.exp(-3.5 * dt); // k = 공기 저항
+        const t = Math.min(1, (now - t0) / L), dt = (now - last) / 1000, k = Math.exp(-3.5 * dt);
         last = now;
         x.clearRect(0, 0, W, H);
         x.fillStyle = `rgba(255,255,255,${.25 * Math.max(0, 1 - t * 5)})`; x.fillRect(0, 0, W, H);
         x.strokeStyle = `rgba(255,255,255,${.6 * (1 - t) ** 2})`; x.lineWidth = 6 * (1 - t) + 1;
-        const gw = w / 2 + 160 * t, gh = h / 2 + 160 * t; // 빛 고리 = 창 모양(둥근 네모) 그대로 사방으로 같은 만큼 퍼짐
+        const gw = w / 2 + 160 * t, gh = h / 2 + 160 * t;
         x.beginPath(); x.roundRect(cx - gw, cy - gh, gw * 2, gh * 2, 22 + 40 * t); x.stroke();
         x.fillStyle = `rgba(255,255,255,${(1 - t) ** 1.5})`;
         ps.forEach(q => {
-          q.vx *= k; q.vy = q.vy * k + 400 * dt; q.x += q.vx * dt; q.y += q.vy * dt; // 살짝 아래로 떨어지며 느려짐
+          q.vx *= k; q.vy = q.vy * k + 400 * dt; q.x += q.vx * dt; q.y += q.vy * dt;
           x.beginPath(); x.arc(q.x, q.y, q.r * (1 - t * .5), 0, 6.283); x.fill();
         });
         t < 1 ? requestAnimationFrame(f) : (cv.remove(), done());
@@ -656,30 +638,27 @@
       requestAnimationFrame(f);
     });
   }
-  // 채널 고르기 — 티켓 · 드라이브는 채널마다 따로. 준비 중 채널은 표시만(못 고름)
   function pickCh(c) {
     chan = c;
     const ch = who.channels.find(x => x.name === c);
     $('chs').innerHTML = who.channels.map(x => x.demo
-      ? `<span class="chip off" title="포자에 연결되면 열려요">${esc(x.name)}<small>준비 중</small></span>`
+      ? `<span class="chip off" title="곧 열려요">${esc(x.name)}<small>준비 중</small></span>`
       : `<span class="chip${x.name === c ? ' accent' : ''}" onclick="pickCh(who.channels[${who.channels.indexOf(x)}].name)">${esc(x.name)}</span>`).join('');
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : c);
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
-    its().forEach(el => { el.dataset.d = ''; drawD(el); }); // 채널마다 디자인 목록이 다름
+    its().forEach(el => { el.dataset.d = ''; drawD(el); });
     템플릿타자_();
-    if (ch && !ch.types && !ch.ld) { // 템플릿 목록은 로그인 뒤 따로(로그인이 포자를 안 기다림) — 오면 카드를 그림 · 실패면 다음에 채널을 고를 때 다시
+    if (ch && !ch.types && !ch.ld) {
       ch.ld = 1;
       google.script.run.withSuccessHandler(t => { ch.types = t; ch.ld = 0; if (chan === c) { its().forEach(drawD); 템플릿타자_(); } })
         .withFailureHandler(() => { ch.ld = 0; }).designs(code, c);
     }
     check();
   }
-  // 펼침 — 지금 보이는 칸(from)의 틀이 다음 칸(to) 자리 · 크기로 천천히 넓어짐. 틀(from 사본)은 처음 30% 동안 안 글 · 바탕이 빠지고 테두리만 남고,
-  // 그 안으로 to 가 같은 크기로 잘려 보이며(clip-path) 같이 넓어짐 → 넓어지는 동안 to 의 글이 써질 수 있음(mid = 틀을 잰 뒤 바로 부름). switch = from 을 숨기고 to 를 까는 함수
   async function 펼침(from, to, T, swap, mid) {
     const b = from.getBoundingClientRect(), g = from.cloneNode(true);
-    g.removeAttribute('id'); g.querySelectorAll('[id]').forEach(e => e.removeAttribute('id')); // 사본 안 입력칸 · 버튼 id 가 겹치지 않게
+    g.removeAttribute('id'); g.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
     swap();
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const box = r => ({ left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
@@ -687,54 +666,49 @@
     document.body.append(g);
     document.body.style.overflow = 'hidden';
     const a = to.getBoundingClientRect(), cs = getComputedStyle(g), R = cs.borderTopLeftRadius, E = 'cubic-bezier(.65,0,.35,1)';
-    // rect() = 위 · 왼쪽 끝에서 잰 네 변 — inset() 은 아래를 to 의 끝에서 재서, 펼치는 중 to 가 길어지면(템플릿 카드가 늦게 옴) 틀 아래로 내용이 비침
     const ins = r => `rect(${Math.max(0, r.top - a.top)}px ${Math.min(a.width, r.right - a.left)}px ${Math.min(a.height, r.bottom - a.top)}px ${Math.max(0, r.left - a.left)}px round ${R})`;
     to.animate([{ clipPath: ins(b) }, { clipPath: ins(a) }], { duration: T, easing: E });
     [...g.children].forEach(c => c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: T * .3, easing: 'ease-out', fill: 'forwards' }));
-    if (mid) mid(); // 첫 장면 전에(바로) — 늦게 부르면 그 사이 다 된 글이 잠깐 보였다 사라짐
+    if (mid) mid();
     await g.animate([
       Object.assign(box(b), { backgroundColor: cs.backgroundColor, boxShadow: cs.boxShadow }),
       { backgroundColor: 'transparent', boxShadow: 'none', offset: .3 },
       Object.assign(box(a), { backgroundColor: 'transparent', boxShadow: 'none', opacity: 1 }),
     ], { duration: T, easing: E, fill: 'forwards' }).finished;
-    await g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).finished; // 틀 테두리 = to 테두리 자리 → 살짝 녹여 없앰
+    await g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).finished;
     g.remove();
     document.body.style.overflow = '';
   }
-  // 로그인(직접 · 새로 고침 뒤 자동) → 로그인 창 틀이 작업 창이 되고, 넓어지는 동안 위 칩 · 작업 창 글이 타자기로 써짐
   function warp() {
     const out = $('login'), inn = $('make'), me = $('me');
-    펼침(out, inn, 2000, () => { out.hidden = true; inn.hidden = false; me.hidden = false; show(home()); }, () => 타자([me, inn], 500, 1.3)); // 글 · 칸은 바로 비우고 0.5초 뒤부터 써짐(1.3배 빠르게)
+    펼침(out, inn, 2000, () => { out.hidden = true; inn.hidden = false; me.hidden = false; show(home()); }, () => 타자([me, inn], 500, 1.3));
     me.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 1400, delay: 500, easing: 'ease-out', fill: 'backwards' });
   }
-  // 타자기 — 화면에 보이는 글을 비웠다가 위에서부터 차례로 한 글자씩(줄 사이 최대 126ms · 한 줄 0.6초 안 · 긴 글일수록 빠르게 · 한 번 부른 차례는 모두 2초 안), 글 없는 칸(입력칸 · 버튼 · 카드 ·
-  // 그림 · 바탕이나 테두리 있는 칸)도 그 차례에 스르륵 나타남 — 예외 없이 모두. 치는 사이 다른 코드가 그 글을 바꾸면(check() 등) 그 줄은 멈추고 바뀐 글 그대로
-  const 치는중 = new WeakSet(); // 이미 치는 글 · 칸 = 겹쳐 부르면 건너뜀(반쯤 친 글을 원래 글로 잘못 기억하지 않게)
-  let 타자끝 = 0; // 앞 차례가 끝나는 때 — 치는 중에 또 부르면(템플릿 목록이 일찍 옴) 그 뒤에 이어서 = 아래 칸이 위 칸보다 먼저 안 나옴
+  const 치는중 = new WeakSet();
+  let 타자끝 = 0;
   const 칸_ = e => /^(INPUT|TEXTAREA|SELECT|BUTTON|IMG|SVG|CANVAS)$/i.test(e.tagName) || e.classList.contains('mini')
     || (s => s.backgroundImage !== 'none' || !/^rgba\(.*,\s*0\)$|^transparent$/.test(s.backgroundColor) || parseFloat(s.borderTopWidth) + parseFloat(s.borderBottomWidth) + parseFloat(s.borderLeftWidth) > 0)(getComputedStyle(e));
-  // 늦게 · 새로 그린 템플릿 칸도 차례로 나타남(작업 창이 숨어 있으면 로그인 펼침 차례에 같이 들어감)
   const 템플릿타자_ = () => !$('make').hidden && 타자(its().map(e => e.querySelector('.dz')));
-  function 타자(roots, 시작 = 0, 빠르기 = 1) { // 빠르기 2 = 두 배 빠르게(제작 현황 탭)
+  function 타자(roots, 시작 = 0, 빠르기 = 1) {
     const ns = [];
     roots.forEach(r => {
       const w = document.createTreeWalker(r, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
       for (let n; (n = w.nextNode());) {
-        const t = n.nodeType === 3, el = t ? n.parentElement : n; // 템플릿 그림(.mini) 안은 그림 한 칸으로
+        const t = n.nodeType === 3, el = t ? n.parentElement : n;
         if (치는중.has(n) || el.closest(t ? 'script,style,textarea,template,.mini' : 'script,style,template,.mini *') || !el.getClientRects().length) continue;
         const top = el.getBoundingClientRect().top;
         if (top <= innerHeight && (t ? n.data.trim() : 칸_(el))) ns.push([n, top]);
       }
     });
-    ns.sort((a, b) => a[1] - b[1]); // 위에서부터(같은 줄은 문서 차례)
-    const now = performance.now(), d0 = Math.min(1000, Math.max(시작, 타자끝 - now)), D = 600 / 빠르기; // D = 한 줄 · 한 칸이 나타나는 가장 긴 시간
+    ns.sort((a, b) => a[1] - b[1]);
+    const now = performance.now(), d0 = Math.min(1000, Math.max(시작, 타자끝 - now)), D = 600 / 빠르기;
     const gap = Math.max(0, Math.min(126 / 빠르기, (1900 - d0 - D) / Math.max(1, ns.length - 1)));
     타자끝 = now + d0 + ns.length * gap;
     ns.forEach(([n], i) => {
       치는중.add(n);
       if (n.nodeType === 1) return n.animate([{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }], { duration: 500 / 빠르기, delay: d0 + i * gap, easing: 'ease-out', fill: 'backwards' })
         .finished.then(() => 치는중.delete(n), () => 치는중.delete(n));
-      const s = n.data, step = Math.min(59 / 빠르기, D / s.length); // 긴 글은 한 틱에 여러 글자
+      const s = n.data, step = Math.min(59 / 빠르기, D / s.length);
       let k = 0;
       n.data = '';
       setTimeout(() => {
@@ -745,7 +719,6 @@
       }, d0 + i * gap);
     });
   }
-  // 화면 제목 타이핑 — 화면마다 처음 한 번만
   function type(el) {
     if (el.dataset.t) return;
     const s = el.dataset.t = el.textContent;
@@ -753,8 +726,6 @@
     el.textContent = '';
     const id = setInterval(() => { el.textContent = s.slice(0, ++i); if (i >= s.length) clearInterval(id); }, 70);
   }
-  // ───── 제작 건 — 건마다 링크 하나 · 에셋 · 참고 게시물 · 코멘트
-  // 붙여 넣은 주소 → 게시물 주소만(utm · igsh · img_index · 계정 이름 경로 버림). 서버 ig_ 와 같은 규칙
   const norm = s => { const m = String(s).match(/instagram\.com\/(?:[^\/?#\s]+\/)?(p|reels?|tv)\/([\w-]{5,})/); return m ? 'https://www.instagram.com/' + (/^reel/.test(m[1]) ? 'reel' : 'p') + '/' + m[2] + '/' : ''; };
   const refLine = l => norm(l) || (/^https?:\/\/\S+$/.test(l) ? l : '');
   const its = () => [...document.querySelectorAll('#items .item')];
@@ -767,10 +738,8 @@
     if (its().length > 1) { last.scrollIntoView({ behavior: 'smooth', block: 'center' }); last.querySelector('.ln').focus(); }
   }
   function delItem(a) { if (its().length > 1) a.closest('.item').remove(); else reset(); check(); }
-  // 템플릿 고르기 — 포자 지침 템플릿(도식 미리보기 html · 1080 좌표를 줄여 그림). 고른 값 = el.dataset.d '열쇠|덧'('' = AI가 고름)
   const types = () => ((who.channels || []).find(x => x.name === chan) || {}).types || { H: 1350, list: [] };
   const tkey = x => x.key + '|' + x.add;
-  // 템플릿 HTML = 쓰는 태그 · 속성만 남김(지침에 스크립트가 끼어도 안 돎) — 새 태그를 쓰면 여기에
   const 틀기억 = new Map();
   const 안전틀 = s => {
     if (틀기억.has(s)) return 틀기억.get(s);
@@ -791,7 +760,6 @@
       + list.map(x => `<div class="pc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}"><div class="th">${mini(x, H, 120)}</div><span>${esc(x.name)}<small>${esc(x.sub)}</small></span></div>`).join('');
     pvD(z, t);
   }
-  // 오른쪽 크게 — t 없으면 AI 고르기 안내(휴대폰은 카드 위 가로 띠라 작게)
   function pvD(z, t) {
     const { H } = types(), pv = z.querySelector('.pv'), w = matchMedia('(max-width:640px)').matches ? 96 : 196;
     pv.style.setProperty('--headH', (document.querySelector('.head').offsetHeight + 12) + 'px');
@@ -806,7 +774,6 @@
     el.dataset.d = c.dataset.d;
     drawD(el);
   }
-  // 마우스를 카드에 올리면 그 꼴을 크게 · 카드 밖으로 나가면 고른 꼴로 되돌림(터치는 누르면 고름 = 같은 칸)
   function peekD(e) {
     const z = e.currentTarget.closest('.dz'), c = e.type === 'mouseover' && e.target.closest('.pc');
     const d = c ? c.dataset.d : z.closest('.item').dataset.d || '';
@@ -814,13 +781,12 @@
     z.dataset.peek = d;
     pvD(z, types().list.find(x => tkey(x) === d));
   }
-  // 오른쪽 미리보기에 올리면 고른 꼴을 폭 560으로 왼쪽(카드 위)에 띄움 · 화면보다 크면 줄임 · 터치는 안 띄움
   function zoomD(e) {
     const zm = $('zoom'), pv = e.currentTarget, { H, list } = types();
     const t = e.type === 'mouseenter' && matchMedia('(hover:hover)').matches && list.find(x => tkey(x) === (pv.closest('.item').dataset.d || ''));
     zm.classList.toggle('show', !!t);
     if (!t) return;
-    const r = pv.getBoundingClientRect(), fit = Math.min(560, r.left - 16 - 12 - 28); // 창이 좁으면 미리보기를 안 덮게 줄임
+    const r = pv.getBoundingClientRect(), fit = Math.min(560, r.left - 16 - 12 - 28);
     const h = Math.min(Math.round(fit * H / 1080), innerHeight - 32 - 28 - 60), w = Math.round(h * 1080 / H) + 28;
     zm.innerHTML = `<div class="stage">${mini(t, H, h)}</div><p><b>${esc(t.name)}</b> · ${esc(t.when)}</p>`;
     zm.style.width = w + 'px';
@@ -833,7 +799,6 @@
     check();
   }
   function pick(inp) { inp.closest('.item').querySelector('.files').innerHTML = [...inp.files].map(f => `<span class="tag">${esc(f.name)}</span>`).join(''); check(); }
-  // 중복 확인 — 링크마다 포자 초안 탭에서 이미 만든 채널(dups). 한 번 물은 링크는 다시 안 물음
   const known = {}, asked = {};
   function ask(link) {
     if (asked[link]) return;
@@ -841,7 +806,6 @@
     const done = r => { known[link] = r; check(); dupPop(link); };
     google.script.run.withSuccessHandler(r => done(r[0] || [])).withFailureHandler(() => done([])).dups(code, [link]);
   }
-  // 같은 채널에서 이미 만들었거나 만드는 중이면 팝업 — 새로 만들지 않고 그 결과를 받음(작은 안내 줄만으론 놓침)
   let dupLink = '';
   function dupPop(link) {
     const same = (known[link] || []).find(x => x.channel === chan);
@@ -866,7 +830,6 @@
       : `⚠ ${chan}에서 지금 만드는 중이에요 (${s}) — 끝나면 그 결과를 받아요`,
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
-  // 건마다 안내 줄(정리된 주소 · 잘못된 점 · 중복) — 하나라도 문제거나 티켓보다 많으면 제작하기를 못 누름
   function check() {
     const ch = (who.channels || []).find(x => x.name === chan), left = ch ? ch.coupon : 0, seen = {};
     let bad = 0;
@@ -891,7 +854,6 @@
     $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `티켓 ${n}장 씀 · 오늘 ${chan} 티켓 ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
     $('left').style.color = over ? '#FF8A8A' : '';
   }
-
   const read = f => new Promise((ok, no) => {
     const r = new FileReader();
     r.onload = () => ok({ name: f.name, type: f.type || 'application/octet-stream', data: r.result.split(',')[1] });
@@ -901,7 +863,7 @@
   async function go() {
     const all = its().flatMap(el => [...el.querySelector('.fl').files]);
     if (all.reduce((t, f) => t + f.size, 0) > MAX) { $('err2').textContent = '참고 자료는 모든 건을 합쳐 20MB 까지 올릴 수 있어요.'; return; }
-    $('go').disabled = true; // 파일 읽는 동안 두 번 눌리지 않게
+    $('go').disabled = true;
     const items = await Promise.all(its().map(async el => ({ link: norm(val(el, '.ln')), refs: val(el, '.rf'), comment: val(el, '.cm'), design: el.dataset.d || '', files: await Promise.all([...el.querySelector('.fl').files].map(read)) })));
     call('make', [code, items, chan], $('go'), 'err2', r => {
       who.channels.find(x => x.name === chan).coupon = r.coupon;
@@ -912,20 +874,14 @@
       view('done');
     });
   }
-  // ───── 제작 현황 · 결과 카드 · 수정 요청
   let mine = [];
-  const 주소 = u => String(u).startsWith('https:') ? u : '#'; // 시트 값이 javascript: 등이면 링크로 안 씀
+  const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
-  const tk = c => who.admin ? '무제한' : c; // 관리자 티켓 칩
-  // 의뢰자 — 관리자 화면은 모든 건 · 담당자 화면은 남이 맡긴 건(관리자 의뢰)만. who.name 은 지난 화면 기억으로 들어오면 비어 있음(새로_ 뒤 다시 그림)
+  const tk = c => who.admin ? '무제한' : c;
   const 의뢰자 = j => j.name && (who.admin || who.name && j.name !== who.name) ? esc(String(j.name).replace(/^관리자\d*$/, '관리자')) : '';
-  // ponytail: 담당자 폴더가 '링크 보기' 공유라 바로 뜸 · 이메일 공유로 바꾸면 서버가 이미지를 넘겨야 함
-  // 주의: Apps Script 가 내보낼 때 // 주석을 지우며 `백틱` 안 주소의 // 까지 잘라 먹음 → 주소는 작은따옴표로
   const DRIVE = 'https://drive.google.com';
-  const img = id => DRIVE + '/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000'; // 파일 ID 가 주소 · 속성 밖으로 못 나가게
+  const img = id => DRIVE + '/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
   const part = n => n.replace(/^\d+_|\.(png|jpg)$/g, '');
-  // 쌍둥이 판 그림 = 본 장 이름 + '_채널'('01_썸네일_팁끌 (수정 1).jpg') → 본 장 카드 하나에 묶음
-  // 수정 요청은 본 장 이름으로 한 번 — 맥이 쪽 번호로 고쳐 두 판(같은 PSD 레이어 컴프)에 같이 반영
   const 판 = n => n.replace(/\.(png|jpg)$/, '').replace(/ \(수정 \d+\)$/, '');
   function 짝(files) {
     const by = new Map(files.map(f => [판(f.name), f])), tw = new Map();
@@ -933,16 +889,13 @@
     const 쌍 = new Set([...tw.values()].map(t => t.f));
     return files.filter(f => !쌍.has(f)).map(f => ({ f, t: tw.get(f) }));
   }
-  const 쌍보기 = new Set(); // 쌍둥이 판으로 바꿔 둔 장(줄|장) — 1분 새로 읽기에도 그대로
+  const 쌍보기 = new Set();
   function 판바꿈(b, on) {
     const ph = b.closest('.ph');
     ph.classList.toggle('tw', on);
     b.parentNode.querySelectorAll('button').forEach((x, i) => x.classList.toggle('on', i === +on));
     쌍보기[on ? 'add' : 'delete'](ph.dataset.k);
   }
-
-  // 화면 이동 = 브라우저 기록 한 칸(google.script.history) — 뒤로 가기 버튼 · 아이폰 밀어서 뒤로 · 위 ‹ 버튼이 앱 안에서 한 화면씩 돌아감
-  // 지금 탭을 다시 누르면 맨 위로(아이폰 탭 막대처럼) · 제작 현황으로 돌아오면 보던 자리 그대로
   let cur = '', listY = 0;
   const home = () => who.admin ? 'list' : 'form';
   const 제목 = { form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 쿠폰 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
@@ -951,14 +904,13 @@
     if (v === cur && v !== 'detail') return scrollTo({ top: 0, behavior: 'smooth' });
     google.script.history.push(Object.assign({ v }, st));
     show(v);
-    if (v === 'list') 타자([$('list')], 0, 2); // 제작 현황 탭 = 로그인처럼 글 · 칸이 위에서부터 차례로 깔림
+    if (v === 'list') 타자([$('list')], 0, 2);
   }
   function goHome() { if (code) view(home()); }
-  // ‹ 버튼 — 앱 창(iframe)은 브라우저 기록을 되돌릴 수 없어 지금 칸을 부모 화면으로 바꿔 끼움
-  function goBack() { const v = 부모[cur]; show(v); google.script.history.replace({ v }); } // 순서 주의: replace 먼저면 화면이 안 바뀜(10/29 실측)
+  function goBack() { const v = 부모[cur]; show(v); google.script.history.replace({ v }); }
   function show(v) {
     if (cur === 'list') listY = scrollY;
-    타자끝 = 0; // 화면이 바뀌면 타자 차례 새로 — 숨은 화면의 남은 차례(늦게 온 템플릿 등)를 기다리지 않음
+    타자끝 = 0;
     cur = v;
     ['form', 'done', 'list', 'detail', 'coup', 'cost', 'ref', 'acc'].forEach(k => $(k).hidden = k !== v);
     $('t-form').classList.toggle('on', v === 'form' || v === 'done');
@@ -966,7 +918,7 @@
     $('t-cost').classList.toggle('on', v === 'cost' || v === 'detail' && 부모.detail === 'cost');
     $('t-cp').classList.toggle('on', v === 'coup');
     $('t-ref').classList.toggle('on', v === 'ref' || v === 'acc');
-    $('ttl').textContent = 부모[v] ? 제목[v] : who.admin && v !== 'form' ? '전체 현황' : chan; // 첫 화면은 카드 버튼이 이름표라 위 막대엔 채널
+    $('ttl').textContent = 부모[v] ? 제목[v] : who.admin && v !== 'form' ? '전체 현황' : chan;
     $('back').hidden = !부모[v]; $('back').textContent = 제목[부모[v]] || ''; $('dots').hidden = !!부모[v];
     const h = $(v).querySelector('h1');
     if (h && v !== 'detail') type(h);
@@ -981,13 +933,11 @@
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|ref|acc)$/.test(s.v) ? home() : s.v || home()); // 뒤로 가기로 관리자 화면에 못 들어감
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|ref|acc)$/.test(s.v) ? home() : s.v || home());
   });
-  // 만드는 중 · 수정 요청이 있는 건이 있으면 1분마다 다시 읽음 — 수정이 끝나면 카드 · 상세 그림이 새 결과로 바뀜(상세에 적던 글이 있으면 그 화면은 그대로)
   let timer = 0, openRow = 0;
-  const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state); // 포자 진행 단계(맥이 1분마다 옮김)
+  const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
   const busy = j => /^(대기|제작중|수정중)/.test(j.state) || j.reqs.some(q => /^(접수|반영중)/.test(q.state));
-  // 포자가 블랙리스트 계정이라 거절한 건 = 한 번만 팝업(본 줄은 이 브라우저에 기억)
   function blocked(r) {
     let seen = [];
     try { seen = JSON.parse(localStorage.getItem('pp_blk') || '[]'); } catch (e) {}
@@ -1001,13 +951,12 @@
   function load(quiet) {
     if (!quiet && !mine.length) $('lsub').textContent = '불러오는 중…';
     google.script.run.withSuccessHandler(r => {
-      if (!code) return; // 로그아웃 뒤 늦게 온 응답은 안 받음
-      r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC'))); // 맥에서 올린 파일 이름은 자모가 풀려 있어 '팔로우' 를 못 알아봄
+      if (!code) return;
+      r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
       현황그림_(r, quiet);
     }).withFailureHandler(e => $('lsub').textContent = e.message.replace(/^Error:\s*/, '')).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value } : null);
   }
-  // 현황 목록 기억(이 브라우저 · 이름은 빼고 · 관리자는 안 함) — 다시 열 때 '불러오는 중…' 없이 지난 목록부터 그리고 새 목록으로 바꿈. 인자 없으면 읽기
   function 현황기억_(r) {
     try {
       if (r) return who.admin || localStorage.setItem('pp_j', JSON.stringify(r.map(j => Object.assign({}, j, { name: '' }))));
@@ -1019,53 +968,47 @@
     const n = r.filter(busy).length;
     $('busyN').hidden = !n; $('busyN').textContent = n;
     clearTimeout(timer);
-    if (r.some(busy)) timer = setTimeout(() => (!$('list').hidden || !$('detail').hidden || !$('done').hidden) && load(true), 60000); // 접수 화면도 — 블랙리스트 거절을 바로 알림
+    if (r.some(busy)) timer = setTimeout(() => (!$('list').hidden || !$('detail').hidden || !$('done').hidden) && load(true), 60000);
     blocked(r);
     const i = r.findIndex(j => j.row === openRow);
     if (quiet && !$('detail').hidden && i >= 0 && ![...$('detail').querySelectorAll('textarea')].some(t => t.value.trim())) card(i, 'refresh');
     const 새로 = !quiet && !$('list').hidden, sub = $('lsub'), 전 = sub.textContent;
     sub.textContent = r.length ? '' : '아직 맡긴 제작이 없어요.';
     const html = r.map((j, i) => {
-      const f = j.files[0], q = j.reqs.find(x => x.eta); // 수정 요청 중이면 완료 예상
+      const f = j.files[0], q = j.reqs.find(x => x.eta);
       return `<div class="card" onclick="card(${i})"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + 진행게이지(j, q) + '</div>';
     }).join(''), c = $('cards');
-    if (새로 && sub.textContent !== 전) 타자([sub], 0, 2); // '불러오는 중…' → 빈 목록 안내도 써짐
-    if (c.html === html) return; // 같은 내용이면 다시 그리지 않음 — 다시 그리면 게이지가 처음부터 다시 차오름(탭 들어올 때 두 번 · 1분마다)
+    if (새로 && sub.textContent !== 전) 타자([sub], 0, 2);
+    if (c.html === html) return;
     c.html = html; c.innerHTML = html;
-    if (새로) 타자([c], 0, 2); // 탭에 들어와 새로 받은 카드도 차례로 깔림(앞 차례 뒤에 이어서)
+    if (새로) 타자([c], 0, 2);
   }
-  // 보낸 요청 한 줄 — 접수 → 반영 중(포자가 다시 만드는 중) → 반영됨 · 실패
-  // 아래 작은 줄 = 지금 어디(phase) · 완료 예상(eta) — 서버 수정현황_ · 끝난 요청은 걸린 시간
-  // 진행 중(접수 · 반영 중)이면 단계 게이지 — 접수 → 검토(정비사) → 다시 제작 → 반영
   const mark = q => '<div class="q">' + (q.state && /^실패/.test(q.state) ? `<i class="bad">✕ ${esc(q.state)}</i> · ${esc(q.text)}`
-    : /^반영(중|됨)/.test(q.state || '') ? `<b class="s-${/^반영됨/.test(q.state) ? 'ok' : 'run'}">${esc(q.state.replace(/^반영중/, '⟳ 반영 중').replace(/^반영됨/, '✓ 반영됨'))}</b> — ${esc(q.text)}`   // 뒤 글 = 포자가 무엇을 고쳤나
+    : /^반영(중|됨)/.test(q.state || '') ? `<b class="s-${/^반영됨/.test(q.state) ? 'ok' : 'run'}">${esc(q.state.replace(/^반영중/, '⟳ 반영 중').replace(/^반영됨/, '✓ 반영됨'))}</b> — ${esc(q.text)}`
     : `<b class="s-wait">✓ 접수</b> · ${esc(q.text)}`)
     + (/^(반영됨|실패)/.test(q.state || '') ? '' : gauge('수정', 수정단계(q), q.pct))
     + (q.phase || q.eta ? `<small class="eta">${esc([q.phase, q.eta && '완료 ' + q.eta].filter(Boolean).join(' · '))}</small>` : '') + '</div>';
-  // 단계 게이지 — n = 지금 단계(0 접수 ~ 3) · pct = 걸린 시간 ÷ 예상 시간(있으면 그만큼 더 채움)
   const 단계말 = { 제작: ['접수', '기획', '포토샵', '완료'], 수정: ['접수', '검토', '다시 제작', '반영'] };
   const 제작단계 = j => /^대기/.test(j.state) ? 0 : /포토샵|조립|올리는/.test(j.step) ? 2 : 1;
-  const 수정단계 = q => /^반영중/.test(q.state || '') ? (/정비사|검토/.test(q.phase || '') ? 1 : 2) : 0;
+  const 수정단계 = q => /^반영중/.test(q.state || '') ? (/검토/.test(q.phase || '') ? 1 : 2) : 0;
   const stc = s => /^완료/.test(s) ? 'ok' : /^실패/.test(s) ? 'bad' : /^대기/.test(s) ? 'wait' : 'run';
   function gauge(kind, n, pct) {
     const w = Math.min(96, Math.max(n / 3 * 100 + 8, (pct || 0) * 100));
     return `<div class="gauge${n ? '' : ' wait'}"><div class="track"><i style="width:${w}%"></i></div><ol>`
       + 단계말[kind].map((s, i) => `<li class="${i < n ? 'on' : i === n ? 'now' : ''}" style="animation-delay:${i * .12}s">${s}</li>`).join('') + '</ol></div>';
   }
-  // 상세 게이지 아래 — 남은 시간 크게 · 옆에 지금 단계 작게 · 아래 앞 대기 건수(서버 제작남음_ · 1분마다 다시 읽음)
   const 남은 = j => j.left == null ? '' : `<div class="left"><b>${j.left ? '약 ' + j.left + '분' : '곧 끝나요'}</b>`
     + `<span>${j.left ? '남음 · ' + j.done + '쯤 완료' : '예상보다 늦어지는 중'}<small>${esc(단계말.제작[제작단계(j)])}${j.step ? ' · ' + esc(j.step) : ''}</small></span></div>`
     + `<p class="ahead">${j.ahead ? `앞에 <b>${j.ahead}건</b> 대기 중` : '앞에 대기 중인 건 없음 — 지금 내 차례'}</p>`;
   const 진행게이지 = (j, q) => /^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j)) : q ? gauge('수정', 수정단계(q), q.pct) : '';
-  // how: 'pop' = 뒤로/앞으로로 돌아옴(기록 안 늘림) · 'refresh' = 1분 새로 읽기(화면 · 스크롤 그대로)
   function card(i, how) {
     const j = mine[i];
     openRow = j.row;
     const box = (p, all, p2) => `<div class="rev${all ? ' all' : ''}"><b>${esc(all ? '전체 수정 요청' : p.replace(/^\d+_/, '') + ' 수정 요청')}</b>${p2 ? '<small class="both">두 채널 판에 같이 반영</small>' : ''}`
       + `<textarea data-p="${esc(p)}" ${all ? '' : 'oninput="모음()" '}placeholder="${all ? '문구 · 구성 · 정보까지 바꿀 점 — 게시물을 다시 기획해요' : '깨진 제품 이미지 복원해주고, 배경은 유려하게 바꿔줘'}"></textarea>`
-      + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '') // 장 칸은 아래 '모아서 보내기' 하나로
+      + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '')
       + `<div class="sent">${j.reqs.filter(q => q.part === p || q.part === p2).map(mark).join('')}</div></div>`;
     const 장 = f => `<a href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank"><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
     const 장들 = 짝(j.files), 쌍잡 = 장들.some(x => x.t), 끝 = n => n.replace(/\.(png|jpg)$/, '');
@@ -1089,11 +1032,11 @@
         : '아직 만드는 중이에요. 끝나면 여기서 결과를 보고 수정 요청을 보낼 수 있어요.</p>')
       + '<p class="err" id="err3"></p>';
     if (how === 'refresh') return;
-    if (!$('list').hidden) 부모.detail = 'list'; // 제작 예산에서 연 상세는 costGo 가 'cost' 로
-    const c = !how && !$('list').hidden && document.querySelectorAll('#cards .card')[i]; // 목록에서 누름 → 그 카드가 상세로 펼쳐짐
-    if (c) { // 표지 사진은 틀(사본)에서 빼고 따로 상세 첫 장 자리로 커짐 · 상세 글 · 칸은 펼치는 동안 써짐
+    if (!$('list').hidden) 부모.detail = 'list';
+    const c = !how && !$('list').hidden && document.querySelectorAll('#cards .card')[i];
+    if (c) {
       const cv = c.querySelector('.cv'), bg = cv.style.backgroundImage, from = cv.getBoundingClientRect();
-      if (bg) cv.style.visibility = 'hidden'; // 사본에 숨긴 채 복사됨
+      if (bg) cv.style.visibility = 'hidden';
       return 펼침(c, $('detail'), 1400, () => { cv.style.visibility = ''; view('detail', { row: j.row }); }, () => {
         const im = bg && $('detail').querySelector('.pages img');
         if (im) 사진펼침(from, bg, im, 1400);
@@ -1102,14 +1045,12 @@
     }
     how === 'pop' ? show('detail') : view('detail', { row: j.row });
   }
-  // 카드 표지 → 상세 첫 장: 같은 사진(떠 있는 사본)이 표지 자리에서 첫 장 자리 · 크기로 커지고, 진짜 사진이 받아지면 바꿔 끼움
-  // 도착 자리는 매 장면 다시 잼 — 위 글이 써지며 첫 장이 내려가도 따라가서 바꿔 끼울 때 안 튐
   async function 사진펼침(b, bg, im, T) {
-    const p = document.createElement('div'), t0 = performance.now(), E = t => t < .5 ? 4 * t ** 3 : 1 - (2 - 2 * t) ** 3 / 2; // ≈ 펼침 곡선
+    const p = document.createElement('div'), t0 = performance.now(), E = t => t < .5 ? 4 * t ** 3 : 1 - (2 - 2 * t) ** 3 / 2;
     p.style.cssText = 'position:fixed;z-index:10;pointer-events:none;background:var(--bar) center/cover;border-radius:12px';
     p.style.backgroundImage = bg;
     document.body.append(p);
-    치는중.add(im); im.style.opacity = 0; im.loading = 'eager'; // 타자가 이 사진은 건드리지 않음
+    치는중.add(im); im.style.opacity = 0; im.loading = 'eager';
     let 받음 = false;
     Promise.race([im.decode().catch(() => {}), new Promise(ok => setTimeout(ok, T + 1500))]).then(() => 받음 = true);
     await new Promise(done => {
@@ -1125,14 +1066,12 @@
     p.remove();
   }
   function cancel(b) { b.closest('.rev').querySelector('textarea').value = ''; }
-  // 장 칸에 적은 수 → 아래 막대 글 · 버튼
   function 모음() {
     const n = [...$('detail').querySelectorAll('.pages textarea')].filter(t => t.value.trim()).length;
     $('rvBar').classList.toggle('has', n > 0);
     $('rvN').textContent = n ? `적은 장 ${n}개 · 이 장들만 한 묶음으로 고쳐요` : '고칠 장 아래 칸에 적어 주세요 — 적은 장만 고쳐요';
     $('rvBar').querySelector('button').textContent = n ? `모아서 보내기 (${n})` : '모아서 보내기';
   }
-  // 적은 장 칸을 한 번에 — 서버 revises 가 한꺼번에 접수(맥이 한 묶음으로 그 장들만 고침)
   function sendAll(b, row) {
     const ts = [...$('detail').querySelectorAll('.pages textarea')].filter(t => t.value.trim());
     if (!ts.length) { $('err3').textContent = '고칠 장 아래 칸에 적어 주세요.'; return; }
@@ -1159,10 +1098,6 @@
       clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
     });
   }
-
-  // ───── 레퍼런스(관리자) — 포자 제작 후보 탭을 카드로 · 체크 + 채널 → 채널마다 make(새 제작과 같은 길)
-  // 고른 것 = sel[link] (채널은 카드 select) · 찾는 중이면 20초마다 다시 읽음
-  // made = 이번에 맡긴 링크 — 맥이 포자 후보 줄 상태를 쓰기 전(1분 안팎)에 다시 읽어도 또 고르지 않게
   let refs = [], sel = {}, refT = 0, made = {}, refMsg = '';
   const 안만든_ = j => !j.state || /^실패/.test(j.state);
   function refLoad(quiet) {
@@ -1197,7 +1132,6 @@
     }).join('');
     refSum();
   }
-  // 카드 그림 누름 = 체크 ↔ 풂 · 채널은 select(자동 매칭이 기본) — 체크된 카드에서 채널을 바꾸면 그 채널로
   function refPick(i) {
     const j = refs[i], chs = who.channels.filter(c => !c.demo).map(c => c.name);
     if (j.link in sel) delete sel[j.link]; else sel[j.link] = chs.includes(j.ch) ? j.ch : '';
@@ -1223,23 +1157,9 @@
       refGrid();
     });
   }
-
-  // ───── 제작 예산(관리자) — 서버 budget: 건마다 비용 칸 · 공통비 탭 / 건은 same(같은 포자 행 앞 줄)이면 합계에서 뺌
   let cD = null, cCh = '', cOpen = 0, cAll = false;
-  const 돈색 = { c: '#6F8FE0', g: '#C4762A', k: '#9A72D8', a: '#1FA085', e: '#6E6E76' }, 돈말 = { c: 'Claude(글 · 판단)', g: 'GPT(그림)', k: 'Grok(그림 2차)', a: 'Apify(수집 · 검색)', e: '공통비' };
+  const 돈색 = { c: '#6F8FE0', g: '#C4762A', k: '#9A72D8', a: '#1FA085', e: '#6E6E76', s: '#6E6E76' };
   const 천 = n => Math.round(n).toLocaleString('en-US');
-  const 단계묶음 = { 설계: '분석', 디자인기록: '분석', 디자인통로: '분석', 재구성판단: '분석', 공통기획: '기획', 기획단계: '제작 · 배치', 자유배치: '제작 · 배치', 제작: '제작 · 배치', 추적찾기: '제품 찾기', 제품자리: '제품 찾기', 복원그림: '그림', 교육: '사진 찾기 · 워싱', 검수: '검수 · 수정', 판다시: '검수 · 수정', 캡션고침: '검수 · 수정' };
-  // 단계별 금액 — 비용 칸에 담당별금액이 있으면 그대로, 옛 건은 토큰 · 그림 장 비율로 나눔(약)
-  function 단계_(j) {
-    const 묶 = {}, 더 = (n, w) => { const k = 단계묶음[n] || '기타'; 묶[k] = (묶[k] || 0) + w; };
-    const 금합 = (j.금 || []).reduce((a, x) => a + x[1], 0), 그합 = j.g + j.k, 정확 = 금합 >= (j.c + 그합) * .9;
-    if (정확) j.금.forEach(x => 더(x[0], x[1]));
-    else {
-      const w = x => x[1] * 2 + x[2] * 10, 토 = (j.담 || []).reduce((a, x) => a + w(x), 0), 장 = (j.담 || []).reduce((a, x) => a + x[3], 0);
-      (j.담 || []).forEach(x => 더(x[0], (토 ? w(x) / 토 * j.c : 0) + (장 ? x[3] / 장 * 그합 : 0)));
-    }
-    return { 정확, 줄: Object.entries(묶).filter(x => x[1] >= 1).sort((a, b) => b[1] - a[1]) };
-  }
   const 띠 = (j, big) => `<span class="mix${big ? ' big' : ''}">${'cgka'.split('').filter(k => j[k]).map(k => `<i style="flex:${j[k]} 1 0;background:${돈색[k]}"></i>`).join('')}</span>`;
   const 게이지칸 = (n, 한) => `<span class="gg ${n >= 한 ? 'bad' : n >= 한 * .8 ? 'warn' : ''}"><i style="width:${Math.min(n / 한, 1) * 100}%"></i></span>`;
   function costLoad() {
@@ -1259,19 +1179,18 @@
     const 보임 = 건들.filter(j => !cCh || j.ch === cCh), 돈건 = 보임.filter(j => !j.same && j.won), 공 = cD.common.filter(x => 안(x.d));
     const 건합 = 돈건.reduce((a, j) => a + j.won, 0), 공합 = cCh ? 0 : 공.reduce((a, x) => a + x.won, 0);
     const 오늘 = 돈건.filter(j => j.d === cD.today), 대기 = 보임.filter(j => j.d === cD.today && /^(대기|제작중)/.test(j.state) && !j.won).length;
-    const 한도 = j => j.limit || 한, 넘음 = 돈건.filter(j => j.won >= 한도(j)).length, 가까움 = 돈건.filter(j => j.won >= 한도(j) * .8 && j.won < 한도(j)).length; // 게시물만 올린 예산이 있으면 그 값
+    const 한도 = j => j.limit || 한, 넘음 = 돈건.filter(j => j.won >= 한도(j)).length, 가까움 = 돈건.filter(j => j.won >= 한도(j) * .8 && j.won < 한도(j)).length;
     $('ckp').innerHTML = `<div><span>이 기간 총 비용</span><b>${천(건합 + 공합)}원</b><small>${돈건.length}건${공합 ? ' + 공통비 ' + 천(공합) + '원' : ''}</small></div>`
       + `<div><span>건당 평균</span><b>${천(돈건.length ? 건합 / 돈건.length : 0)}원</b><small>예산 ${천(한)}원의 ${돈건.length ? Math.round(건합 / 돈건.length / 한 * 100) : 0}%</small></div>`
       + `<div><span>예산 넘은 건</span><b>${넘음}건</b><small>80% 이상 ${가까움}건 더</small></div>`
       + `<div><span>오늘</span><b>${천(오늘.reduce((a, j) => a + j.won, 0))}원</b><small>${오늘.length}건${대기 ? ' · ' + 대기 + '건 진행 전' : ''}</small></div>`;
-    // 날마다 쌓은 막대 — 건은 만든 날(요청 시각)에 모두 묶음(수정비도 그 건 날짜) · 날 많으면 최근 14일만
     const 날 = {};
     돈건.forEach(j => { const o = 날[j.d] = 날[j.d] || { c: 0, g: 0, k: 0, a: 0, e: 0 }; 'cgka'.split('').forEach(k => o[k] += j[k]); });
     if (!cCh) 공.forEach(x => { (날[x.d] = 날[x.d] || { c: 0, g: 0, k: 0, a: 0, e: 0 }).e += x.won; });
     const 날들 = Object.keys(날).filter(Boolean).sort().slice(-14), 합_ = o => o.c + o.g + o.k + o.a + o.e, top = Math.max(1, ...날들.map(d => 합_(날[d])));
     $('cchart').innerHTML = `<p class="lb">날마다 쓴 돈</p><div class="bars">${날들.map(d => { const o = 날[d], 짧 = d.slice(5).replace('-', '/').replace(/^0/, '');
-      return `<div class="co" title="${짧} · ${천(합_(o))}원&#10;${'cgkae'.split('').filter(k => o[k]).map(k => 돈말[k] + ' ' + 천(o[k]) + '원').join('&#10;')}"><small>${천(합_(o))}</small><div class="sb">${'eakgc'.split('').filter(k => o[k] / top * 118 >= 1).map(k => `<i style="height:${o[k] / top * 118}px;background:${돈색[k]}"></i>`).join('')}</div><span>${짧}</span></div>`; }).join('')}</div>`
-      + `<div class="lg">${'cgkae'.split('').map(k => `<span><i style="background:${돈색[k]}"></i>${돈말[k]}</span>`).join('')}</div>`;
+      return `<div class="co" title="${짧} · ${천(합_(o))}원&#10;${'cgkae'.split('').filter(k => o[k]).map(k => esc(cD.말[k]) + ' ' + 천(o[k]) + '원').join('&#10;')}"><small>${천(합_(o))}</small><div class="sb">${'eakgc'.split('').filter(k => o[k] / top * 118 >= 1).map(k => `<i style="height:${o[k] / top * 118}px;background:${돈색[k]}"></i>`).join('')}</div><span>${짧}</span></div>`; }).join('')}</div>`
+      + `<div class="lg">${'cgkae'.split('').map(k => `<span><i style="background:${돈색[k]}"></i>${esc(cD.말[k])}</span>`).join('')}</div>`;
     const 줄 = 보임.slice();
     if ($('csort').value === 'won') 줄.sort((a, b) => (b.same ? 0 : b.won || 0) - (a.same ? 0 : a.won || 0));
     $('crows').innerHTML = 줄.map(j => { const id = j.row || 's' + j.ch + j.title, on = cOpen === id, won = j.won || 0, 한 = j.limit || cD.예산;
@@ -1285,17 +1204,15 @@
   }
   function 내역칸(j, 한) {
     if (!j.won) return `<div class="box"><p class="nt">아직 쓴 돈이 없어요.</p>${j.row ? `<button onclick="costGo(${j.row})">제작 현황 열기 ›</button>` : ''}</div>`;
-    const 서 = [['c', 'Claude', `${j.cn || 0}회 · 입력 ${j.ti || 0} · 출력 ${j.to || 0} 토큰`], ['g', 'GPT 이미지', (j.gn || 0) + '장'], ['k', 'Grok 이미지', (j.kn || 0) + '장'], ['a', 'Apify', (j.an || 0) + '회'], ['s', '받아쓰기', '']];
-    const d = 단계_(j), 큰 = Math.max(1, ...d.줄.map(x => x[1]));
-    return `<div class="box"><div class="bh"><b>${천(j.won)}원</b><span>/ 예산 ${천(한)}원</span>${게이지칸(j.won, 한)}</div>${띠(j, true)}<div class="two"><table>${서.filter(x => j[x[0]] || x[0] === 'a' && j.an).map(x => `<tr><td><i style="background:${돈색[x[0]] || 돈색.e}"></i>${x[1]}</td><td>${esc(x[2])}</td><td>${천(j[x[0]])}원</td></tr>`).join('')}</table>`
-      + `<ul>${d.줄.map(x => `<li><span>${esc(x[0])}</span><u><i style="width:${x[1] / 큰 * 100}%"></i></u><b>${d.정확 ? '' : '약 '}${천(x[1])}원</b></li>`).join('')}</ul></div>`
-      + `<p class="nt">${j.same ? `#${j.same} 과 같은 포자 행이라 합계에는 한 번만 세요 · ` : ''}수정 · 다시 제작에 쓴 돈까지 모두 포함${d.정확 ? '' : ' · 단계 금액은 토큰 비율로 나눈 값이라 약'}</p>`
+    const 큰 = Math.max(1, ...j.단.map(x => x[1]));
+    return `<div class="box"><div class="bh"><b>${천(j.won)}원</b><span>/ 예산 ${천(한)}원</span>${게이지칸(j.won, 한)}</div>${띠(j, true)}<div class="two"><table>${j.서.map(x => `<tr><td><i style="background:${돈색[x[0]]}"></i>${esc(x[1])}</td><td>${esc(x[2])}</td><td>${천(x[3])}원</td></tr>`).join('')}</table>`
+      + `<ul>${j.단.map(x => `<li><span>${esc(x[0])}</span><u><i style="width:${x[1] / 큰 * 100}%"></i></u><b>${j.정확 ? '' : '약 '}${천(x[1])}원</b></li>`).join('')}</ul></div>`
+      + `<p class="nt">${j.same ? `#${j.same} 과 같은 게시물이라 합계에는 한 번만 세요 · ` : ''}수정 · 다시 제작에 쓴 돈까지 모두 포함${j.정확 ? '' : ' · 단계 금액은 토큰 비율로 나눈 값이라 약'}</p>`
       + (j.row ? `<button onclick="costGo(${j.row})">제작 현황 열기 ›</button>` : '') + '</div>';
   }
   function costCh(c) { cCh = c; costDraw(); }
   function costAll() { cAll = !cAll; costDraw(); }
   function costOpen(id) { cOpen = cOpen === id ? 0 : id; costDraw(); }
-  // 제작 현황 상세로 — mine(현황 목록)에 없으면(최근 30건 밖) 그 건만 받아 더함 · 뒤로 = 제작 예산
   function costGo(row) {
     const 열기 = i => { 부모.detail = 'cost'; card(i); };
     const i = mine.findIndex(j => j.row === row);
@@ -1306,8 +1223,6 @@
       mine.push(r[0]); 열기(mine.length - 1);
     }).withFailureHandler(e => $('err7').textContent = e.message.replace(/^Error:\s*/, '')).jobs(code, { row });
   }
-  // ───── 레퍼런스 채널 · 분석(관리자) — 서버 refacc(집계) · refacc2(add · set · del → 새 집계)
-  // 지표 · 순위 · 유형 칸 · 꼴 길은 위 '우리 채널' 거르기를 따름 · 줄을 누르면 그 계정 자세히(accOpen)
   let accD = null, accOpen = '';
   const 채널목록_ = () => who.channels.filter(c => !c.demo).map(c => c.name);
   const 채널옵션_ = v => [['', '찾기가 채움'], ['자동', '자동(글마다)']].concat(채널목록_().map(c => [c, c]), v && !['자동', ...채널목록_()].includes(v) ? [[v, v]] : [])
@@ -1344,7 +1259,6 @@
       const p = 률_(a), bad = a.수집 >= 10 && p < 25;
       return `<div class="rk"><span>@${esc(a.u)}</span><div class="bx"><i style="width:${p / mx * 100}%;background:var(${bad ? '--bad' : '--ok'})"></i></div><span>${p}% · ${a.수집}</span></div>`;
     }).join('') || '<p class="note">수집 5개 넘는 계정이 아직 없어요.</p>';
-    // 계정 × 유형 — 많이 만든 계정 8개 · 그 계정들에 많은 유형 5개
     const top = l.filter(a => a.제작).sort((x, y) => y.제작 - x.제작).slice(0, 8), tc = {};
     top.forEach(a => a.유형.forEach(([t, n]) => tc[t] = (tc[t] || 0) + n));
     const ts = Object.entries(tc).sort((x, y) => y[1] - x[1]).slice(0, 5).map(x => x[0]);
@@ -1389,7 +1303,6 @@
     google.script.run.withSuccessHandler(r => { el.disabled = false; accShow(r); ok && ok(); })
       .withFailureHandler(e => { el.disabled = false; $('err6').textContent = e.message.replace(/^Error:\s*/, ''); }).refacc2(code, op, v);
   }
-  // 고치기 = 메모 · 우리 채널 둘 다 보냄(바꾼 쪽만 새 값)
   function accSet(el, u) {
     const a = accD.accs.find(x => x.u === u), v = { u, memo: a.memo, ch: a.ch };
     v[el.tagName === 'SELECT' ? 'ch' : 'memo'] = el.value;
@@ -1401,9 +1314,6 @@
     if (!v.u) { $('err6').textContent = '계정 이름이나 프로필 주소를 넣어 주세요.'; return; }
     accRun(b, 'add', v, () => { $('au').value = $('amemo').value = ''; accOpen = ''; });
   }
-
-  // ───── 쿠폰 관리(관리자) — 서버 coupon(code, 줄, 작업, n) 이 새 목록을 돌려줌
-  // 같은 사람(한 사람이 여러 채널)은 한 묶음 — 이름 · 비밀번호 칸은 묶음에 하나(rowspan) · 채널 줄마다 쿠폰 · 하루 제공 · 리셋 · 계정
   function cpDraw(r) {
     const 키 = x => String(x.name).normalize('NFC').replace(/\s+/g, ''), 묶음 = {};
     r.forEach(x => (묶음[키(x)] = 묶음[키(x)] || []).push(x));
@@ -1417,7 +1327,6 @@
       + `<td><span class="step"><button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button><button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
   }
-  // 계정 · 채널 — 서버 계정(code, 작업, 값) 도 새 목록을 돌려줌
   function acOp(b, op, row) { call('계정', [code, op, { row }], b, 'err4', cpDraw); }
   function acDel(b, row) { if (confirm('이 담당자 · 채널 줄을 지울까요?\n그 사람의 마지막 줄이면 로그인도 끝나요(드라이브 폴더 · 지난 제작물은 그대로).')) acOp(b, 'del', row); }
   function acAdd(b) {
@@ -1425,7 +1334,6 @@
     if (!v.name || !v.channel) { $('err4').textContent = '이름과 채널을 넣어 주세요.'; return; }
     call('계정', [code, 'add', v], b, 'err4', r => { cpDraw(r); $('an').value = $('ac').value = $('ae').value = ''; });
   }
-  // 그 사람(모든 채널 줄) 비밀번호를 무작위 임시 비번으로 — 표 '비밀번호' 칸에 뜸 · 다음 로그인 때 새 비밀번호를 정함 · 그 사람의 로그인은 모두 끝남
   function pwReset(b, row) { if (confirm('이 담당자에게 새 임시 비밀번호를 발급할까요?\n그 사람의 로그인이 모두 끝나요. 표에 뜨는 임시 비밀번호를 그 사람에게만 알려 주세요.')) call('pwreset', [code, row], b, 'err4', cpDraw); }
   function cpLoad() {
     type($('coup').querySelector('h1'));
@@ -1437,13 +1345,11 @@
     const n = sign * (Number($('cpn').value) || 0);
     if (n && confirm(`모든 담당자 쿠폰을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
   }
-
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
-  ['code', 'pw'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && enter())); // 한글 조합 중 Enter 는 건너뜀
+  ['code', 'pw'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && enter()));
   ['pw1', 'pw2'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && !$('pwgo').disabled && pwChange()));
   addItem();
-  try { localStorage.removeItem('pp_name'); } catch (e) {} // 옛 판이 저장한 이름은 지움
-  // 새로 고침 · 다시 열기 = 저장된 토큰 확인(1~2초) 동안 이름 칸을 잠금 — 그 사이 다른 이름을 넣어도 확인이 끝나면 이전 계정으로 들어가던 것(10/29)
+  try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
 </script>
 </body>
