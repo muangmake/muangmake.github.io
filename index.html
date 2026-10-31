@@ -235,6 +235,7 @@
   .pv p b { color:var(--text); }
   #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .12s, transform .12s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
   #zoom.show { opacity:1; transform:none; }
+  #zoom > img { display:block; max-width:min(640px, calc(100vw - 32px)); max-height:calc(100vh - 32px); }
   #zoom .stage { padding:12px; display:grid; place-items:center; }
   #zoom p { padding:10px 14px; font-size:13px; color:var(--dim); background:var(--field); }
   #zoom p b { color:var(--text); }
@@ -831,6 +832,26 @@
     zm.style.left = r.left - w - 12 + 'px';
     zm.style.top = Math.max(16, Math.min(r.top, innerHeight - h - 28 - 60 - 16)) + 'px';
   }
+  const 큰그림칸 = t => t && t.closest('img, .cv, .cr, [data-z]');
+  function 크게(e) {
+    const zm = $('zoom'), el = e.type === 'mouseover' && matchMedia('(hover:hover)').matches && 큰그림칸(e.target);
+    if (e.type === 'mouseout' && 큰그림칸(e.target) === 큰그림칸(e.relatedTarget)) return;
+    const u = el && (el.dataset.z || el.src || (el.style.backgroundImage.match(/url\("(.+)"\)/) || [])[1]);
+    if (!u) { zm.classList.remove('show'); zm.dataset.u = ''; return; }
+    if (zm.dataset.u === u) return;
+    const im = new Image();
+    zm.dataset.u = u;
+    im.onload = () => {
+      if (zm.dataset.u !== u) return;
+      zm.replaceChildren(im);
+      zm.style.cssText = 'left:0;top:0';
+      const r = el.getBoundingClientRect(), W = zm.offsetWidth, H = zm.offsetHeight;
+      zm.style.left = (r.right + 12 + W <= innerWidth - 8 ? r.right + 12 : Math.max(8, r.left - 12 - W)) + 'px';
+      zm.style.top = Math.max(8, Math.min(r.top + r.height / 2 - H / 2, innerHeight - H - 8)) + 'px';
+      zm.classList.add('show');
+    };
+    im.src = u;
+  }
   function tidy(el) {
     el.value = el.classList.contains('ln') ? norm(el.value) || el.value.trim()
       : el.value.split('\n').map(l => l.trim()).filter(Boolean).map(l => refLine(l) || l).join('\n');
@@ -1086,6 +1107,7 @@
     const X = (i, n) => n > 1 ? (W - nw - 12) * i / (n - 1) + 6 : 6, 위x = r => X(레퍼.indexOf(r), 레퍼.length), 밑x = k => X(아래.indexOf(k), 아래.length);
     const 흐름 = { '1|1': 3 };
     짝있.forEach(i => { const q = i.r + '|' + i.쪽; 흐름[q] = (흐름[q] || 0) + 1; });
+    d.쪽.forEach(p => { if (!짝있.some(i => i.쪽 === p.k)) (p.r || []).forEach(x => 흐름[x[0] + '|' + p.k] = x[1]); });
     const 줄 = Object.entries(흐름).map(([q, n]) => { const [r, k] = q.split('|').map(Number); return { r, k, n }; }).filter(f => 레퍼.includes(f.r)).sort((a, c) => 밑x(a.k) - 밑x(c.k) || 위x(a.r) - 위x(c.r));
     const u = Math.min(5, 70 / Math.max(...Object.values(흐름))), 위찬 = {}, 밑찬 = {};
     const 선 = 줄.map(f => {
@@ -1095,7 +1117,7 @@
       const 켬 = 고름.side === 'o' ? f.k === 고름.k : f.r === 고름.k, a = y1 + nh + 4, c = y2 - 4, m = (a + c) / 2;
       return `<path class="flow ${켬 ? 'hi' : 'lo'}" stroke-width="${w}" d="M${x1} ${a} C${x1} ${m} ${x2} ${m} ${x2} ${c}"/>`;
     }).join('');
-    const 노드 = (x, y, id, 글, 켬, side, k) => `<g role="button" tabindex="0" aria-label="${esc(글)}" onclick="대조골라(${j.row},'${side}',${k})" onkeydown="if(event.key==='Enter')대조골라(${j.row},'${side}',${k})">${id ? `<image href="${img(id)}" x="${x}" y="${y}" width="${nw}" height="${nh}" preserveAspectRatio="xMidYMid slice"/>` : ''}<rect class="nd ${켬 ? 'on' : ''}" x="${x}" y="${y}" width="${nw}" height="${nh}" rx="7"/><text class="mt ${켬 ? 'on' : ''}" x="${x + nw / 2}" y="${y > 100 ? y + nh + 16 : y - 7}" text-anchor="middle">${esc(글)}</text></g>`;
+    const 노드 = (x, y, id, 글, 켬, side, k) => `<g role="button" tabindex="0" aria-label="${esc(글)}"${id ? ` data-z="${img(id)}"` : ''} onclick="대조골라(${j.row},'${side}',${k})" onkeydown="if(event.key==='Enter')대조골라(${j.row},'${side}',${k})">${id ? `<image href="${img(id)}" x="${x}" y="${y}" width="${nw}" height="${nh}" preserveAspectRatio="xMidYMid slice"/>` : ''}<rect class="nd ${켬 ? 'on' : ''}" x="${x}" y="${y}" width="${nw}" height="${nh}" rx="7"/><text class="mt ${켬 ? 'on' : ''}" x="${x + nw / 2}" y="${y > 100 ? y + nh + 16 : y - 7}" text-anchor="middle">${esc(글)}</text></g>`;
     const svg = `<svg style="min-width:${W * .76}px" viewBox="0 0 ${W} 440" role="img" aria-label="레퍼런스 장에서 제작본 장으로 아이템이 옮겨 간 흐름"><text class="mr" x="6" y="14">레퍼런스 ${레퍼.length}장</text><text class="mr" x="6" y="436">제작본 ${아래.length}장</text>${선}`
       + 레퍼.map(r => 노드(위x(r), y1, d.참조[r], r === 1 ? '표지' : r + '장', 고름.side === 'r' && 고름.k === r, 'r', r)).join('')
       + 아래.map(k => 노드(밑x(k), y2, 파일[k], 쪽이름(k), 고름.side === 'o' && 고름.k === k, 'o', k)).join('') + '</svg>';
@@ -1470,6 +1492,7 @@
     if (n && confirm(`모든 담당자 쿠폰을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
   }
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
+  ['list', 'detail'].forEach(id => ['mouseover', 'mouseout', 'click'].forEach(t => $(id).addEventListener(t, 크게)));
   ['code', 'pw'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && enter()));
   ['pw1', 'pw2'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && !$('pwgo').disabled && pwChange()));
   addItem();
