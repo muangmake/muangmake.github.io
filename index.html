@@ -26,6 +26,15 @@
   #cost .two ul { list-style:none; padding:0; margin:0; font-size:12px; } #cost .two li { display:grid; grid-template-columns:96px 1fr 66px; gap:6px; align-items:center; padding:3px 0; } #cost .two li u { display:block; height:6px; background:var(--bar); border-radius:3px; overflow:hidden; } #cost .two li u i { display:block; height:100%; background:var(--navy2); } #cost .two li b { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
   #cost .nt { color:var(--dim); font-size:11px; margin-top:8px; line-height:1.5; } #cost .box button { margin-top:10px; width:100%; } #cost .ft { color:var(--dim); font-size:12px; margin-top:10px; line-height:1.6; } #cost .ft a { color:var(--navy2); font-weight:700; cursor:pointer; }
   @media (max-width:640px) { #cost .kp { grid-template-columns:repeat(2,1fr); gap:8px; } #cost .kp b { font-size:19px; } #cost .rw { grid-template-columns:40px minmax(0,1fr) 78px; gap:10px; } #cost .th { width:40px; height:53px; } #cost .tt b { font-size:13px; } #cost .tt small { font-size:11px; } #cost .rw .mix, #cost .rw .go { display:none; } #cost .won { font-size:14px; } #cost .two { grid-template-columns:1fr; gap:10px; } #cost .co small { font-size:10px; } #cost .bars { gap:6px; } }
+  #dj { margin:6px 0 18px; } #dj h2 { font-size:17px; margin:0 0 10px; } #dj h3 { font-size:14px; margin:14px 0 8px; } #dj .kp { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-bottom:12px; } #dj .kp div { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:9px 11px; min-width:0; } #dj .kp span { display:block; color:var(--dim); font-size:12px; } #dj .kp b { display:block; font-size:20px; font-variant-numeric:tabular-nums; } #dj .kp small { display:block; color:var(--dim); font-size:11.5px; line-height:1.35; } #dj .ok { color:var(--ok); } #dj .warn { color:var(--run); }
+  #dj .map { overflow-x:auto; background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:8px; margin-bottom:12px; } #dj .map svg { display:block; width:100%; height:auto; } #dj .map g[role=button] { cursor:pointer; }
+  #dj .flow { fill:none; stroke:var(--navy2); stroke-opacity:.42; } #dj .flow.hi { stroke:var(--run); stroke-opacity:.92; } #dj .flow.lo { stroke-opacity:.1; } #dj .nd { fill:none; stroke:var(--line); stroke-width:2; } #dj .nd.on { stroke:var(--run); stroke-width:3; } #dj .mt { fill:var(--dim); font-size:12px; } #dj .mt.on { fill:#fff; font-weight:700; } #dj .mr { fill:var(--text); font-size:12.5px; font-weight:700; }
+  #dj .chk { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; } #dj .chk p { margin:0 0 6px; } #dj .chk button { all:unset; cursor:pointer; display:block; width:100%; padding:5px 0; border-top:1px solid var(--line); font-size:13px; line-height:1.4; } #dj .chk button i { font-style:normal; color:var(--run); } #dj .chk small { color:var(--dim); }
+  #dj .lad { display:grid; grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr); } #dj .lad svg { grid-column:2; width:44px; height:100%; } #dj .lh { font-size:12px; color:var(--dim); padding-bottom:6px; } #dj .ru { height:64px; display:flex; gap:8px; align-items:center; font-size:13px; line-height:1.3; min-width:0; } #dj .ru > span { min-width:0; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; } #dj .ru small { display:block; color:var(--dim); font-size:11.5px; } #dj .ru em { font-style:normal; color:var(--run); font-size:11.5px; display:block; }
+  #dj .cr { width:52px; height:52px; flex:none; border-radius:7px; background:var(--bar) no-repeat; background-size:300% auto; display:block; }
+  #dj .two { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } #dj .two figure { margin:0; min-width:0; } #dj .two figcaption { font-size:12px; color:var(--dim); margin-bottom:4px; } #dj .two img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:10px; display:block; background:var(--bar); } #dj .two ul { margin:8px 0 0; padding:0; list-style:none; font-size:13px; line-height:1.4; } #dj .two li { padding:2px 0; }
+  #dj .bar2 { display:grid; grid-template-columns:40px minmax(0,1fr) 30px; gap:8px; align-items:center; font-size:12.5px; margin-bottom:4px; } #dj .bar2 u { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; } #dj .bar2 i { display:block; height:100%; border-radius:4px; background:var(--navy2); } #dj .bar2 s { position:absolute; left:80%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .nt { color:var(--dim); font-size:12px; line-height:1.5; margin:6px 0 0; }
+  @media (max-width:560px) { #dj .kp { grid-template-columns:repeat(2,minmax(0,1fr)); } #dj .lad { grid-template-columns:minmax(0,1fr) 26px minmax(0,1fr); } #dj .lad svg { width:26px; } #dj .cr { width:38px; height:38px; } #dj .ru { font-size:12px; gap:5px; height:72px; } }
   :root { color-scheme:dark; } 
   * { box-sizing:border-box; margin:0; }
   body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Pretendard,sans-serif; letter-spacing:-.04em; word-break:keep-all; overflow-wrap:anywhere; 
@@ -1039,6 +1048,82 @@
     + `<span>${j.left ? '남음 · ' + j.done + '쯤 완료' : '예상보다 늦어지는 중'}<small>${esc(단계말.제작[제작단계(j)])}${j.step ? ' · ' + esc(j.step) : ''}</small></span></div>`
     + `<p class="ahead">${j.ahead ? `앞에 <b>${j.ahead}건</b> 대기 중` : '앞에 대기 중인 건 없음 — 지금 내 차례'}</p>`;
   const 진행게이지 = (j, q) => /^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j)) : q ? gauge('수정', 수정단계(q), q.pct) : '';
+  const 대조기억 = new Map(), 대조고름 = new Map();
+  function 대조받기(j) {
+    const 열쇠 = j.files.map(f => f.id).join(), m = 대조기억.get(j.row);
+    if (!j.files.length || m && m.열쇠 === 열쇠 && m.d) return;
+    google.script.run.withSuccessHandler(d => {
+      대조기억.set(j.row, { 열쇠, d });
+      const e = $('dj');
+      if (d && e && openRow === j.row) e.innerHTML = 대조칸(j);
+    }).withFailureHandler(() => {}).대조(code, j.row);
+  }
+  function 대조골라(row, side, k) {
+    대조고름.set(row, { side, k });
+    $('dj').innerHTML = 대조칸(mine.find(j => j.row === row));
+  }
+  const 내값 = i => [(i.글.match(/[\d,.]+ ?원/) || [''])[0]].filter(Boolean).join('');
+  function 체크글(i, 새글) {
+    const l = [];
+    if (!새글 && i.이름체크 === '비슷') l.push(`이름 일부 다름(레퍼런스: ${i.r글 || ''})`);
+    if (!새글 && i.이름체크 === '없음') l.push('레퍼런스에서 같은 이름을 못 찾음');
+    if (i.값체크 === '다름') l.push(`가격 다름(제작본 ${내값(i)} · 레퍼런스: ${i.r값 || ''})`);
+    if (i.값체크 === '없음') l.push('레퍼런스에 없는 숫자');
+    if (i.사진체크 === '틀림') l.push(`사진이 '${i.사진짝}' 쪽과 더 닮음`);
+    return l;
+  }
+  function 대조칸(j) {
+    const d = (대조기억.get(j.row) || {}).d;
+    if (!d || !d.쪽) return '';
+    const 고름 = 대조고름.get(j.row) || { side: 'o', k: (d.쪽[0] || { k: 1 }).k }, 전 = d.쪽.filter(p => p.r.length), 템 = d.템;
+    const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
+    const 쪽이름 = k => k === 1 ? '썸네일' : (d.쪽.find(p => p.k === k) || { n: '' }).n;
+    const 새글 = 템.filter(i => i.이름체크 === '없음').length * 2 > 템.length;
+    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length);
+    const 셈 = (k, v) => 템.filter(i => i[k] === v).length, 값들 = 템.filter(i => i.값체크).length;
+    const 상태 = v => 짝있.filter(i => i.상태 === v).length;
+    const 레퍼 = Object.keys(d.참조).map(Number).sort((a, b) => a - b), 아래 = [1].concat(d.쪽.map(p => p.k));
+    const nw = 84, nh = 105, W = Math.max(760, Math.max(레퍼.length, 아래.length) * 94 + 12), y1 = 38, y2 = 300;
+    const X = (i, n) => n > 1 ? (W - nw - 12) * i / (n - 1) + 6 : 6, 위x = r => X(레퍼.indexOf(r), 레퍼.length), 밑x = k => X(아래.indexOf(k), 아래.length);
+    const 흐름 = { '1|1': 3 };
+    짝있.forEach(i => { const q = i.r + '|' + i.쪽; 흐름[q] = (흐름[q] || 0) + 1; });
+    const 줄 = Object.entries(흐름).map(([q, n]) => { const [r, k] = q.split('|').map(Number); return { r, k, n }; }).filter(f => 레퍼.includes(f.r)).sort((a, c) => 밑x(a.k) - 밑x(c.k) || 위x(a.r) - 위x(c.r));
+    const u = Math.min(5, 70 / Math.max(...Object.values(흐름))), 위찬 = {}, 밑찬 = {};
+    const 선 = 줄.map(f => {
+      const w = f.n * u, 합위 = 줄.filter(x => x.r === f.r).reduce((s, x) => s + x.n * u, 0), 합밑 = 줄.filter(x => x.k === f.k).reduce((s, x) => s + x.n * u, 0);
+      위찬[f.r] = 위찬[f.r] || 0; 밑찬[f.k] = 밑찬[f.k] || 0;
+      const x1 = 위x(f.r) + nw / 2 - 합위 / 2 + 위찬[f.r] + w / 2, x2 = 밑x(f.k) + nw / 2 - 합밑 / 2 + 밑찬[f.k] + w / 2; 위찬[f.r] += w; 밑찬[f.k] += w;
+      const 켬 = 고름.side === 'o' ? f.k === 고름.k : f.r === 고름.k, a = y1 + nh + 4, c = y2 - 4, m = (a + c) / 2;
+      return `<path class="flow ${켬 ? 'hi' : 'lo'}" stroke-width="${w}" d="M${x1} ${a} C${x1} ${m} ${x2} ${m} ${x2} ${c}"/>`;
+    }).join('');
+    const 노드 = (x, y, id, 글, 켬, side, k) => `<g role="button" tabindex="0" aria-label="${esc(글)}" onclick="대조골라(${j.row},'${side}',${k})" onkeydown="if(event.key==='Enter')대조골라(${j.row},'${side}',${k})">${id ? `<image href="${img(id)}" x="${x}" y="${y}" width="${nw}" height="${nh}" preserveAspectRatio="xMidYMid slice"/>` : ''}<rect class="nd ${켬 ? 'on' : ''}" x="${x}" y="${y}" width="${nw}" height="${nh}" rx="7"/><text class="mt ${켬 ? 'on' : ''}" x="${x + nw / 2}" y="${y > 100 ? y + nh + 16 : y - 7}" text-anchor="middle">${esc(글)}</text></g>`;
+    const svg = `<svg style="min-width:${W * .76}px" viewBox="0 0 ${W} 440" role="img" aria-label="레퍼런스 장에서 제작본 장으로 아이템이 옮겨 간 흐름"><text class="mr" x="6" y="14">레퍼런스 ${레퍼.length}장</text><text class="mr" x="6" y="436">제작본 ${아래.length}장</text>${선}`
+      + 레퍼.map(r => 노드(위x(r), y1, d.참조[r], r === 1 ? '표지' : r + '장', 고름.side === 'r' && 고름.k === r, 'r', r)).join('')
+      + 아래.map(k => 노드(밑x(k), y2, 파일[k], 쪽이름(k), 고름.side === 'o' && 고름.k === k, 'o', k)).join('') + '</svg>';
+    const 조각 = (id, x, y) => { const p = (c, z) => Math.max(0, Math.min(100, (c - 1 / (2 * z)) / (1 - 1 / z) * 100)).toFixed(1); return `<i class="cr" style="background-image:url('${id ? img(id) : ''}');background-position:${p(+x, 3)}% ${p(+y, 3.75)}%"></i>`; };
+    const 칸 = (i, 측) => 측 === 'l'
+      ? `<div class="ru">${조각(d.참조[i.r], i.px != null ? i.px : i.rx != null ? i.rx : .5, i.py != null ? i.py : i.ry != null ? i.ry - .12 : .5)}<span>${esc(i.r글 || '글 자리 못 찾음')}<small>${i.r}장${i.r칸 ? ' ' + i.r칸 + '번째' : ''}${i.r값 ? ' · ' + esc(i.r값) : ''}</small></span></div>`
+      : `<div class="ru">${조각(파일[i.쪽], i.ox, i.oy)}<span>${esc(i.이름)}<small>${esc(i.글)}</small>${체크글(i, 새글).map(t => `<em>${esc(t)}</em>`).join('')}</span></div>`;
+    let 아래칸;
+    if (고름.side === 'o' && 고름.k === 1 || 고름.side === 'r' && 고름.k === 1) {
+      const 막대 = (n, v) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`;
+      아래칸 = `<h3>썸네일 대조</h3><div class="two"><figure><figcaption>레퍼런스 표지</figcaption><img src="${img(d.참조[1])}" alt="레퍼런스 표지"><ul>${d.표지[0].slice(0, 6).map(t => `<li>${esc(t)}</li>`).join('')}</ul></figure><figure><figcaption>제작본 썸네일</figcaption><img src="${파일[1] ? img(파일[1]) : ''}" alt="제작본 썸네일"><ul>${d.표지[1].slice(0, 6).map(t => `<li>${esc(t)}</li>`).join('')}</ul></figure></div><div style="margin-top:10px">${막대('구도', d.구도)}${막대('색', d.색)}</div><p class="nt">빨간 눈금(80)을 넘으면 베낌 주의예요. 글은 글자 인식으로 읽어 일부 틀릴 수 있어요.</p>`;
+    } else {
+      const 고른 = 고름.side === 'o' ? 템.filter(i => i.쪽 === 고름.k) : 템.filter(i => i.r === 고름.k);
+      const 왼 = 고른.filter(i => i.r).sort((a, b) => a.r - b.r || (a.r칸 || 0) - (b.r칸 || 0)), 오 = 왼.slice().sort((a, b) => a.쪽 - b.쪽 || a.칸 - b.칸), h = innerWidth <= 560 ? 72 : 64;
+      const 빠 = 고른.filter(i => !i.r);
+      const 말 = 고름.side === 'o' ? `${쪽이름(고름.k)}: 이 장 아이템이 레퍼런스에 있던 차례(왼쪽)와 지금 차례(오른쪽)예요. 노란 선이 자리가 바뀐 아이템이에요.` : `레퍼런스 ${고름.k}장의 아이템이 어느 내지로 갔는지 보여 줘요.`;
+      아래칸 = `<h3>아이템 차례 · 제품 정보</h3><p class="nt" style="margin:0 0 8px">${esc(말)}</p>` + (왼.length ? `<div class="lad"><div class="lh">레퍼런스</div><div></div><div class="lh">제작본</div>${왼.map((i, n) => 칸(i, 'l') + (n ? '' : `<svg viewBox="0 0 54 ${왼.length * h}" preserveAspectRatio="none" style="grid-row:2 / span ${왼.length}">${왼.map((x, a) => { const c = 오.indexOf(x), 곧 = a === c; return `<line x1="0" y1="${a * h + h / 2}" x2="54" y2="${c * h + h / 2}" stroke="${곧 ? '#6F8FE0' : '#FFC46B'}" stroke-opacity="${곧 ? .5 : .95}" stroke-width="2" vector-effect="non-scaling-stroke"/>`; }).join('')}</svg>`) + 칸(오[n], 'r')).join('')}</div>` : '')
+        + (빠.length ? `<p class="nt">레퍼런스 짝을 못 찾은 글: ${빠.map(i => esc(i.이름)).join(', ')}</p>` : '');
+    }
+    return `<h2>레퍼런스 대조</h2><div class="kp"><div><span>썸네일 닮음</span><b>구도 ${+d.구도}</b><small>색 ${+d.색} · 80 넘으면 베낌 주의</small></div>`
+      + `<div><span>제품 정보 체크</span><b class="${볼.length ? 'warn' : 'ok'}">${볼.length ? `확인 ${볼.length}개` : '문제 없음'}</b><small>${템.length}개 중 · 이름 ${새글 ? '새로 씀' : 셈('이름체크', '맞음') + ' 맞음'} · 숫자 ${셈('값체크', '맞음')}/${값들} 맞음</small></div>`
+      + `<div><span>아이템 자리</span><b>${상태('그대로')} 그대로</b><small>차례 바뀜 ${상태('차례')} · 다른 장에서 ${상태('옮김')}</small></div>`
+      + `<div><span>내지 장 수</span><b>${d.참조수 - 1} → ${d.쪽.length}</b><small>${d.소제목.length ? '레퍼런스 소제목: ' + esc(d.소제목.join(' · ')) : '되풀이 소제목 없음'}</small></div></div>`
+      + `<div class="map">${svg}</div>`
+      + (볼.length ? `<div class="chk"><p><b>확인할 아이템 ${볼.length}개</b> <small>눌러서 그 장을 봐요</small></p>${볼.slice(0, 12).map(i => `<button onclick="대조골라(${j.row},'o',${+i.쪽})">${esc(쪽이름(i.쪽))} · ${esc(i.이름)} — <i>${esc(체크글(i, 새글).join(' · '))}</i></button>`).join('')}${볼.length > 12 ? `<small>외 ${볼.length - 12}개</small>` : ''}</div>` : '')
+      + 아래칸 + `<p class="nt">사진은 ${템.filter(i => i.사진체크 === '맞음').length}개만 자동으로 같은 제품임을 확인했어요. 나머지는 위 표에서 양쪽 사진을 눈으로 비교해 주세요. 자동 대조로 못 잡는 차이도 있어요.</p>`;
+  }
   function card(i, how) {
     const j = mine[i];
     openRow = j.row;
@@ -1056,7 +1141,7 @@
       + (/^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j), j.pct) + 남은(j) : '')
       + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.left == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
       + (j.files.length ? `고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.${busy}</p>`
-        + `<div class="pages">${장들.map(({ f, t }) => {
+        + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
           return `<div><div class="ph${on ? ' tw' : ''}" data-k="${esc(k)}">`
             + (t ? `<div class="seg"><button class="${on ? '' : 'on'}" onclick="판바꿈(this, false)">${esc(j.channel)}</button><button class="${on ? 'on' : ''}" onclick="판바꿈(this, true)">${esc(t.ch)}</button></div>` : 쌍잡 ? '<span class="same">두 채널 같음</span>' : '')
@@ -1067,6 +1152,7 @@
         + box('전체', true)
         : '아직 만드는 중이에요. 끝나면 여기서 결과를 보고 수정 요청을 보낼 수 있어요.</p>')
       + '<p class="err" id="err3"></p>';
+    대조받기(j);
     if (how === 'refresh') { const 새 = [], 낱 = []; 맞춤($('detail'), 틀_(html), 새, 낱); return 타자(새, 0, 2, 낱); }
     $('detail').innerHTML = html;
     if (!$('list').hidden) 부모.detail = 'list';
