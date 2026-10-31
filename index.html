@@ -1068,7 +1068,6 @@
     if (!새글 && i.이름체크 === '비슷') l.push(`이름 일부 다름(레퍼런스: ${i.r글 || ''})`);
     if (!새글 && i.이름체크 === '없음') l.push('레퍼런스에서 같은 이름을 못 찾음');
     if (i.값체크 === '다름') l.push(`가격 다름(제작본 ${내값(i)} · 레퍼런스: ${i.r값 || ''})`);
-    if (i.값체크 === '없음') l.push('레퍼런스에 없는 숫자');
     if (i.사진체크 === '틀림') l.push(`사진이 '${i.사진짝}' 쪽과 더 닮음`);
     return l;
   }
@@ -1079,7 +1078,7 @@
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
     const 쪽이름 = k => k === 1 ? '썸네일' : (d.쪽.find(p => p.k === k) || { n: '' }).n;
     const 새글 = 템.filter(i => i.이름체크 === '없음').length * 2 > 템.length;
-    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length);
+    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length), 새숫자 = 템.filter(i => i.값체크 === '없음');
     const 셈 = (k, v) => 템.filter(i => i[k] === v).length, 값들 = 템.filter(i => i.값체크).length;
     const 상태 = v => 짝있.filter(i => i.상태 === v).length;
     const 레퍼 = Object.keys(d.참조).map(Number).sort((a, b) => a - b), 아래 = [1].concat(d.쪽.map(p => p.k));
@@ -1103,7 +1102,7 @@
     const 조각 = (id, x, y) => { const p = (c, z) => Math.max(0, Math.min(100, (c - 1 / (2 * z)) / (1 - 1 / z) * 100)).toFixed(1); return `<i class="cr" style="background-image:url('${id ? img(id) : ''}');background-position:${p(+x, 3)}% ${p(+y, 3.75)}%"></i>`; };
     const 칸 = (i, 측) => 측 === 'l'
       ? `<div class="ru">${조각(d.참조[i.r], i.px != null ? i.px : i.rx != null ? i.rx : .5, i.py != null ? i.py : i.ry != null ? i.ry - .12 : .5)}<span>${esc(i.r글 || '글 자리 못 찾음')}<small>${i.r}장${i.r칸 ? ' ' + i.r칸 + '번째' : ''}${i.r값 ? ' · ' + esc(i.r값) : ''}</small></span></div>`
-      : `<div class="ru">${조각(파일[i.쪽], i.ox, i.oy)}<span>${esc(i.이름)}<small>${고름.side === 'r' ? esc(쪽이름(i.쪽)) + ' ' + i.칸 + '번째 · ' : ''}${esc(i.글)}</small>${체크글(i, 새글).map(t => `<em>${esc(t)}</em>`).join('')}</span></div>`;
+      : `<div class="ru">${조각(파일[i.쪽], i.ox, i.oy)}<span>${esc(i.이름)}<small>${고름.side === 'r' ? esc(쪽이름(i.쪽)) + ' ' + i.칸 + '번째 · ' : ''}${esc(i.글)}</small>${체크글(i, 새글).map(t => `<em>${esc(t)}</em>`).join('')}${i.값체크 === '없음' ? '<small>레퍼런스 장에 없는 숫자</small>' : ''}</span></div>`;
     let 아래칸;
     if (고름.side === 'o' && 고름.k === 1 || 고름.side === 'r' && 고름.k === 1) {
       const 막대 = (n, v) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`;
@@ -1117,10 +1116,11 @@
         + (빠.length ? `<p class="nt">레퍼런스 짝을 못 찾은 글: ${빠.map(i => esc(i.이름)).join(', ')}</p>` : '');
     }
     return `<h2>레퍼런스 대조</h2><div class="kp"><div><span>썸네일 닮음</span><b>구도 ${+d.구도}</b><small>색 ${+d.색} · 80 넘으면 베낌 주의</small></div>`
-      + `<div><span>제품 정보 체크</span><b class="${볼.length ? 'warn' : 'ok'}">${볼.length ? `확인 ${볼.length}개` : '문제 없음'}</b><small>${템.length}개 중 · 이름 ${새글 ? '새로 씀' : 셈('이름체크', '맞음') + ' 맞음'} · 숫자 ${셈('값체크', '맞음')}/${값들} 맞음</small></div>`
+      + `<div><span>제품 정보 체크</span><b class="${볼.length ? 'warn' : 'ok'}">${볼.length ? `확인 ${볼.length}개` : '문제 없음'}</b><small>${템.length}개 중 · 이름 ${새글 ? '새로 씀' : 셈('이름체크', '맞음') + ' 맞음'} · 숫자 ${셈('값체크', '맞음') + 새숫자.length}/${값들} 이상 없음</small></div>`
       + `<div><span>아이템 자리</span><b>${상태('그대로')} 그대로</b><small>차례 바뀜 ${상태('차례')} · 다른 장에서 ${상태('옮김')}</small></div>`
       + `<div><span>내지 장 수</span><b>${d.참조수 - 1} → ${d.쪽.length}</b><small>${d.소제목.length ? '레퍼런스 소제목: ' + esc(d.소제목.join(' · ')) : '되풀이 소제목 없음'}</small></div></div>`
       + `<div class="map">${svg}</div>`
+      + (새숫자.length ? `<p class="nt" style="margin:0 0 12px">레퍼런스 장 글자에 없는 숫자가 있는 아이템 ${새숫자.length}개 — 캡션 · 검색에서 온 날짜나 주소일 수 있어 경고로 세지 않았어요. (${새숫자.slice(0, 3).map(i => esc(i.이름)).join(', ')}${새숫자.length > 3 ? ' 등' : ''})</p>` : '')
       + (볼.length ? `<div class="chk"><p><b>확인할 아이템 ${볼.length}개</b> <small>눌러서 그 장을 봐요</small></p>${볼.slice(0, 12).map(i => `<button onclick="대조골라(${j.row},'o',${+i.쪽})">${esc(쪽이름(i.쪽))} · ${esc(i.이름)} — <i>${esc(체크글(i, 새글).join(' · '))}</i></button>`).join('')}${볼.length > 12 ? `<small>외 ${볼.length - 12}개</small>` : ''}</div>` : '')
       + 아래칸 + `<p class="nt">사진은 ${템.filter(i => i.사진체크 === '맞음').length}개만 자동으로 같은 제품임을 확인했어요. 나머지는 위 표에서 양쪽 사진을 눈으로 비교해 주세요. 자동 대조로 못 잡는 차이도 있어요.</p>`;
   }
