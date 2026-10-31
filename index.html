@@ -322,7 +322,7 @@
     <input type="password" id="pw" name="pp-login-pw" placeholder="비밀번호" autocomplete="current-password" style="margin-top:10px">
     <div id="pwbox" hidden>
       <p class="sub" id="pwmsg" style="margin:18px 0 10px"></p>
-      <input type="password" id="pw1" placeholder="새 비밀번호 (6자 이상)" autocomplete="new-password">
+      <input type="password" id="pw1" placeholder="새 비밀번호 (8자 이상)" autocomplete="new-password">
       <input type="password" id="pw2" placeholder="새 비밀번호 한 번 더" autocomplete="new-password" style="margin-top:10px">
       <button id="pwgo" onclick="pwChange()">새 비밀번호로 바꾸고 로그인</button>
     </div>
@@ -453,6 +453,13 @@
   // GitHub Pages 판 — 구글 계정이 여럿 로그인된 폰에서 웹앱 주소가 '파일을 열 수 없습니다'로 막혀, 쿠키 없이 doPost 로 서버를 부름
   if (location.hostname.endsWith('github.io')) {
     if (top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); } // 다른 사이트가 이 화면을 틀에 넣어 누르게 하지 못하게(doGet 의 XFrame 대신)
+    // 스크립트가 끼어도 토큰을 다른 곳으로 못 보내게 — 서버 · 그림 · 글꼴 주소만 허용(새 주소가 필요하면 여기에)
+    const 정책 = document.createElement('meta');
+    정책.httpEquiv = 'Content-Security-Policy';
+    정책.content = ['default-src \'none\'', 'script-src \'unsafe-inline\'', 'style-src \'unsafe-inline\' https://cdn.jsdelivr.net https://fonts.googleapis.com',
+      'font-src https://cdn.jsdelivr.net https://fonts.gstatic.com', 'img-src data: https://drive.google.com https://*.googleusercontent.com https://*.cdninstagram.com https://*.fbcdn.net',
+      'connect-src https://script.google.com https://script.googleusercontent.com', 'base-uri \'none\'', 'form-action \'none\''].join('; ');
+    document.head.append(정책);
     const API = 'https://script.google.com/macros/s/AKfycbzk9f66VR2EigqnlQFj26YITn8IJmNPYG65ml93DSz26ro1XNsXKR-6yblJG4t3jpT22g/exec';
     const 부름 = (ok, no) => new Proxy({}, { get: (_, fn) =>
       fn === 'withSuccessHandler' ? f => 부름(f, no) : fn === 'withFailureHandler' ? f => 부름(ok, f) : (...args) => {
@@ -504,7 +511,7 @@
   function pwChange() {
     const name = $('code').value.trim(), cur = $('pw').value, a = $('pw1').value;
     const 틀림 = !name || !cur ? '위에 이름과 지금 비밀번호(처음이면 임시 비밀번호)를 넣어 주세요.'
-      : a.length < 6 ? '새 비밀번호는 6자 이상이에요.' : a !== $('pw2').value ? '새 비밀번호 두 칸이 달라요.' : '';
+      : a.length < 8 ? '새 비밀번호는 8자 이상이에요.' : a !== $('pw2').value ? '새 비밀번호 두 칸이 달라요.' : '';
     if (틀림) return $('err1').textContent = 틀림;
     call('비번변경', [name, cur, a], $('pwgo'), 'err1', r => { $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
   }
@@ -583,10 +590,12 @@
   function saved() { try { return localStorage.getItem('pp_t') || ''; } catch (e) { return ''; } }
   async function logout() {
     if (!code || document.body.dataset.out) return; // 터지는 중엔 한 번만
-    google.script.run.logout(code);
+    const t = code;
+    google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t); // 끊겨도 한 번 더 — 서버 세션이 남지 않게
     store(''); code = ''; // 토큰은 바로 지움 — 효과(1.5초)는 그 뒤 화면만
     await 터짐_();
     who = {}; cur = ''; mine = []; $('cards').innerHTML = $('cards').html = '';
+    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = ''); // 임시 비밀번호 표 등 — 같은 탭 다음 사람에게 안 남게
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel()); // 들어갈 때 흐려진 채(forwards) 남은 로그인 창 되돌림
     google.script.history.replace({});
@@ -761,7 +770,19 @@
   // 템플릿 고르기 — 포자 지침 템플릿(도식 미리보기 html · 1080 좌표를 줄여 그림). 고른 값 = el.dataset.d '열쇠|덧'('' = AI가 고름)
   const types = () => ((who.channels || []).find(x => x.name === chan) || {}).types || { H: 1350, list: [] };
   const tkey = x => x.key + '|' + x.add;
-  const mini = (x, H, h) => { const w = Math.round(h * 1080 / H); return `<div class="mini" style="width:${w}px;height:${h}px"><div class="pg" style="height:${H}px;transform:scale(${h / H})">${x.html}</div></div>`; };
+  // 템플릿 HTML = 쓰는 태그 · 속성만 남김(지침에 스크립트가 끼어도 안 돎) — 새 태그를 쓰면 여기에
+  const 틀기억 = new Map();
+  const 안전틀 = s => {
+    if (틀기억.has(s)) return 틀기억.get(s);
+    const d = new DOMParser().parseFromString('<body>' + s, 'text/html');
+    d.body.querySelectorAll('*').forEach(e => {
+      if (!/^(DIV|SPAN|P|B|I|S|U|BR|IMG|STYLE)$/.test(e.tagName)) return e.remove();
+      [...e.attributes].forEach(a => { if (!(a.name === 'style' || a.name === 'class' || a.name === 'src' && e.tagName === 'IMG' && a.value.startsWith('https:'))) e.removeAttribute(a.name); });
+    });
+    틀기억.set(s, d.body.innerHTML);
+    return 틀기억.get(s);
+  };
+  const mini = (x, H, h) => { H = Number(H) || 1350; const w = Math.round(h * 1080 / H); return `<div class="mini" style="width:${w}px;height:${h}px"><div class="pg" style="height:${H}px;transform:scale(${h / H})">${안전틀(String(x.html))}</div></div>`; };
   function drawD(el) {
     const { H, list } = types(), d = el.dataset.d || '', z = el.querySelector('.dz'), t = list.find(x => tkey(x) === d);
     z.hidden = !list.length;
@@ -893,6 +914,7 @@
   }
   // ───── 제작 현황 · 결과 카드 · 수정 요청
   let mine = [];
+  const 주소 = u => String(u).startsWith('https:') ? u : '#'; // 시트 값이 javascript: 등이면 링크로 안 씀
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
   const tk = c => who.admin ? '무제한' : c; // 관리자 티켓 칩
   // 의뢰자 — 관리자 화면은 모든 건 · 담당자 화면은 남이 맡긴 건(관리자 의뢰)만. who.name 은 지난 화면 기억으로 들어오면 비어 있음(새로_ 뒤 다시 그림)
@@ -959,7 +981,7 @@
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : s.v || home());
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|ref|acc)$/.test(s.v) ? home() : s.v || home()); // 뒤로 가기로 관리자 화면에 못 들어감
   });
   // 만드는 중 · 수정 요청이 있는 건이 있으면 1분마다 다시 읽음 — 수정이 끝나면 카드 · 상세 그림이 새 결과로 바뀜(상세에 적던 글이 있으면 그 화면은 그대로)
   let timer = 0, openRow = 0;
@@ -979,6 +1001,7 @@
   function load(quiet) {
     if (!quiet && !mine.length) $('lsub').textContent = '불러오는 중…';
     google.script.run.withSuccessHandler(r => {
+      if (!code) return; // 로그아웃 뒤 늦게 온 응답은 안 받음
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC'))); // 맥에서 올린 파일 이름은 자모가 풀려 있어 '팔로우' 를 못 알아봄
       현황기억_(r);
       현황그림_(r, quiet);
@@ -1052,7 +1075,7 @@
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (/^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j), j.pct) + 남은(j) : '')
-      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.left == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(j.link)}" target="_blank">레퍼런스</a> · <a href="${esc(j.folder)}" target="_blank">드라이브 폴더 ↗</a><br>`
+      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.left == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
       + (j.files.length ? `고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.${busy}</p>`
         + `<div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
@@ -1232,7 +1255,7 @@
     const 건들 = (cAll ? cD.jobs.concat(cD.sheet) : cD.jobs).filter(j => 안(j.d) || !days && !j.d);
     const 채널들 = [...new Set(건들.map(j => j.ch))];
     if (cCh && !채널들.includes(cCh)) cCh = '';
-    $('cch').innerHTML = ['', ...채널들].map(c => `<span class="chip ${c === cCh ? 'accent' : ''}" onclick="costCh('${esc(c)}')">${esc(c || '전체')}</span>`).join('');
+    $('cch').innerHTML = ['', ...채널들].map(c => `<span class="chip ${c === cCh ? 'accent' : ''}" onclick="costCh(${esc(JSON.stringify(c))})">${esc(c || '전체')}</span>`).join('');
     const 보임 = 건들.filter(j => !cCh || j.ch === cCh), 돈건 = 보임.filter(j => !j.same && j.won), 공 = cD.common.filter(x => 안(x.d));
     const 건합 = 돈건.reduce((a, j) => a + j.won, 0), 공합 = cCh ? 0 : 공.reduce((a, x) => a + x.won, 0);
     const 오늘 = 돈건.filter(j => j.d === cD.today), 대기 = 보임.filter(j => j.d === cD.today && /^(대기|제작중)/.test(j.state) && !j.won).length;
