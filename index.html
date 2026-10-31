@@ -155,7 +155,7 @@
   .gauge .track { position:relative; height:6px; border-radius:999px; background:var(--line); }
   .gauge .track i { position:absolute; left:0; top:0; bottom:0; border-radius:inherit;
     background:linear-gradient(90deg, color-mix(in srgb, var(--c) 30%, transparent), var(--c));
-    animation:grow 1.6s cubic-bezier(.22,1,.36,1) both, glow 4.2s cubic-bezier(.45,0,.55,1) 1.6s infinite; }
+    animation:grow 1.6s cubic-bezier(.22,1,.36,1), glow 4.2s cubic-bezier(.45,0,.55,1) 1.6s infinite; transition:width 1.2s cubic-bezier(.22,1,.36,1); }
   .gauge .track i::before { content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(90deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%) 0 0/200% 100%; animation:flow 2.6s linear infinite; }
   .gauge .track i::after, .gauge li.now::before { animation:breathe 4.2s cubic-bezier(.45,0,.55,1) infinite; will-change:transform, box-shadow; } 
   .gauge .track i::after { content:""; position:absolute; right:-6px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; background:var(--c); }
@@ -175,7 +175,7 @@
   @keyframes flow { from { background-position:100% 0; } to { background-position:-100% 0; } }
   @keyframes breathe { 0%, 100% { transform:scale(.86); box-shadow:0 0 6px 1px color-mix(in srgb, var(--c) 70%, transparent), 0 0 0 0 transparent; } 50% { transform:scale(1.1); box-shadow:0 0 14px 4px var(--c), 0 0 36px 12px color-mix(in srgb, var(--c) 30%, transparent); } }
   @keyframes rise { from { opacity:0; transform:translateY(5px); } }
-  @media (prefers-reduced-motion:reduce) { .gauge *, .gauge *::before, .gauge *::after { animation:none !important; } }
+  @media (prefers-reduced-motion:reduce) { .gauge *, .gauge *::before, .gauge *::after { animation:none !important; transition:none !important; } }
   .top, .win { position:relative; z-index:1; }
   #login { max-width:640px; }
   .item { border:2px solid var(--line); border-radius:16px; padding:16px 18px 18px; margin-top:16px; background:rgba(0,0,0,.18); }
@@ -578,7 +578,7 @@
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
     await 터짐_();
-    who = {}; cur = ''; mine = []; $('cards').innerHTML = $('cards').html = '';
+    who = {}; cur = ''; mine = []; $('cards').innerHTML = '';
     cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
@@ -689,17 +689,21 @@
   const 칸_ = e => /^(INPUT|TEXTAREA|SELECT|BUTTON|IMG|SVG|CANVAS)$/i.test(e.tagName) || e.classList.contains('mini')
     || (s => s.backgroundImage !== 'none' || !/^rgba\(.*,\s*0\)$|^transparent$/.test(s.backgroundColor) || parseFloat(s.borderTopWidth) + parseFloat(s.borderBottomWidth) + parseFloat(s.borderLeftWidth) > 0)(getComputedStyle(e));
   const 템플릿타자_ = () => !$('make').hidden && 타자(its().map(e => e.querySelector('.dz')));
-  function 타자(roots, 시작 = 0, 빠르기 = 1) {
+  const 원글 = new WeakMap();
+  function 타자(roots, 시작 = 0, 빠르기 = 1, 낱개 = []) {
     const ns = [];
+    const 넣기 = n => {
+      const t = n.nodeType === 3, el = t ? n.parentElement : n;
+      if (치는중.has(n) || el.closest(t ? 'script,style,textarea,template,.mini' : 'script,style,template,.mini *') || !el.getClientRects().length) return;
+      const top = el.getBoundingClientRect().top;
+      if (top <= innerHeight && (t ? n.data.trim() : 칸_(el))) ns.push([n, top]);
+    };
     roots.forEach(r => {
       const w = document.createTreeWalker(r, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
-      for (let n; (n = w.nextNode());) {
-        const t = n.nodeType === 3, el = t ? n.parentElement : n;
-        if (치는중.has(n) || el.closest(t ? 'script,style,textarea,template,.mini' : 'script,style,template,.mini *') || !el.getClientRects().length) continue;
-        const top = el.getBoundingClientRect().top;
-        if (top <= innerHeight && (t ? n.data.trim() : 칸_(el))) ns.push([n, top]);
-      }
+      for (let n; (n = w.nextNode());) 넣기(n);
     });
+    낱개.forEach(넣기);
+    if (!ns.length) return;
     ns.sort((a, b) => a[1] - b[1]);
     const now = performance.now(), d0 = Math.min(1000, Math.max(시작, 타자끝 - now)), D = 600 / 빠르기;
     const gap = Math.max(0, Math.min(126 / 빠르기, (1900 - d0 - D) / Math.max(1, ns.length - 1)));
@@ -710,6 +714,7 @@
         .finished.then(() => 치는중.delete(n), () => 치는중.delete(n));
       const s = n.data, step = Math.min(59 / 빠르기, D / s.length);
       let k = 0;
+      원글.set(n, s);
       n.data = '';
       setTimeout(() => {
         const t0 = performance.now(), id = setInterval(() => {
@@ -718,6 +723,30 @@
         }, Math.max(16, step));
       }, d0 + i * gap);
     });
+  }
+  const 틀_ = html => { const t = document.createElement('template'); t.innerHTML = html; return t.content; };
+  function 맞춤(o, n, 새, 낱) {
+    if (o.nodeType === 3) {
+      if ((원글.has(o) ? 원글.get(o) : o.data) !== n.data) { 원글.delete(o); o.data = n.data; 낱.push(o); }
+      return;
+    }
+    const 둠 = a => o.tagName === 'IMG' && /^(style|loading)$/.test(a);
+    let 그림 = false;
+    [...(n.attributes || [])].forEach(({ name, value }) => {
+      if (둠(name) || (name === 'style' ? o.style.cssText === n.style.cssText : o.getAttribute(name) === value)) return;
+      o.setAttribute(name, value);
+      if (/^(style|src)$/.test(name) && !o.closest('.track')) 그림 = true;
+    });
+    if (n.attributes) [...o.attributes].forEach(({ name }) => 둠(name) || n.hasAttribute(name) || o.removeAttribute(name));
+    if (그림) 낱.push(o);
+    const a = [...o.childNodes], b = [...n.childNodes];
+    b.forEach((x, i) => {
+      const y = a[i];
+      if (y && y.nodeType === x.nodeType && y.nodeName === x.nodeName) return 맞춤(y, x, 새, 낱);
+      y ? y.replaceWith(x) : o.append(x);
+      새.push(x); 낱.push(x);
+    });
+    a.slice(b.length).forEach(y => y.remove());
   }
   function type(el) {
     if (el.dataset.t) return;
@@ -974,16 +1003,23 @@
     if (quiet && !$('detail').hidden && i >= 0 && ![...$('detail').querySelectorAll('textarea')].some(t => t.value.trim())) card(i, 'refresh');
     const 새로 = !quiet && !$('list').hidden, sub = $('lsub'), 전 = sub.textContent;
     sub.textContent = r.length ? '' : '아직 맡긴 제작이 없어요.';
-    const html = r.map((j, i) => {
+    if (새로 && sub.textContent !== 전) 타자([sub], 0, 2);
+    const c = $('cards'), 줄 = new Set(r.map(j => String(j.row))), 새 = [], 낱 = [];
+    [...c.children].forEach(e => 줄.has(e.dataset.row) || e.remove());
+    const 있던 = new Map([...c.children].map(e => [e.dataset.row, e]));
+    let at = c.firstElementChild;
+    r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta);
-      return `<div class="card" onclick="card(${i})"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
+      const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + 진행게이지(j, q) + '</div>';
-    }).join(''), c = $('cards');
-    if (새로 && sub.textContent !== 전) 타자([sub], 0, 2);
-    if (c.html === html) return;
-    c.html = html; c.innerHTML = html;
-    if (새로) 타자([c], 0, 2);
+      let e = 있던.get(String(j.row));
+      if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
+      else if (e.html !== html) 맞춤(e, 틀_(html).firstElementChild, 새, 낱);
+      e.html = html;
+      if (e === at) at = e.nextElementSibling; else c.insertBefore(e, at);
+    });
+    타자(새, 0, 2, 낱);
   }
   const mark = q => '<div class="q">' + (q.state && /^실패/.test(q.state) ? `<i class="bad">✕ ${esc(q.state)}</i> · ${esc(q.text)}`
     : /^반영(중|됨)/.test(q.state || '') ? `<b class="s-${/^반영됨/.test(q.state) ? 'ok' : 'run'}">${esc(q.state.replace(/^반영중/, '⟳ 반영 중').replace(/^반영됨/, '✓ 반영됨'))}</b> — ${esc(q.text)}`
@@ -1013,7 +1049,7 @@
     const 장 = f => `<a href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank"><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
     const 장들 = 짝(j.files), 쌍잡 = 장들.some(x => x.t), 끝 = n => n.replace(/\.(png|jpg)$/, '');
     const busy = j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
-    $('detail').innerHTML = `<div class="path">POWERPAGE.zip › ${esc(j.channel)} › 제작 현황</div>`
+    const html = `<div class="path">POWERPAGE.zip › ${esc(j.channel)} › 제작 현황</div>`
       + `<h1><span class="num">#${j.row}</span> ${esc(j.title || j.channel + ' 제작 건')}</h1>`
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
@@ -1031,7 +1067,8 @@
         + box('전체', true)
         : '아직 만드는 중이에요. 끝나면 여기서 결과를 보고 수정 요청을 보낼 수 있어요.</p>')
       + '<p class="err" id="err3"></p>';
-    if (how === 'refresh') return;
+    if (how === 'refresh') { const 새 = [], 낱 = []; 맞춤($('detail'), 틀_(html), 새, 낱); return 타자(새, 0, 2, 낱); }
+    $('detail').innerHTML = html;
     if (!$('list').hidden) 부모.detail = 'list';
     const c = !how && !$('list').hidden && document.querySelectorAll('#cards .card')[i];
     if (c) {
