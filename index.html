@@ -305,6 +305,17 @@
   #zoom .stage { padding:12px; display:grid; place-items:center; }
   #zoom p { padding:10px 14px; font-size:13px; color:var(--dim); background:var(--field); }
   #zoom p b { color:var(--text); }
+  
+  @property --o { syntax:'<number>'; inherits:true; initial-value:0; }
+  #sd, #sh2 { display:none; }
+  html.sh-on { --o:0; transition:--o .24s cubic-bezier(.4,0,1,1); } html.sh-up { --o:1; transition:--o .36s cubic-bezier(.22,1,.36,1); }
+  html.sh-on #make { transform:scale(calc(1 - .08 * var(--o))); }
+  html.sh-on #sd { display:block; position:fixed; inset:0; z-index:60; opacity:var(--o); background:rgba(0,0,0,.78); -webkit-backdrop-filter:blur(calc(3px * var(--o))); backdrop-filter:blur(calc(3px * var(--o))); touch-action:none; }
+  html.sh-on #sh2 { display:block; position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:560px; max-height:92dvh; margin:0 auto; overflow-y:auto; background:var(--win); border-top:1.5px solid var(--line); border-radius:20px 20px 0 0; padding:7px 12px calc(14px + env(safe-area-inset-bottom, 0px)); transform:translateY(calc((1 - var(--o)) * 105%)); touch-action:none; }
+  #sh2 .gb { width:42px; height:5px; border-radius:3px; background:#55555C; margin:2px auto 9px; } #sh2 h5 { margin:0; padding-right:48px; font-size:16px; } #sh2 .gl2 { color:var(--dim); font-size:12.5px; margin:0 0 7px; } #sh2 em { display:block; font-style:normal; color:var(--run); font-size:13px; margin-top:8px; }
+  #sh2 .xx { all:unset; cursor:pointer; position:absolute; right:13px; top:15px; color:var(--navy2); font-weight:700; font-size:14.5px; padding:2px 3px; } #sh2 .fx { display:block; width:100%; margin-top:10px; }
+  #sh2 .pp { display:grid; grid-template-columns:1fr 1fr; gap:5px; } #sh2 figure { margin:0; min-width:0; } #sh2 figcaption { font-size:12px; color:var(--dim); text-align:center; padding-bottom:3px; } #sh2 img { display:block; width:100%; aspect-ratio:4/5; object-fit:contain; border-radius:7px; background:var(--bar); }
+  @media (prefers-reduced-motion:reduce) { html.sh-on, html.sh-up { transition:none; } }
   .mini { position:relative; overflow:hidden; border-radius:3px; flex:none; background:#fff; }
   
   .pg { position:absolute; left:0; top:0; width:1080px; transform-origin:0 0; overflow:hidden; font-family:Pretendard,sans-serif; letter-spacing:0; background:#fff; color:#111; }
@@ -1030,6 +1041,7 @@
   }
   const 큰그림칸 = t => t && t.closest('[data-z]');
   function 크게(e) {
+    if (e.type === 'click' && (e.pointerType === 'touch' || !matchMedia('(hover:hover)').matches) && 큰그림칸(e.target)) return 시트열기(큰그림칸(e.target).dataset.k);
     const zm = $('zoom'), el = e.type === 'mouseover' && matchMedia('(hover:hover)').matches && 큰그림칸(e.target);
     if (e.type === 'mouseout' && 큰그림칸(e.target) === 큰그림칸(e.relatedTarget)) return;
     const u = el && el.dataset.z;
@@ -1297,6 +1309,48 @@
     call('문의', [code, row], b, 'err3', r => { const i = mine.findIndex(x => x.row === row); mine[i].asked = r.asked; card(i, 'refresh'); });
   }
   const 진행게이지 = (j, q) => /^(대기|제작중)/.test(j.state) ? (j.si == null ? '' : 일곱칸(j)) : q ? gauge('수정', 수정단계(q), q.pct) : '';
+  let 시트장 = [], 시트k = '';
+  function 시트틀_() {
+    if ($('sh2')) return;
+    document.body.insertAdjacentHTML('beforeend', '<div id="sd" onclick="시트닫기()"></div><div id="sh2" role="dialog" aria-modal="true" aria-label="레퍼런스 · 제작본 비교"></div>');
+    const sh = $('sh2'), 뿌리 = document.documentElement.style;
+    let y0 = 0, x0 = 0, 끌림 = false;
+    sh.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; y0 = e.clientY; x0 = e.clientX; 끌림 = true; sh.setPointerCapture(e.pointerId); 뿌리.transition = 'none'; });
+    sh.addEventListener('pointermove', e => { if (끌림) 뿌리.setProperty('--o', Math.min(1, 1 - Math.max(0, e.clientY - y0) / sh.offsetHeight)); });
+    const 놓기 = e => {
+      if (!끌림) return;
+      끌림 = false; 뿌리.removeProperty('--o'); 뿌리.transition = '';
+      const dy = e.clientY - y0, dx = e.clientX - x0, n = 시트장.findIndex(p => p.k === 시트k);
+      if (dy > 70) 시트닫기();
+      else if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) 시트그림(시트장[(n + (dx < 0 ? 1 : -1) + 시트장.length) % 시트장.length].k);
+    };
+    sh.addEventListener('pointerup', 놓기); sh.addEventListener('pointercancel', 놓기);
+  }
+  function 시트그림(k) {
+    const p = 시트장.find(x => x.k === String(k));
+    if (!p) return;
+    시트k = p.k;
+    $('sh2').innerHTML = `<div class="gb"></div><button class="xx" onclick="시트닫기()">취소</button><h5>${esc(p.이름)}</h5><p class="gl2">${esc(p.쪽)} · ${시트장.indexOf(p) + 1}/${시트장.length}</p>`
+      + `<div class="pp">${[['레퍼런스', p.a], ['제작본', p.b]].filter(x => x[1]).map(x => `<figure><figcaption>${x[0]}</figcaption><img src="${esc(x[1])}" alt="${x[0]}"></figure>`).join('')}</div>`
+      + (p.글 ? `<em>${esc(p.글)}</em>` : '') + (p.b ? '<button class="fx" onclick="시트수정()">이 장 수정</button>' : '');
+  }
+  function 시트열기(k) {
+    시트틀_(); 시트그림(k);
+    const r = document.documentElement, m = $('make');
+    m.style.transformOrigin = `50% ${innerHeight * .3 - m.getBoundingClientRect().top}px`;
+    document.body.style.overflow = 'hidden';
+    r.classList.add('sh-on'); void r.offsetHeight; r.classList.add('sh-up');
+  }
+  function 시트닫기() {
+    const r = document.documentElement;
+    r.classList.remove('sh-up');
+    setTimeout(() => { if (!r.classList.contains('sh-up')) { r.classList.remove('sh-on'); document.body.style.overflow = $('make').style.transformOrigin = ''; } }, 260);
+  }
+  function 시트수정() {
+    const t = document.querySelector(`.pages textarea[data-p^="${시트k.padStart(2, '0')}_"]`);
+    시트닫기();
+    if (t) { t.focus({ preventScroll: true }); setTimeout(() => t.scrollIntoView({ block: 'center', behavior: 'smooth' }), 280); }
+  }
   const 대조기억 = new Map(), 대조고름 = new Map();
   function 대조받기(j) {
     const 열쇠 = j.files.map(f => f.id).join(), m = 대조기억.get(j.row);
@@ -1334,7 +1388,9 @@
     const 쪽들 = [{ k: 1, n: '썸네일', r: [[1, 0]] }].concat(d.쪽), 쓴 = new Set(쪽들.flatMap(p => p.r.map(x => x[0])));
     const 안쓴 = Object.keys(d.참조).map(Number).sort((a, b) => a - b).filter(r => !쓴.has(r));
     const 주소 = id => id ? img(id) : '', 그림 = id => id ? `<img src="${img(id)}" alt="" loading="lazy">` : '<i class="cr"></i>';
-    const 나란히 = (r, k) => `data-z="${주소(d.참조[r])} ${주소(파일[k])}"`;
+    const 나란히 = (r, k) => `data-z="${주소(d.참조[r])} ${주소(파일[k])}" data-k="${+k}"`;
+    시트장 = 쪽들.map(p => { const 장템 = 템.filter(i => i.쪽 === p.k); return { k: String(p.k), 이름: 장템.length === 1 ? 장템[0].이름 : p.n, 쪽: p.n, a: 주소(d.참조[p.r.length ? p.r[0][0] : 0]), b: 주소(파일[p.k]), 글: 장템.flatMap(i => 체크글(i, 새글)).join(' · ') }; })
+      .concat(안쓴.map(r => ({ k: 'r' + r, 이름: `안 쓴 레퍼런스 ${r}번째`, 쪽: '안 쓴 장', a: 주소(d.참조[r]), b: '', 글: '' })));
     const 조각 = (id, x, y, 세로 = 3.75) => { const p = (c, z) => Math.max(0, Math.min(100, (c - 1 / (2 * z)) / (1 - 1 / z) * 100)).toFixed(1); return `<i class="cr" style="background-image:url('${주소(id)}');background-position:${p(+x, 3)}% ${p(+y, 세로)}%"></i>`; };
     const 레퍼x = i => i.px != null ? i.px : i.rx != null ? i.rx : .5, 레퍼y = i => i.py != null ? i.py : i.ry != null ? i.ry - .12 : .5;
     const 칸 = (i, 측) => 측 === 'l'
@@ -1359,7 +1415,7 @@
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`;
     const 순번 = p => p.r.length ? `${+p.r[0][0]}번째${p.r.length > 1 ? ` 외 ${p.r.length - 1}장` : ''}` : '없음';
     const 볼쪽 = new Set(볼.map(i => i.쪽));
-    const 짝칸 = `<div class="mapb"><div class="prs">${쪽들.map(p => `<button class="pr ${p.k === 고름 ? 'on' : ''} ${볼쪽.has(p.k) ? 'w' : ''}" ${볼쪽.has(p.k) ? 'title="추가 확인이 필요해요"' : ''} ${나란히(p.r.length ? p.r[0][0] : 0, p.k)} onclick="대조골라(${j.row},${+p.k})"><span class="tt">${그림(d.참조[p.r.length ? p.r[0][0] : 0])}${그림(파일[p.k])}</span><span class="cap">${p.k === 1 ? '표지 → <b>썸네일</b>' : `내지 순서 : <b>${순번(p)} → ${d.쪽.indexOf(p) + 1}번째</b>`}</span></button>`).join('')}</div>${안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} ">${그림(d.참조[r])}</span>`).join('')}</div>` : ''}</div>`;
+    const 짝칸 = `<div class="mapb"><div class="prs">${쪽들.map(p => `<button class="pr ${p.k === 고름 ? 'on' : ''} ${볼쪽.has(p.k) ? 'w' : ''}" ${볼쪽.has(p.k) ? 'title="추가 확인이 필요해요"' : ''} ${나란히(p.r.length ? p.r[0][0] : 0, p.k)} onclick="대조골라(${j.row},${+p.k})"><span class="tt">${그림(d.참조[p.r.length ? p.r[0][0] : 0])}${그림(파일[p.k])}</span><span class="cap">${p.k === 1 ? '표지 → <b>썸네일</b>' : `내지 순서 : <b>${순번(p)} → ${d.쪽.indexOf(p) + 1}번째</b>`}</span></button>`).join('')}</div>${안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} " data-k="r${+r}">${그림(d.참조[r])}</span>`).join('')}</div>` : ''}</div>`;
     const 큰칸 = (id, x, y, 여럿) => 여럿 ? 조각(id, x, y, 3) : 그림(id);
     const 확인 = 볼.length ? `<div class="mapb"><p class="cdh"><b>확인할 아이템 ${볼.length}개</b> <small>눌러서 그 장을 봐요</small></p><div class="cds">${볼.slice(0, 12).map(i => `<button class="cd" ${나란히(i.r, i.쪽)} onclick="대조골라(${j.row},${+i.쪽})"><span class="tt"><span><small>레퍼런스</small>${큰칸(d.참조[i.r], 레퍼x(i), 레퍼y(i), i.r수 > 1)}</span><span><small>제작본</small>${큰칸(파일[i.쪽], i.ox, i.oy, 템.filter(x => x.쪽 === i.쪽).length > 1)}</span></span><b>${esc(i.이름)}</b><small>${esc(쪽이름(i.쪽))}${i.r ? ` ← 레퍼런스 ${+i.r}번째` : ''}</small><em>${esc(체크글(i, 새글).join(' · '))}</em></button>`).join('')}</div>${볼.length > 12 ? `<small>외 ${볼.length - 12}개</small>` : ''}</div>` : '';
     return `<h2>레퍼런스 대조</h2>${띠}${짝칸}`
