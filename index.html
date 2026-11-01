@@ -535,10 +535,10 @@
   let code = '', who = {}, chan = '';
   function call(fn, args, btn, err, ok) {
     const label = btn.textContent;
-    btn.disabled = true; btn.textContent = '잠시만요…'; $(err).textContent = '';
+    btn.disabled = true; btn.dataset.sending = 1; btn.textContent = '잠시만요…'; $(err).textContent = '';
     google.script.run
-      .withSuccessHandler(r => { btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; ok(r); })
-      .withFailureHandler(e => { btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; if (fn === 'login' || fn === '나') { store(''); code = ''; $('code').disabled = false; } $(err).textContent = e.message.replace(/^Error:\s*/, ''); check(); })[fn](...args);
+      .withSuccessHandler(r => { delete btn.dataset.sending; btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; ok(r); })
+      .withFailureHandler(e => { delete btn.dataset.sending; btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; if (fn === 'login' || fn === '나') { store(''); code = ''; $('code').disabled = false; } $(err).textContent = e.message.replace(/^Error:\s*/, ''); check(); })[fn](...args);
   }
   function enter(auto) {
     if ($('in').disabled || (!auto && code)) return;
@@ -1076,8 +1076,10 @@
       recCheck(el, link && !msg ? link : '');
     });
     const n = its().length, over = n > left;
-    $('go').disabled = !ch || ch.demo || bad > 0 || over;
-    $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+    if (!$('go').dataset.sending) {
+      $('go').disabled = !ch || ch.demo || bad > 0 || over;
+      $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+    }
     $('add').disabled = !ch || n >= left;
     $('add').textContent = ch && n >= left ? `티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
     $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `티켓 ${n}장 씀 · 오늘 ${chan} 티켓 ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
@@ -1092,8 +1094,14 @@
   async function go() {
     const all = its().flatMap(el => [...el.querySelector('.fl').files]);
     if (all.reduce((t, f) => t + f.size, 0) > MAX) { $('err2').textContent = '참고 자료는 모든 건을 합쳐 20MB 까지 올릴 수 있어요.'; return; }
-    $('go').disabled = true;
-    const items = await Promise.all(its().map(async el => ({ link: norm(val(el, '.ln')), refs: val(el, '.rf'), comment: val(el, '.cm'), design: el.dataset.d || '', files: await Promise.all([...el.querySelector('.fl').files].map(read)) })));
+    $('go').disabled = true; $('go').dataset.sending = 1;
+    let items;
+    try {
+      items = await Promise.all(its().map(async el => ({ link: norm(val(el, '.ln')), refs: val(el, '.rf'), comment: val(el, '.cm'), design: el.dataset.d || '', files: await Promise.all([...el.querySelector('.fl').files].map(read)) })));
+    } catch (e) {
+      delete $('go').dataset.sending; $('err2').textContent = '참고 자료 파일을 못 읽었어요.'; check();
+      return;
+    }
     call('make', [code, items, chan], $('go'), 'err2', r => {
       who.channels.find(x => x.name === chan).coupon = r.coupon;
       $('cp').textContent = tk(r.coupon);
