@@ -63,12 +63,12 @@
   .home { cursor:pointer; }
   #ch { cursor:pointer; } #ch small { color:var(--dim); font-weight:500; font-size:12px; margin-left:6px; }
   html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; }
-  .card, .pc, button, .chip, .tabs a { transition:transform .12s ease, border-color .15s; }
+  .card, .pc, button, .chip, .tabs a { transition:transform .096s ease, border-color .12s; }
   .card:active, .pc:active, button:active:not(:disabled), .home:active, #ch:active { transform:scale(.97); }
   .body { padding:22px 26px 28px; }
   .path { color:var(--dim); font-size:13px; margin-bottom:18px; }
   h1 { font-size:30px; font-weight:700; display:inline; border-bottom:3px solid var(--text); }
-  .cur { display:inline-block; width:3px; height:30px; background:var(--navy2); margin-left:6px; vertical-align:-4px; animation:blink 1s steps(1) infinite; }
+  .cur { display:inline-block; width:3px; height:30px; background:var(--navy2); margin-left:6px; vertical-align:-4px; animation:blink .8s steps(1) infinite; }
   @keyframes blink { 50% { opacity:0; } }
   .sub { color:var(--dim); font-size:14px; margin:14px 0 24px; line-height:1.5; }
   @media (max-width:640px) { h1 { font-size:25px; } .cur { height:25px; } } 
@@ -86,7 +86,7 @@
   .tag { background:var(--navy); color:#fff; border-radius:10px; padding:5px 10px; font-size:13px; font-weight:700; }
   button { width:100%; margin-top:26px; background:var(--navy); color:#fff; border:0; border-radius:14px; padding:16px; font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
   button:disabled { background:var(--line); color:var(--dim); cursor:default; }
-  button.busy:disabled { background:var(--navy); color:#fff; animation:숨쉼 1.8s cubic-bezier(.45,0,.55,1) infinite; }
+  button.busy:disabled { background:var(--navy); color:#fff; animation:숨쉼 1.44s cubic-bezier(.45,0,.55,1) infinite; }
   button.busy::before, button.busy::after { display:inline-block; width:1.2em; text-align:left; content:''; } button.busy::after { content:attr(data-dots); } 
   @keyframes 숨쉼 { 0%, 100% { box-shadow:0 0 0 0 rgba(111,143,224,0); filter:brightness(1); } 50% { box-shadow:0 0 24px 3px rgba(111,143,224,.5); filter:brightness(1.2); } }
   .note { color:var(--dim); font-size:12px; text-align:center; margin-top:10px; }
@@ -132,7 +132,7 @@
   .pages img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:2px solid var(--line); display:block; background:var(--bar); }
   
   .ph { position:relative; }
-  .ph > a + a { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .ph > a + a { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .2s; }
   .ph.tw > a + a { opacity:1; pointer-events:auto; }
   .ph .seg, .ph .same { position:absolute; left:10px; top:10px; z-index:2; display:flex; padding:3px; border-radius:99px; background:rgba(0,0,0,.72); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.14); }
   .ph .seg button { all:unset; cursor:pointer; font-size:12px; font-weight:700; padding:5px 11px; border-radius:99px; color:#bbb; }
@@ -142,7 +142,7 @@
   .rev.all { margin-top:26px; }
   .rev .both { display:block; color:var(--dim); font-size:12px; margin:-4px 0 8px; }
   .rev.all b { font-size:18px; }
-  textarea { width:100%; min-height:72px; resize:vertical; background:var(--field); border:2px solid var(--line); border-radius:12px; padding:10px 12px; color:var(--text); font:inherit; font-size:16px; outline:none; transition:border-color .15s, box-shadow .15s; }
+  textarea { width:100%; min-height:72px; resize:vertical; background:var(--field); border:2px solid var(--line); border-radius:12px; padding:10px 12px; color:var(--text); font:inherit; font-size:16px; outline:none; transition:border-color .12s, box-shadow .12s; }
   .rev textarea::placeholder { color:color-mix(in srgb, var(--dim) 60%, transparent); font-size:13px; } 
   textarea:not(:placeholder-shown) { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.2); } 
   .acts { display:flex; gap:6px; justify-content:flex-end; margin-top:6px; }
@@ -166,12 +166,12 @@
   .gauge .track { position:relative; height:6px; border-radius:999px; background:var(--line); }
   .gauge .track i { position:absolute; left:0; top:0; bottom:0; border-radius:inherit;
     background:linear-gradient(90deg, color-mix(in srgb, var(--c) 30%, transparent), var(--c));
-    animation:grow 1.6s cubic-bezier(.22,1,.36,1), glow 4.2s cubic-bezier(.45,0,.55,1) 1.6s infinite; transition:width 1.2s cubic-bezier(.22,1,.36,1); }
-  .gauge .track i::before { content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(90deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%) 0 0/200% 100%; animation:flow 2.6s linear infinite; }
-  .gauge .track i::after, .gauge li.now::before { animation:breathe 4.2s cubic-bezier(.45,0,.55,1) infinite; will-change:transform, box-shadow; } 
+    animation:grow 1.28s cubic-bezier(.22,1,.36,1), glow 3.36s cubic-bezier(.45,0,.55,1) 1.28s infinite; transition:width .96s cubic-bezier(.22,1,.36,1); }
+  .gauge .track i::before { content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(90deg, transparent 30%, rgba(255,255,255,.45) 50%, transparent 70%) 0 0/200% 100%; animation:flow 2.08s linear infinite; }
+  .gauge .track i::after, .gauge li.now::before { animation:breathe 3.36s cubic-bezier(.45,0,.55,1) infinite; will-change:transform, box-shadow; } 
   .gauge .track i::after { content:""; position:absolute; right:-6px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%; background:var(--c); }
   .gauge ol { list-style:none; padding:0; display:flex; justify-content:space-between; margin-top:8px; font-size:11px; font-weight:700; color:var(--dim); }
-  .gauge li { display:flex; align-items:center; gap:4px; animation:rise .7s cubic-bezier(.22,1,.36,1) both; }
+  .gauge li { display:flex; align-items:center; gap:4px; animation:rise .56s cubic-bezier(.22,1,.36,1) both; }
   .gauge li::before { content:""; width:7px; height:7px; border-radius:50%; border:1.5px solid currentColor; }
   .gauge li.on { color:var(--c); } .gauge li.on::before { background:currentColor; }
   .gauge li.now { color:var(--text); } .gauge li.now::before { background:var(--c); border-color:var(--c); }
@@ -242,17 +242,17 @@
   .rst { display:flex; flex-wrap:wrap; gap:8px; }
   .rsl { --k:0; min-width:0; }
   .rp { position:relative; border-radius:4px; overflow:hidden; background:var(--bar); }
-  .rcov { position:absolute; inset:0; z-index:2; background:var(--navy); opacity:0; transform:scale(.6); transition:transform .25s cubic-bezier(.22,1,.36,1), opacity .2s; }
+  .rcov { position:absolute; inset:0; z-index:2; background:var(--navy); opacity:0; transform:scale(.6); transition:transform .2s cubic-bezier(.22,1,.36,1), opacity .16s; }
   .rsl.on .rcov { opacity:1; transform:none; }
   .rcap { font-size:11px; color:var(--dim); text-align:center; margin-top:4px; }
   .rthm { position:absolute; inset:0; background:#3A4152; }
   .rthm i { position:absolute; left:10%; background:#fff; }
   .rthm i:first-child { top:60%; right:14%; height:8%; }
   .rthm i:last-child { top:73%; right:34%; height:6%; }
-  .rst.go .rcov { animation:recOut .34s ease calc(var(--i) * 80ms) both; }
-  .rst.go .rp .pg > *, .rst.go .rthm { animation:recRise .62s cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 80ms + var(--k) * 90ms + 110ms) both; }
-  .rst.go .rp .pg > .b0, .rst.go .rthm { animation-name:recFade; animation-duration:.3s; animation-timing-function:ease; }
-  .rst.go .rthm i { animation:recGrow .42s cubic-bezier(.22,1,.36,1) calc(var(--i) * 80ms + 270ms) both; transform-origin:left; }
+  .rst.go .rcov { animation:recOut .272s ease calc(var(--i) * 64ms) both; }
+  .rst.go .rp .pg > *, .rst.go .rthm { animation:recRise .496s cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 64ms + var(--k) * 72ms + 88ms) both; }
+  .rst.go .rp .pg > .b0, .rst.go .rthm { animation-name:recFade; animation-duration:.24s; animation-timing-function:ease; }
+  .rst.go .rthm i { animation:recGrow .336s cubic-bezier(.22,1,.36,1) calc(var(--i) * 64ms + 216ms) both; transform-origin:left; }
   @keyframes recOut { to { opacity:0; transform:scale(1.1); } }
   @keyframes recFade { from { opacity:0; } }
   @keyframes recRise { from { opacity:0; translate:0 90px; scale:.92; } }
@@ -261,7 +261,7 @@
   .rwhy:empty { display:none; }
   .rch { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
   .rch:empty { display:none; }
-  .rch.up { animation:recUp .45s cubic-bezier(.22,1,.36,1) both; }
+  .rch.up { animation:recUp .36s cubic-bezier(.22,1,.36,1) both; }
   @keyframes recUp { from { opacity:0; transform:translateY(6px); } }
   .rcc { background:var(--field); border:2px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; font-weight:700; line-height:1.35; cursor:pointer; min-width:0; }
   .rcc:hover { border-color:var(--navy2); }
@@ -271,7 +271,7 @@
   .allt[hidden] { display:none; }
   @media (max-width:640px) { .rch { grid-template-columns:minmax(0,1fr); } }
   @media (prefers-reduced-motion:reduce) { .rst.go .rcov { display:none; } .rst *, .rch { animation:none !important; transition:none !important; } }
-  #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .12s, transform .12s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+  #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .096s, transform .096s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
   #zoom.show { opacity:1; transform:none; }
   #zoom .zz { display:flex; gap:6px; padding:6px; } #zoom figure { margin:0; width:min(250px, calc(50vw - 18px)); } #zoom figcaption { font-size:12px; color:var(--dim); text-align:center; padding:0 0 4px; } #zoom figure img { display:block; width:100%; max-height:min(312px, calc(100vh - 60px)); object-fit:contain; }
   #zoom .stage { padding:12px; display:grid; place-items:center; }
@@ -648,11 +648,11 @@
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
-      $('login').animate([{ transform: 'scale(.6)', filter: 'blur(10px)', opacity: 0 }, { transform: 'none', filter: 'blur(0px)', opacity: 1 }], { duration: 250, easing: 'cubic-bezier(.16,1,.3,1)' });
+      $('login').animate([{ transform: 'scale(.6)', filter: 'blur(10px)', opacity: 0 }, { transform: 'none', filter: 'blur(0px)', opacity: 1 }], { duration: 200, easing: 'cubic-bezier(.16,1,.3,1)' });
   }
   async function 터짐_() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const T = 800, d = document.body.dataset, win = $('make'), me = $('me');
+    const T = 640, d = document.body.dataset, win = $('make'), me = $('me');
     d.out = 1; document.body.style.overflow = 'hidden';
     const r = win.getBoundingClientRect(), top = Math.max(0, r.top), bot = Math.min(innerHeight, r.bottom);
     const cx = r.left + r.width / 2, cy = (top + bot) / 2, w = r.width, h = bot - top;
@@ -667,14 +667,14 @@
     ];
     await p.animate([0, 1].map(i => ({ transform: 눌림(i), opacity: i, boxShadow: `0 0 ${i * 90}px ${i * 24}px rgba(255,255,255,${i * .35})` })), { duration: T, easing: E, fill: 'forwards' }).finished;
     win.style.opacity = 0;
-    p.animate([{ transform: 눌림(1), opacity: 1, filter: 'blur(0px)' }, { transform: 'scale(1.08)', opacity: 0, filter: 'blur(10px)' }], { duration: 200, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
+    p.animate([{ transform: 눌림(1), opacity: 1, filter: 'blur(0px)' }, { transform: 'scale(1.08)', opacity: 0, filter: 'blur(10px)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.3,1)', fill: 'forwards' });
     await 조각_(cx, cy, w, h);
     a.forEach(x => x.cancel()); p.remove();
     win.style.opacity = win.style.transformOrigin = '';
     delete d.out; document.body.style.overflow = '';
   }
   function 조각_(cx, cy, w, h) {
-    const cv = document.createElement('canvas'), x = cv.getContext('2d'), W = cv.width = innerWidth, H = cv.height = innerHeight, L = 450;
+    const cv = document.createElement('canvas'), x = cv.getContext('2d'), W = cv.width = innerWidth, H = cv.height = innerHeight, L = 360;
     cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:10;pointer-events:none';
     document.body.append(cv);
     const ps = Array.from({ length: 140 }, () => {
@@ -739,14 +739,14 @@
       { backgroundColor: 'transparent', boxShadow: 'none', offset: .3 },
       Object.assign(box(a), { backgroundColor: 'transparent', boxShadow: 'none', opacity: 1 }),
     ], { duration: T, easing: E, fill: 'forwards' }).finished;
-    await g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' }).finished;
+    await g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).finished;
     g.remove();
     document.body.style.overflow = '';
   }
   function warp() {
     const out = $('login'), inn = $('make'), me = $('me');
-    펼침(out, inn, 2000, () => { out.hidden = true; inn.hidden = false; me.hidden = false; show(home()); }, () => 타자([me, inn], 500, 1.3));
-    me.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 1400, delay: 500, easing: 'ease-out', fill: 'backwards' });
+    펼침(out, inn, 1600, () => { out.hidden = true; inn.hidden = false; me.hidden = false; show(home()); }, () => 타자([me, inn], 400, 1.3));
+    me.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }], { duration: 1120, delay: 400, easing: 'ease-out', fill: 'backwards' });
   }
   const 치는중 = new WeakSet();
   let 타자끝 = 0;
@@ -769,14 +769,14 @@
     낱개.forEach(넣기);
     if (!ns.length) return;
     ns.sort((a, b) => a[1] - b[1]);
-    const now = performance.now(), d0 = Math.min(1000, Math.max(시작, 타자끝 - now)), D = 600 / 빠르기;
-    const gap = Math.max(0, Math.min(126 / 빠르기, (1900 - d0 - D) / Math.max(1, ns.length - 1)));
+    const now = performance.now(), d0 = Math.min(800, Math.max(시작, 타자끝 - now)), D = 480 / 빠르기;
+    const gap = Math.max(0, Math.min(100 / 빠르기, (1520 - d0 - D) / Math.max(1, ns.length - 1)));
     타자끝 = now + d0 + ns.length * gap;
     ns.forEach(([n], i) => {
       치는중.add(n);
-      if (n.nodeType === 1) return n.animate([{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }], { duration: 500 / 빠르기, delay: d0 + i * gap, easing: 'ease-out', fill: 'backwards' })
+      if (n.nodeType === 1) return n.animate([{ opacity: 0, translate: '0 6px' }, { opacity: 1, translate: '0 0' }], { duration: 400 / 빠르기, delay: d0 + i * gap, easing: 'ease-out', fill: 'backwards' })
         .finished.then(() => 치는중.delete(n), () => 치는중.delete(n));
-      const s = n.data, step = Math.min(59 / 빠르기, D / s.length);
+      const s = n.data, step = Math.min(47 / 빠르기, D / s.length);
       let k = 0;
       원글.set(n, s);
       n.data = '';
@@ -817,7 +817,7 @@
     const s = el.dataset.t = el.textContent;
     let i = 0;
     el.textContent = '';
-    const id = setInterval(() => { el.textContent = s.slice(0, ++i); if (i >= s.length) clearInterval(id); }, 70);
+    const id = setInterval(() => { el.textContent = s.slice(0, ++i); if (i >= s.length) clearInterval(id); }, 56);
   }
   const norm = s => { const m = String(s).match(/instagram\.com\/(?:[^\/?#\s]+\/)?(p|reels?|tv)\/([\w-]{5,})/); return m ? 'https://www.instagram.com/' + (/^reel/.test(m[1]) ? 'reel' : 'p') + '/' + m[2] + '/' : ''; };
   const refLine = l => norm(l) || (/^https?:\/\/\S+$/.test(l) ? l : '');
@@ -931,8 +931,8 @@
       if (r && r.ok) 추천기억[key] = r;
       rq(el, '.rl').textContent = '';
       const 남 = sl.filter(s => !s.classList.contains('on'));
-      남.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * 70));
-      setTimeout(() => el._rec && el._rec.id === id && recFin(el, r), 남.length * 70 + 260);
+      남.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * 56));
+      setTimeout(() => el._rec && el._rec.id === id && recFin(el, r), 남.length * 56 + 208);
     };
     if (추천기억[key]) return 끝(추천기억[key]);
     google.script.run.withSuccessHandler(끝).withFailureHandler(() => 끝(null)).추천(code, link, chan);
@@ -969,7 +969,7 @@
     void box.offsetWidth;
     if (t) box.classList.add('go');
     ch.className = 'rch' + (sw ? '' : ' up');
-    ch.style.animationDelay = sw ? '' : (s.pages + 1) * 80 + 500 + 'ms';
+    ch.style.animationDelay = sw ? '' : (s.pages + 1) * 64 + 400 + 'ms';
     ch.innerHTML = s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('');
   }
   function recPick(e) {
@@ -1243,7 +1243,7 @@
   function gauge(kind, n, pct) {
     const w = Math.min(96, Math.max(n / 3 * 100 + 8, (pct || 0) * 100));
     return `<div class="gauge${n ? '' : ' wait'}"><div class="track"><i style="width:${w}%"></i></div><ol>`
-      + 단계말[kind].map((s, i) => `<li class="${i < n ? 'on' : i === n ? 'now' : ''}" style="animation-delay:${i * .12}s">${s}</li>`).join('') + '</ol></div>';
+      + 단계말[kind].map((s, i) => `<li class="${i < n ? 'on' : i === n ? 'now' : ''}" style="animation-delay:${i * .096}s">${s}</li>`).join('') + '</ol></div>';
   }
   const 남은 = j => j.left == null ? '' : `<div class="left"><b>${j.left ? '약 ' + j.left + '분' : '곧 끝나요'}</b>`
     + `<span>${j.left ? '남음 · ' + j.done + '쯤 완료' : '예상보다 늦어지는 중'}<small>${esc(단계말.제작[제작단계(j)])}${j.step ? ' · ' + esc(j.step) : ''}</small></span></div>`
@@ -1353,10 +1353,10 @@
     if (c) {
       const cv = c.querySelector('.cv'), bg = cv.style.backgroundImage, from = cv.getBoundingClientRect();
       if (bg) cv.style.visibility = 'hidden';
-      return 펼침(c, $('detail'), 1400, () => { cv.style.visibility = ''; view('detail', { row: j.row }); }, () => {
+      return 펼침(c, $('detail'), 1120, () => { cv.style.visibility = ''; view('detail', { row: j.row }); }, () => {
         const im = bg && $('detail').querySelector('.pages img');
-        if (im) 사진펼침(from, bg, im, 1400);
-        타자([$('detail')], 400);
+        if (im) 사진펼침(from, bg, im, 1120);
+        타자([$('detail')], 320);
       });
     }
     how === 'pop' ? show('detail') : view('detail', { row: j.row });
@@ -1378,7 +1378,7 @@
       requestAnimationFrame(f);
     });
     im.style.opacity = ''; 치는중.delete(im);
-    await p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200, fill: 'forwards' }).finished;
+    await p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' }).finished;
     p.remove();
   }
   function cancel(b) { b.closest('.rev').querySelector('textarea').value = ''; }
