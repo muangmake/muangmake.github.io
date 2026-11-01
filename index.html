@@ -943,7 +943,7 @@
       rq(el, '.rec').hidden = false;
       rq(el, '.rst').className = 'rst';
       rq(el, '.rst').innerHTML = '';
-      rq(el, '.rt').textContent = '추천을 못 불러왔어요 · 아래에서 고르거나 AI가 고르게 둘 수 있어요';
+      rq(el, '.rt').textContent = (r && r.over ? '오늘 새 추천을 다 썼어요' : '추천을 못 불러왔어요') + ' · 아래에서 고르거나 AI가 고르게 둘 수 있어요';
       rq(el, '.rl').textContent = '';
       el.dataset.all = 1;
       drawD(el);
