@@ -36,7 +36,7 @@
   #dj .fds { display:grid; gap:7px; min-width:0; } #dj .fd { display:block; min-width:0; } #dj .fd > span { display:block; color:var(--dim); font-size:12px; margin-bottom:2px; } #dj .fds input, #dj .fds textarea { display:block; width:100%; min-height:0; margin:0; background:var(--field); color:var(--text); border:1.5px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; line-height:1.45; resize:none; field-sizing:content; } #dj .fd input { font-weight:700; } #dj .w input, #dj .w textarea { border-color:var(--run); } #dj .fds input.ch, #dj .fds textarea.ch { border-color:var(--navy2); } #dj .fds em { display:block; font-style:normal; color:var(--run); font-size:12px; margin-top:1px; }
   #dj .pl { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.55fr); gap:3px 5px; } #dj .pl input { padding:5px 8px; font-size:13.5px; } #dj .pl em { grid-column:1 / -1; margin-bottom:3px; } #dj .pl .hd { color:var(--dim); font-size:12px; } #dj .ad { all:unset; cursor:pointer; color:var(--navy2); font-size:13px; font-weight:700; justify-self:start; }
   #dj .vb { all:unset; box-sizing:border-box; cursor:pointer; display:block; width:100%; text-align:center; font-weight:700; font-size:14.5px; padding:10px; border-radius:9px; background:var(--bar); border:1.5px solid var(--line); } #dj .vb.ok { background:rgba(94,230,168,.14); border-color:var(--ok); color:var(--ok); } #dj .vb.hot { background:var(--navy); border-color:var(--navy2); color:#fff; } #dj .vb.fix { cursor:default; background:rgba(111,143,224,.18); border-color:var(--navy2); color:#C9D5F6; }
-  #dj .film { display:flex; gap:5px; overflow-x:auto; padding:10px 1px 3px; scrollbar-width:none; } #dj .film button { all:unset; cursor:pointer; flex:none; width:62px; position:relative; } #dj .film img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:6px; opacity:.55; } #dj .film .on img { opacity:1; outline:2px solid var(--navy2); } #dj .film .w img { outline:2.5px solid var(--run); opacity:1; } #dj .film .on.w img { outline-color:var(--navy2); } #dj .film small { display:block; text-align:center; font-size:10.5px; color:var(--dim); margin-top:2px; } #dj .mk { position:absolute; right:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#000; color:var(--ok); font-size:11px; font-weight:800; font-style:normal; display:grid; place-items:center; } #dj .mk.fix { color:#C9D5F6; } #dj .mk.draft { color:var(--run); }
+  #dj .film { display:flex; gap:5px; overflow-x:auto; padding:3px 3px 3px; margin:0 0 10px; scrollbar-width:none; } #dj .film button { all:unset; cursor:pointer; flex:none; width:62px; position:relative; } #dj .film img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:6px; opacity:.55; } #dj .film .on img { opacity:1; outline:2px solid var(--navy2); } #dj .film .w img { outline:2.5px solid var(--run); opacity:1; } #dj .film .on.w img { outline-color:var(--navy2); } #dj .film small { display:block; text-align:center; font-size:10.5px; color:var(--dim); margin-top:2px; } #dj .mk { position:absolute; right:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#000; color:var(--ok); font-size:11px; font-weight:800; font-style:normal; display:grid; place-items:center; } #dj .mk.fix { color:#C9D5F6; } #dj .mk.draft { color:var(--run); }
   #dj .snd { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); color:var(--dim); font-size:13.5px; } #dj .snd b { color:var(--run); font-weight:700; } #dj .go { all:unset; box-sizing:border-box; cursor:pointer; background:var(--navy); color:#fff; font-weight:700; padding:9px 15px; border-radius:10px; text-align:center; white-space:nowrap; } #dj .go:disabled { opacity:.35; cursor:default; } #dj .qs button { all:unset; box-sizing:border-box; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; width:100%; cursor:pointer; margin-top:8px; padding:8px 11px; border-radius:9px; background:var(--bar); color:var(--dim); font-size:13px; line-height:1.45; white-space:pre-line; } #dj .qs button:focus-visible { outline:2px solid var(--navy2); } #dj .qs b { color:#C9D5F6; font-weight:700; margin-right:7px; } #dj .bars { min-width:0; } #dj .sent { margin-top:0; }
   #dj .un { display:flex; align-items:center; gap:6px; flex-wrap:wrap; color:var(--dim); font-size:13px; margin-bottom:12px; } #dj .un span { width:30px; cursor:zoom-in; } #dj .un img { display:block; width:100%; border-radius:3px; }
   #detail:has(#dj > *) .hl, #detail:has(#dj > *) .pages .rev, #detail:has(#dj > *) #rvBar { display:none; } 
@@ -319,7 +319,8 @@
   html.sh-on #sd { display:block; position:fixed; inset:0; z-index:60; opacity:var(--o); background:rgba(0,0,0,.78); -webkit-backdrop-filter:blur(calc(3px * var(--o))); backdrop-filter:blur(calc(3px * var(--o))); touch-action:none; }
   html.sh-on #sh2 { display:block; position:fixed; left:0; right:0; bottom:0; z-index:61; max-width:560px; max-height:92dvh; margin:0 auto; overflow-y:auto; background:var(--win); border-top:1.5px solid var(--line); border-radius:20px 20px 0 0; padding:7px 12px calc(14px + env(safe-area-inset-bottom, 0px)); transform:translateY(calc((1 - var(--o)) * 105%)); touch-action:none; }
   #sh2 .gb { width:42px; height:5px; border-radius:3px; background:#55555C; margin:2px auto 9px; } #sh2 h5 { margin:0; padding-right:48px; font-size:16px; } #sh2 .gl2 { color:var(--dim); font-size:12.5px; margin:0 0 7px; } #sh2 em { display:block; font-style:normal; color:var(--run); font-size:13px; margin-top:8px; }
-  #sh2 .xx { all:unset; cursor:pointer; position:absolute; right:13px; top:15px; color:var(--navy2); font-weight:700; font-size:14.5px; padding:2px 3px; } #sh2 .fx { display:block; width:100%; margin-top:10px; }
+  #sh2 .xx { all:unset; cursor:pointer; position:absolute; right:6px; top:6px; width:44px; height:44px; display:grid; place-items:center; color:var(--text); }
+  #sh2 .nv { display:flex; gap:6px; margin-top:10px; } #sh2 .nv button { flex:1.4; width:auto; min-width:0; margin:0; padding:14px 6px; font-size:15px; white-space:nowrap; } #sh2 .nv .ghost { flex:1; background:transparent; border:1.5px solid var(--line); color:var(--text); }
   #sh2 .pp { display:grid; grid-template-columns:1fr 1fr; gap:5px; } #sh2 figure { margin:0; min-width:0; } #sh2 figcaption { font-size:12px; color:var(--dim); text-align:center; padding-bottom:3px; } #sh2 img { display:block; width:100%; aspect-ratio:4/5; object-fit:contain; border-radius:7px; background:var(--bar); }
   @media (prefers-reduced-motion:reduce) { html.sh-on, html.sh-up { transition:none; } }
   .mini { position:relative; overflow:hidden; border-radius:3px; flex:none; background:#fff; }
@@ -1152,7 +1153,7 @@
       who.channels.find(x => x.name === chan).coupon = r.coupon;
       $('cp').textContent = tk(r.coupon);
       load(true);
-      $('job').textContent = [chan, r.jobs.length > 1 && r.jobs.length + '건', r.eta && '완료 예상 ' + r.eta].filter(Boolean).join(' · ');
+      $('job').textContent = [chan, r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
       reset();
       view('done');
     });
@@ -1292,7 +1293,7 @@
       + 단계말[kind].map((s, i) => `<li class="${i < n ? 'on' : i === n ? 'now' : ''}" style="animation-delay:${i * .096}s">${s}</li>`).join('') + '</ol></div>';
   }
   const 일곱칸 = j => `<div class="s7${j.stuck ? ' bad' : ''}">${제작칸.map((_, i) => `<i class="${i < j.si ? 'on' : i === j.si ? 'now' : ''}" style="--n:${i}"></i>`).join('')}</div>`;
-  const 카드예상 = j => j.stuck ? `<small class="stuck">${esc(j.stuck.t)}${j.asked ? ' · 문의 ' + esc(j.asked) : ''}</small>` : j.eta ? `<small class="eta">${esc(j.eta)} 완료 예상</small>` : '';
+  const 카드예상 = j => j.stuck ? `<small class="stuck">${esc(j.stuck.t)}${j.asked ? ' · 문의 ' + esc(j.asked) : ''}</small>` : j.eta ? `<small class="eta">${esc(j.eta)}</small>` : '';
   const 앞말 = j => j.ahead ? `내 앞 ${j.ahead}건` : '내 앞 없음';
   function 대기칸(j) {
     const 앞 = [j.sheet && `시트 제작 ${j.sheet}건 앞`, j.ahead - j.sheet && `제작기 ${j.ahead - j.sheet}건 앞`].filter(Boolean);
@@ -1326,19 +1327,21 @@
     const 놓기 = e => {
       if (!끌림) return;
       끌림 = false; 뿌리.removeProperty('--o'); 뿌리.transition = '';
-      const dy = e.clientY - y0, dx = e.clientX - x0, n = 시트장.findIndex(p => p.k === 시트k);
+      const dy = e.clientY - y0, dx = e.clientX - x0;
       if (dy > 70) 시트닫기();
-      else if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) 시트그림(시트장[(n + (dx < 0 ? 1 : -1) + 시트장.length) % 시트장.length].k);
+      else if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) 시트넘김(dx < 0 ? 1 : -1);
     };
     sh.addEventListener('pointerup', 놓기); sh.addEventListener('pointercancel', 놓기);
   }
+  function 시트넘김(d) { 시트그림(시트장[(시트장.findIndex(p => p.k === 시트k) + d + 시트장.length) % 시트장.length].k); }
   function 시트그림(k) {
     const p = 시트장.find(x => x.k === String(k));
     if (!p) return;
     시트k = p.k;
-    $('sh2').innerHTML = `<div class="gb"></div><button class="xx" onclick="시트닫기()">취소</button><h5>${esc(p.이름)}</h5><p class="gl2">${esc(p.쪽)} · ${시트장.indexOf(p) + 1}/${시트장.length}</p>`
+    const 넘김 = (d, 말) => 시트장.length > 1 ? `<button class="ghost" onclick="시트넘김(${d})">${말}</button>` : '';
+    $('sh2').innerHTML = `<div class="gb"></div><button class="xx" onclick="시트닫기()" aria-label="닫기"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><h5>${esc(p.이름)}</h5><p class="gl2">${esc(p.쪽)} · ${시트장.indexOf(p) + 1}/${시트장.length}</p>`
       + `<div class="pp">${[['레퍼런스', p.a], ['제작본', p.b]].filter(x => x[1]).map(x => `<figure><figcaption>${x[0]}</figcaption><img src="${esc(x[1])}" alt="${x[0]}"></figure>`).join('')}</div>`
-      + (p.글 ? `<em>${esc(p.글)}</em>` : '') + (p.b ? '<button class="fx" onclick="시트수정()">이 장 수정</button>' : '');
+      + (p.글 ? `<em>${esc(p.글)}</em>` : '') + `<div class="nv">${넘김(-1, '‹ 이전')}${p.b ? '<button onclick="시트수정()">이 장 수정</button>' : ''}${넘김(1, '다음 ›')}</div>`;
   }
   function 시트열기(k) {
     시트틀_(); 시트그림(k);
@@ -1382,14 +1385,14 @@
   const 확필름 = () => `<div class="film" data-re="film">${확.장.map(a => { const p = 확판(a.k); return `<button class="${a.k === 확.고름 ? 'on' : ''} ${a.볼 && !확됨(a.k) ? 'w' : ''}" onclick="대조골라(${확.row},${+a.k})">${확.판그림(a.k)}${p ? `<i class="mk ${p}">${{ ok: '✓', fix: '✎', draft: '•' }[p]}</i>` : ''}<small>${a.k === 1 ? '표지' : `${a.r0 ? +a.r0 : '-'} → ${+a.번째}`}</small></button>`; }).join('')}</div>`;
   function 확상자() {
     const k = 확.고름, c = 확합(), 요청 = 확.요청(k);
-    return `<div class="hbx"><div class="tp"><h3>내지 확인하기</h3><span class="htag ${c.끝 >= c.전 ? 'ok' : ''}" data-re="sum">${c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`}</span></div>`
+    return `<div class="hbx"><div class="tp"><h3>내지 확인하기</h3><span class="htag ${c.끝 >= c.전 ? 'ok' : ''}" data-re="sum">${c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`}</span></div>${확필름()}`
       + `<div class="ln"><span>${확.쪽말(k)}</span><button class="rv" onclick="확원래(${k})" data-re="rv" ${확손댐(k) ? '' : 'hidden'}>원래대로</button></div>`
-      + `<div class="one">${확.쌍(k)}<div class="fds">${확칸들(확장(k))}${확추가(k)}${확버튼(k)}${요청 ? `<div class="sent">${요청}</div>` : ''}</div></div>${확필름()}`
+      + `<div class="one">${확.쌍(k)}<div class="fds">${확칸들(확장(k))}${확추가(k)}${확버튼(k)}${요청 ? `<div class="sent">${요청}</div>` : ''}</div></div>`
       + `<div class="qs" data-re="qs">${확담글()}</div><div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div></div>`;
   }
   function 확갱신(k) {
-    const c = 확합(), 칸 = 이름 => $('dj').querySelector(`[data-re=${이름}]`);
-    칸('zs').outerHTML = 확.띠(); 칸('film').outerHTML = 확필름(); 칸('vb').outerHTML = 확버튼(k);
+    const c = 확합(), 칸 = 이름 => $('dj').querySelector(`[data-re=${이름}]`), x = 칸('film').scrollLeft;
+    칸('zs').outerHTML = 확.띠(); 칸('film').outerHTML = 확필름(); 필름자리(x); 칸('vb').outerHTML = 확버튼(k);
     칸('qs').innerHTML = 확담글(); 칸('snd').innerHTML = 확끝글(c); 칸('go').disabled = !c.수; 칸('rv').hidden = !확손댐(k);
     칸('sum').textContent = c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`; 칸('sum').classList.toggle('ok', c.끝 >= c.전);
     const 보임 = 확손댐(k) || 확.상.열림[k]; 칸('add').hidden = !보임; 칸('adb').hidden = !!보임;
@@ -1425,11 +1428,19 @@
     if (!j.files.length || m && m.열쇠 === 열쇠 && m.d) return;
     google.script.run.withSuccessHandler(d => {
       대조기억.set(j.row, { 열쇠, d });
-      const e = $('dj');
-      if (d && e && openRow === j.row) e.innerHTML = 대조칸(j);
+      if (d && $('dj') && openRow === j.row) 대조넣기(j);
     }).withFailureHandler(() => {}).대조(code, j.row);
   }
-  const 대조그림 = row => { $('dj').innerHTML = 대조칸(mine.find(j => j.row === row)); 확저장(row); };
+  function 필름자리(x) {
+    const f = $('dj').querySelector('.film'), on = f && f.querySelector('.on');
+    if (!f) return;
+    f.scrollLeft = x;
+    if (!on) return;
+    const a = f.getBoundingClientRect(), b = on.getBoundingClientRect();
+    f.scrollLeft += b.left < a.left ? b.left - a.left : b.right > a.right ? b.right - a.right : 0;
+  }
+  function 대조넣기(j) { const f = $('dj').querySelector('.film'), x = f ? f.scrollLeft : 0; $('dj').innerHTML = 대조칸(j); 필름자리(x); }
+  const 대조그림 = row => { 대조넣기(mine.find(j => j.row === row)); 확저장(row); };
   function 대조골라(row, k) { 대조고름.set(row, k); 대조그림(row); }
   const 내값 = i => [(i.글.match(/[\d,.]+ ?원/) || [''])[0]].filter(Boolean).join('');
   const 이름됨 = i => i.이름기준 ? i.이름기준 !== '없음' : i.이름체크 === '맞음';
