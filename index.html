@@ -449,9 +449,10 @@
   <div class="body" id="list" hidden>
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 제작 현황</div>
     <h1>제작 현황</h1><span class="cur"></span>
-    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="load()"></select><select id="fwho" onchange="load()"></select></div>
+    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="보일 = 30; load()"></select><select id="fwho" onchange="보일 = 30; load()"></select></div>
     <p class="sub" id="lsub"></p>
     <div class="cards" id="cards"></div>
+    <button class="ghost" id="more" hidden onclick="더보기()">더 보기</button>
   </div>
   <div class="body" id="detail" hidden></div>
   <div class="body" id="ref" hidden>
@@ -640,7 +641,7 @@
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
     await 터짐_();
-    who = {}; cur = ''; mine = []; $('cards').innerHTML = '';
+    who = {}; cur = ''; mine = []; 보일 = 30; $('more').hidden = true; $('cards').innerHTML = '';
     cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
@@ -1100,7 +1101,7 @@
       view('done');
     });
   }
-  let mine = [];
+  let mine = [], 보일 = 30;
   const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
   const tk = c => who.admin ? '무제한' : c;
@@ -1181,16 +1182,18 @@
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
       현황그림_(r, quiet);
-    }).withFailureHandler(e => $('lsub').textContent = e.message.replace(/^Error:\s*/, '')).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value } : null);
+    }).withFailureHandler(e => { $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
   }
+  function 더보기() { 보일 = mine.length + 30; $('more').textContent = '불러오는 중…'; load(true); }
   function 현황기억_(r) {
     try {
-      if (r) return who.admin || localStorage.setItem('pp_j', JSON.stringify(r.map(j => Object.assign({}, j, { name: '' }))));
+      if (r) return who.admin || localStorage.setItem('pp_j', JSON.stringify(r.slice(0, 30).map(j => Object.assign({}, j, { name: '' }))));
       return who.admin ? null : JSON.parse(localStorage.getItem('pp_j') || 'null');
     } catch (e) { return null; }
   }
   function 현황그림_(r, quiet) {
     mine = r;
+    $('more').hidden = r.length < 보일; $('more').textContent = '더 보기';
     const n = r.filter(busy).length;
     $('busyN').hidden = !n; $('busyN').textContent = n;
     clearTimeout(timer);
