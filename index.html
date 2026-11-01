@@ -895,8 +895,7 @@
   }
   function recCheck(el, link) {
     const same = link && (known[link] || []).find(x => x.channel === chan);
-    const on = link && known[link] && types().list.length && !(same && !/^실패/.test(same.state));
-    if (!on) { if (!link || known[link]) recOff(el); return; }
+    if (!link || !types().list.length || same && !/^실패/.test(same.state)) return recOff(el);
     const key = link + '|' + chan;
     if (el.dataset.rk === key) return;
     if (el.dataset.rk) delete el.dataset.my;
