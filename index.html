@@ -30,13 +30,19 @@
   #dj { margin:6px 0 18px; min-width:0; } #dj h2 { font-size:17px; margin:0 0 10px; } #dj h3 { font-size:14px; margin:14px 0 8px; } #dj .ok { color:var(--ok); } #dj .warn { color:var(--run); } #dj .bad { color:var(--bad); } #dj .mut { color:var(--dim); }
   #dj .zs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); background:var(--field); border:1.5px solid var(--line); border-radius:12px; margin-bottom:12px; } #dj .zs > div { padding:10px 13px; border-left:1px solid var(--line); min-width:0; } #dj .zs > div:first-child { border-left:0; } #dj .zs span { display:block; color:var(--dim); font-size:12px; margin-bottom:2px; } #dj .zs b { display:block; font-size:18px; line-height:1.3; font-variant-numeric:tabular-nums; } #dj .zs b small { font-size:13px; color:var(--dim); font-weight:600; } #dj .zs p { margin:0; font-size:13px; line-height:1.5; font-weight:700; } #dj .zs p.warn, #dj .zs p.sub { font-size:12px; font-weight:600; margin-top:4px; } #dj .zs p.sub { color:var(--dim); }
   #dj .gu { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; margin-top:8px; } #dj .gu i { display:block; max-width:100%; height:100%; border-radius:4px; background:var(--ok); } #dj .gu i.hi { background:var(--bad); } #dj .gu s { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .dots { display:flex; flex-wrap:wrap; gap:3px; margin-top:7px; } #dj .dots i { width:9px; height:9px; border:0; border-radius:50%; background:var(--ok); } #dj .dots i.w { background:var(--run); } #dj .dots i.n { background:#55555C; } #dj .gs { display:flex; align-items:center; gap:5px; margin-top:7px; } #dj .gs u { display:block; height:8px; min-width:4px; border-radius:4px; background:#55555C; } #dj .gs u.to { background:var(--navy2); } #dj .gs em { flex:none; font-style:normal; font-size:12px; line-height:1; color:var(--dim); }
-  #dj .mapb { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:8px; margin-bottom:12px; } #dj .prs { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:6px; } #dj .pr, #dj .cd { all:unset; box-sizing:border-box; cursor:pointer; display:block; min-width:0; background:var(--bar); border-radius:9px; padding:6px; } #dj .pr:focus-visible, #dj .cd:focus-visible { outline:2px solid var(--navy2); } #dj .pr.on { outline:2px solid var(--navy2); outline-offset:-2px; background:rgba(111,143,224,.28); } #dj .pr.w { outline:4px solid var(--run); outline-offset:-4px; } #dj .tt { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; } #dj .tt img, #dj .tt .cr { display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; border-radius:5px; background-color:var(--field); } #dj .cap { display:block; margin-top:5px; font-size:11.5px; line-height:1.35; color:var(--dim); text-align:center; } #dj .cap b { color:var(--text); white-space:nowrap; } #dj .un { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:8px; font-size:12px; color:var(--dim); } #dj .un span { width:30px; opacity:.6; cursor:zoom-in; } #dj .un img, #dj .un .cr { display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; border-radius:3px; }
-  #dj .cdh { margin:2px 4px 7px; font-size:13px; } #dj .cdh small, #dj .mapb > small { color:var(--dim); font-size:12px; } #dj .cds { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:6px; margin-bottom:2px; } #dj .cd { font-size:13px; line-height:1.4; } #dj .cd .tt { margin-bottom:6px; } #dj .cd .tt small { display:block; text-align:center; margin-bottom:2px; font-size:11px; color:var(--dim); } #dj .cd > b { display:block; } #dj .cd > small { display:block; color:var(--dim); font-size:11.5px; } #dj .cd > em { display:block; font-style:normal; color:var(--run); font-size:11.5px; }
-  #dj .lad { display:grid; grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr); column-gap:8px; } #dj .lad svg { grid-column:2; width:100%; height:100%; } #dj .lh { font-size:12px; color:var(--dim); padding-bottom:6px; } #dj .lh:first-child { text-align:right; } #dj .ru { height:64px; display:flex; gap:8px; align-items:center; font-size:13px; line-height:1.3; min-width:0; } #dj .ru.l { flex-direction:row-reverse; text-align:right; } #dj .ru > span { min-width:0; overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; } #dj .ru small { display:block; color:var(--dim); font-size:11.5px; } #dj .ru em { font-style:normal; color:var(--run); font-size:11.5px; display:block; }
+  #dj .hbx { background:var(--win); border:1.5px solid var(--line); border-radius:14px; padding:14px; margin-bottom:12px; min-width:0; } #dj .tp { display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:8px; } #dj .tp h3 { margin:0; font-size:20px; line-height:1.3; } #dj .htag { font-size:13px; font-weight:700; color:var(--run); } #dj .htag.ok { color:var(--ok); }
+  #dj .ln { display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--dim); font-size:13px; margin-bottom:6px; } #dj .rv { all:unset; cursor:pointer; flex:none; color:var(--dim); font-size:12.5px; text-decoration:underline; text-underline-offset:2px; } #dj .rv[hidden], #dj .ad[hidden], #dj .fd[hidden] { display:none; }
+  #dj .one { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:14px; align-items:start; } #dj .pp2 { display:grid; grid-template-columns:1fr 1fr; gap:4px; min-width:0; } #dj .pp2 button { all:unset; display:block; cursor:zoom-in; min-width:0; } #dj .pp2 img { display:block; width:100%; aspect-ratio:4/5; object-fit:contain; border-radius:6px; background:var(--bar); } #dj .pp2 .cr { aspect-ratio:4/5; width:100%; height:auto; } #dj .pp2 small { display:block; text-align:center; color:var(--dim); font-size:11.5px; line-height:1.3; margin-bottom:2px; }
+  #dj .fds { display:grid; gap:7px; min-width:0; } #dj .fd { display:block; min-width:0; } #dj .fd > span { display:block; color:var(--dim); font-size:12px; margin-bottom:2px; } #dj .fds input, #dj .fds textarea { display:block; width:100%; min-height:0; margin:0; background:var(--field); color:var(--text); border:1.5px solid var(--line); border-radius:8px; padding:6px 9px; font:inherit; font-size:14px; line-height:1.45; resize:none; field-sizing:content; } #dj .fd input { font-weight:700; } #dj .w input, #dj .w textarea { border-color:var(--run); } #dj .fds input.ch, #dj .fds textarea.ch { border-color:var(--navy2); } #dj .fds em { display:block; font-style:normal; color:var(--run); font-size:12px; margin-top:1px; }
+  #dj .pl { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.55fr); gap:3px 5px; } #dj .pl input { padding:5px 8px; font-size:13.5px; } #dj .pl em { grid-column:1 / -1; margin-bottom:3px; } #dj .pl .hd { color:var(--dim); font-size:12px; } #dj .ad { all:unset; cursor:pointer; color:var(--navy2); font-size:13px; font-weight:700; justify-self:start; }
+  #dj .vb { all:unset; box-sizing:border-box; cursor:pointer; display:block; width:100%; text-align:center; font-weight:700; font-size:14.5px; padding:10px; border-radius:9px; background:var(--bar); border:1.5px solid var(--line); } #dj .vb.ok { background:rgba(94,230,168,.14); border-color:var(--ok); color:var(--ok); } #dj .vb.hot { background:var(--navy); border-color:var(--navy2); color:#fff; } #dj .vb.fix { cursor:default; background:rgba(111,143,224,.18); border-color:var(--navy2); color:#C9D5F6; }
+  #dj .film { display:flex; gap:5px; overflow-x:auto; padding:10px 1px 3px; scrollbar-width:none; } #dj .film button { all:unset; cursor:pointer; flex:none; width:62px; position:relative; } #dj .film img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:6px; opacity:.55; } #dj .film .on img { opacity:1; outline:2px solid var(--navy2); } #dj .film .w img { outline:2.5px solid var(--run); opacity:1; } #dj .film .on.w img { outline-color:var(--navy2); } #dj .film small { display:block; text-align:center; font-size:10.5px; color:var(--dim); margin-top:2px; } #dj .mk { position:absolute; right:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#000; color:var(--ok); font-size:11px; font-weight:800; font-style:normal; display:grid; place-items:center; } #dj .mk.fix { color:#C9D5F6; } #dj .mk.draft { color:var(--run); }
+  #dj .snd { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); color:var(--dim); font-size:13.5px; } #dj .snd b { color:var(--run); font-weight:700; } #dj .go { all:unset; box-sizing:border-box; cursor:pointer; background:var(--navy); color:#fff; font-weight:700; padding:9px 15px; border-radius:10px; text-align:center; white-space:nowrap; } #dj .go:disabled { opacity:.35; cursor:default; } #dj .bars { min-width:0; } #dj .sent { margin-top:0; }
+  #dj .un { display:flex; align-items:center; gap:6px; flex-wrap:wrap; color:var(--dim); font-size:13px; margin-bottom:12px; } #dj .un span { width:30px; cursor:zoom-in; } #dj .un img { display:block; width:100%; border-radius:3px; }
+  #detail:has(#dj > *) .hl, #detail:has(#dj > *) .pages .rev, #detail:has(#dj > *) #rvBar { display:none; } 
   #dj .cr { width:52px; height:52px; flex:none; border-radius:7px; background:var(--bar) no-repeat; background-size:300% auto; display:block; }
-  #dj .two { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } #dj .two figure { margin:0; min-width:0; } #dj .two figcaption { font-size:12px; color:var(--dim); margin-bottom:4px; } #dj .two img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:10px; display:block; background:var(--bar); } #dj .two ul { margin:8px 0 0; padding:0; list-style:none; font-size:13px; line-height:1.4; } #dj .two li { padding:2px 0; }
   #dj .bar2 { display:grid; grid-template-columns:40px minmax(0,1fr) 30px; gap:8px; align-items:center; font-size:12.5px; margin-bottom:4px; } #dj .bar2 u { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; } #dj .bar2 i { display:block; height:100%; border-radius:4px; background:var(--navy2); } #dj .bar2 s { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .nt { color:var(--dim); font-size:12px; line-height:1.5; margin:6px 0 0; }
-  @media (max-width:560px) { #dj .zs { grid-template-columns:repeat(2,minmax(0,1fr)); } #dj .zs > div:nth-child(3) { border-left:0; } #dj .zs > div:nth-child(n+3) { border-top:1px solid var(--line); } #dj .prs { grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; } #dj .pr { padding:4px; } #dj .cap { font-size:11px; } #dj .cds { grid-template-columns:repeat(2,minmax(0,1fr)); } #dj .lad { grid-template-columns:minmax(0,1fr) 26px minmax(0,1fr); column-gap:4px; } #dj .cr { width:38px; height:38px; } #dj .ru { font-size:12px; gap:5px; height:72px; } }
+  @media (max-width:560px) { #dj .zs { grid-template-columns:repeat(2,minmax(0,1fr)); } #dj .zs > div:nth-child(3) { border-left:0; } #dj .zs > div:nth-child(n+3) { border-top:1px solid var(--line); } #dj .one { grid-template-columns:minmax(0,1fr); } #dj .snd { flex-direction:column; align-items:stretch; } #dj .cr { width:38px; height:38px; } }
   :root { color-scheme:dark; } 
   * { box-sizing:border-box; margin:0; }
   body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Pretendard,sans-serif; letter-spacing:-.04em; word-break:keep-all; overflow-wrap:anywhere; 
@@ -1347,9 +1353,67 @@
     setTimeout(() => { if (!r.classList.contains('sh-up')) { r.classList.remove('sh-on'); document.body.style.overflow = $('make').style.transformOrigin = ''; } }, 260);
   }
   function 시트수정() {
-    const t = document.querySelector(`.pages textarea[data-p^="${시트k.padStart(2, '0')}_"]`);
+    const k = +시트k;
     시트닫기();
+    if (!k) return;
+    확.상.열림[k] = true; 대조골라(확.row, k);
+    const t = $('dj').querySelector('.one input, .one textarea');
     if (t) { t.focus({ preventScroll: true }); setTimeout(() => t.scrollIntoView({ block: 'center', behavior: 'smooth' }), 280); }
+  }
+  const 확인상태 = new Map(), 확상태 = row => 확인상태.get(row) || 확인상태.set(row, { 값: {}, 추가: {}, 담: {}, 판: {}, 열림: {} }).get(row);
+  let 확 = null;
+  const 확장 = k => 확.장.find(a => a.k === k), 확값 = (i, n) => (확.상.값[i.키] || i)[n];
+  const 확고침 = k => 확장(k).템.some(i => 확값(i, '이름') !== i.이름 || 확값(i, '정보') !== i.정보);
+  const 확손댐 = k => 확고침(k) || !!(확.상.추가[k] || '').trim();
+  const 확판 = k => 확손댐(k) ? (확.상.담[k] ? 'fix' : 'draft') : 확.상.판[k] || '';
+  const 확됨 = k => ['ok', 'fix'].includes(확판(k));
+  const 확합 = () => { const 끝 = 확.볼쪽.filter(확됨).length, ks = 확.장.map(a => a.k); return { 끝, 전: 확.볼쪽.length, 수: ks.filter(k => 확판(k) === 'fix').length, 안눌림: ks.filter(k => 확판(k) === 'draft').length }; };
+  const 확끝글 = c => c.수 ? `수정 ${c.수}장${c.안눌림 ? ` · <b>안 누른 수정 ${c.안눌림}장</b>` : ''}` : c.안눌림 ? `<b>안 누른 수정 ${c.안눌림}장</b>` : c.끝 >= c.전 ? '✓ 모두 확인했어요' : `${c.끝}/${c.전}장 확인`;
+  const 확입력 = (i, n, 칸) => { const v = esc(확값(i, n)), ch = 확값(i, n) !== i[n] ? 'ch' : ''; return 칸 === 'in' ? `<input type="text" class="${ch}" data-f="${n}" data-i="${esc(i.키)}" value="${v}" aria-label="${n}">` : `<textarea class="${ch}" data-f="${n}" data-i="${esc(i.키)}" rows="3" aria-label="${n}">${v}</textarea>`; };
+  function 확칸들(a) {
+    if (!a.템.length) return a.k === 1 ? `<div class="bars">${[['구도', 확.구도], ['색', 확.색]].map(([n, v]) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`).join('')}</div>` : '';
+    if (a.템.length === 1) { const i = a.템[0], 사진 = i.사진말 ? `<em>${esc(i.사진말)}</em>` : ''; return `<label class="fd ${i.이름말 ? 'w' : ''}"><span>이름</span>${확입력(i, '이름', 'in')}${i.이름말 ? `<em>${esc(i.이름말)}</em>` : ''}</label><label class="fd ${i.값말 ? 'w' : ''}"><span>정보</span>${확입력(i, '정보', 'ta')}${i.값말 ? `<em>${esc(i.값말)}</em>` : ''}</label>${사진}`; }
+    return `<div class="pl"><span class="hd">이름</span><span class="hd">가격 · 정보</span>${a.템.map(i => `<span class="${i.이름말 ? 'w' : ''}">${확입력(i, '이름', 'in')}</span><span class="${i.값말 ? 'w' : ''}">${확입력(i, '정보', 'in')}</span>${i.이름말 || i.값말 || i.사진말 ? `<em>${esc([i.이름말, i.값말, i.사진말].filter(Boolean).join(' · '))}</em>` : ''}`).join('')}</div>`;
+  }
+  const 확추가 = k => { const 보임 = 확손댐(k) || 확.상.열림[k]; return `<button class="ad" onclick="확열기(${k})" data-re="adb" ${보임 ? 'hidden' : ''}>＋ 수정 사항 적기</button><label class="fd" data-re="add" ${보임 ? '' : 'hidden'}><span>추가 수정 사항</span><textarea data-add="${k}" rows="2" placeholder="예: 깨진 제품 이미지 복원, 배경 밝게">${esc(확.상.추가[k] || '')}</textarea></label>`; };
+  const 확버튼 = k => { const p = 확판(k); return `<div data-re="vb">` + (p === 'draft' ? `<button class="vb hot" onclick="확담기(${k})">수정하기</button>` : p === 'fix' ? '<button class="vb fix" disabled>✓ 수정 담김</button>' : `<button class="vb ${p}" onclick="확체크(${k})">${p === 'ok' ? '✓ 확인' : '맞아요'}</button>`) + '</div>'; };
+  const 확필름 = () => `<div class="film" data-re="film">${확.장.map(a => { const p = 확판(a.k); return `<button class="${a.k === 확.고름 ? 'on' : ''} ${a.볼 && !확됨(a.k) ? 'w' : ''}" onclick="대조골라(${확.row},${+a.k})">${확.판그림(a.k)}${p ? `<i class="mk ${p}">${{ ok: '✓', fix: '✎', draft: '•' }[p]}</i>` : ''}<small>${a.k === 1 ? '표지' : `${a.r0 ? +a.r0 : '-'} → ${+a.번째}`}</small></button>`; }).join('')}</div>`;
+  function 확상자() {
+    const k = 확.고름, c = 확합(), 요청 = 확.요청(k);
+    return `<div class="hbx"><div class="tp"><h3>내지 확인하기</h3><span class="htag ${c.끝 >= c.전 ? 'ok' : ''}" data-re="sum">${c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`}</span></div>`
+      + `<div class="ln"><span>${확.쪽말(k)}</span><button class="rv" onclick="확원래(${k})" data-re="rv" ${확손댐(k) ? '' : 'hidden'}>원래대로</button></div>`
+      + `<div class="one">${확.쌍(k)}<div class="fds">${확칸들(확장(k))}${확추가(k)}${확버튼(k)}${요청 ? `<div class="sent">${요청}</div>` : ''}</div></div>${확필름()}`
+      + `<div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div></div>`;
+  }
+  function 확갱신(k) {
+    const c = 확합(), 칸 = 이름 => $('dj').querySelector(`[data-re=${이름}]`);
+    칸('zs').outerHTML = 확.띠(); 칸('film').outerHTML = 확필름(); 칸('vb').outerHTML = 확버튼(k);
+    칸('snd').innerHTML = 확끝글(c); 칸('go').disabled = !c.수; 칸('rv').hidden = !확손댐(k);
+    칸('sum').textContent = c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`; 칸('sum').classList.toggle('ok', c.끝 >= c.전);
+    const 보임 = 확손댐(k) || 확.상.열림[k]; 칸('add').hidden = !보임; 칸('adb').hidden = !!보임;
+  }
+  function 확글받기(e) {
+    const t = e.target, 상 = 확 && 확.상;
+    if (!상 || !t.closest('#dj')) return;
+    if (t.dataset.f) { const a = 확.장.flatMap(x => x.템).find(i => i.키 === t.dataset.i), k = parseInt(a.키); 상.값[a.키] = 상.값[a.키] || { 이름: a.이름, 정보: a.정보 }; 상.값[a.키][t.dataset.f] = t.value; 상.담[k] = false; t.classList.toggle('ch', t.value !== a[t.dataset.f]); 확갱신(k); }
+    else if (t.dataset.add) { const k = +t.dataset.add; 상.추가[k] = t.value; 상.담[k] = false; 확갱신(k); }
+  }
+  const 확다음 = () => { const n = 확.볼쪽.find(k => !확됨(k)); if (n) 대조고름.set(확.row, n); 대조그림(확.row); };
+  function 확체크(k) { 확.상.판[k] = 확.상.판[k] === 'ok' ? '' : 'ok'; 확.상.판[k] ? 확다음() : 대조그림(확.row); }
+  function 확담기(k) { 확.상.담[k] = true; 확다음(); }
+  function 확열기(k) { 확.상.열림[k] = true; 대조그림(확.row); const t = $('dj').querySelector('[data-add]'); if (t) t.focus(); }
+  function 확원래(k) { const 상 = 확.상; 확장(k).템.forEach(i => delete 상.값[i.키]); 상.추가[k] = ''; 상.담[k] = 상.열림[k] = false; 대조그림(확.row); }
+  const 확요청글 = a => { const 줄 = []; a.템.forEach(i => { [['이름', '이름'], ['정보', a.템.length > 1 ? `${i.이름} 가격 · 정보` : '정보']].forEach(([n, 말]) => { if (확값(i, n) !== i[n]) 줄.push(`${말}: '${i[n]}' → '${확값(i, n)}' 로 바꿔 주세요`); }); }); const 더 = (확.상.추가[a.k] || '').trim(); if (더) 줄.push(더); return 줄.join('\n'); };
+  function 확보내기(b) {
+    const row = 확.row, 장들 = 확.장.filter(a => 확판(a.k) === 'fix'), items = 장들.map(a => ({ part: 확.파트[a.k], text: 확요청글(a) }));
+    if (!items.length) return;
+    call('revises', [code, row, items], b, 'err3', rs => {
+      const j = mine.find(x => x.row === row), 상 = 확상태(row);
+      items.forEach((q, i) => j.reqs.push(Object.assign({ state: '접수' }, q, rs[i])));
+      장들.forEach(a => { a.템.forEach(i => delete 상.값[i.키]); 상.추가[a.k] = ''; 상.담[a.k] = 상.열림[a.k] = false; 상.판[a.k] = 'ok'; });
+      대조그림(row);
+      clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
+    });
   }
   const 대조기억 = new Map(), 대조고름 = new Map();
   function 대조받기(j) {
@@ -1361,10 +1425,8 @@
       if (d && e && openRow === j.row) e.innerHTML = 대조칸(j);
     }).withFailureHandler(() => {}).대조(code, j.row);
   }
-  function 대조골라(row, k) {
-    대조고름.set(row, k);
-    $('dj').innerHTML = 대조칸(mine.find(j => j.row === row));
-  }
+  const 대조그림 = row => $('dj').innerHTML = 대조칸(mine.find(j => j.row === row));
+  function 대조골라(row, k) { 대조고름.set(row, k); 대조그림(row); }
   const 내값 = i => [(i.글.match(/[\d,.]+ ?원/) || [''])[0]].filter(Boolean).join('');
   const 이름됨 = i => i.이름기준 ? i.이름기준 !== '없음' : i.이름체크 === '맞음';
   function 체크글(i, 새글) {
@@ -1380,46 +1442,31 @@
   function 대조칸(j) {
     const d = (대조기억.get(j.row) || {}).d;
     if (!d || !d.쪽) return '';
-    const 고름 = 대조고름.get(j.row) || (d.쪽[0] || { k: 1 }).k, 템 = d.템;
+    const 템 = d.템;
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
-    const 쪽이름 = k => k === 1 ? '썸네일' : (d.쪽.find(p => p.k === k) || { n: '' }).n;
     const 새글 = 템.filter(i => i.이름체크 === '없음').length * 2 > 템.length;
-    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length);
+    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length), 고름 = 대조고름.get(j.row) || (볼[0] || {}).쪽 || (d.쪽[0] || { k: 1 }).k;
     const 쪽들 = [{ k: 1, n: '썸네일', r: [[1, 0]] }].concat(d.쪽), 쓴 = new Set(쪽들.flatMap(p => p.r.map(x => x[0])));
     const 안쓴 = Object.keys(d.참조).map(Number).sort((a, b) => a - b).filter(r => !쓴.has(r));
     const 주소 = id => id ? img(id) : '', 그림 = id => id ? `<img src="${img(id)}" alt="" loading="lazy">` : '<i class="cr"></i>';
     const 나란히 = (r, k) => `data-z="${주소(d.참조[r])} ${주소(파일[k])}" data-k="${+k}"`;
     시트장 = 쪽들.map(p => { const 장템 = 템.filter(i => i.쪽 === p.k); return { k: String(p.k), 이름: 장템.length === 1 ? 장템[0].이름 : p.n, 쪽: p.n, a: 주소(d.참조[p.r.length ? p.r[0][0] : 0]), b: 주소(파일[p.k]), 글: 장템.flatMap(i => 체크글(i, 새글)).join(' · ') }; })
       .concat(안쓴.map(r => ({ k: 'r' + r, 이름: `안 쓴 레퍼런스 ${r}번째`, 쪽: '안 쓴 장', a: 주소(d.참조[r]), b: '', 글: '' })));
-    const 조각 = (id, x, y, 세로 = 3.75) => { const p = (c, z) => Math.max(0, Math.min(100, (c - 1 / (2 * z)) / (1 - 1 / z) * 100)).toFixed(1); return `<i class="cr" style="background-image:url('${주소(id)}');background-position:${p(+x, 3)}% ${p(+y, 세로)}%"></i>`; };
-    const 레퍼x = i => i.px != null ? i.px : i.rx != null ? i.rx : .5, 레퍼y = i => i.py != null ? i.py : i.ry != null ? i.ry - .12 : .5;
-    const 칸 = (i, 측) => 측 === 'l'
-      ? `<div class="ru l">${조각(d.참조[i.r], 레퍼x(i), 레퍼y(i))}<span>${esc(i.r글 || '글 자리 못 찾음')}<small>${i.r}장${i.r칸 ? ' ' + i.r칸 + '번째' : ''}${i.r값 ? ' · ' + esc(i.r값) : ''}</small></span></div>`
-      : `<div class="ru">${조각(파일[i.쪽], i.ox, i.oy)}<span>${esc(i.이름)}<small>${esc(i.글)}</small>${체크글(i, 새글).map(t => `<em>${esc(t)}</em>`).join('')}</span></div>`;
-    let 아래칸;
-    if (고름 === 1) {
-      const 막대 = (n, v) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`;
-      아래칸 = `<h3>썸네일 대조</h3><div class="two"><figure><figcaption>레퍼런스 표지</figcaption><img src="${img(d.참조[1])}" alt="레퍼런스 표지"><ul>${d.표지[0].slice(0, 6).map(t => `<li>${esc(t)}</li>`).join('')}</ul></figure><figure><figcaption>제작본 썸네일</figcaption><img src="${파일[1] ? img(파일[1]) : ''}" alt="제작본 썸네일"><ul>${d.표지[1].slice(0, 6).map(t => `<li>${esc(t)}</li>`).join('')}</ul></figure></div><div style="margin-top:10px">${막대('구도', d.구도)}${막대('색', d.색)}</div><p class="nt">빨간 눈금(50)을 넘으면 유사한 거예요. 글은 글자 인식으로 읽어 일부 틀릴 수 있어요.</p>`;
-    } else {
-      const 고른 = 템.filter(i => i.쪽 === 고름), 왼 = 고른.filter(i => i.r).sort((a, b) => a.r - b.r || (a.r칸 || 0) - (b.r칸 || 0)), 오 = 왼.slice().sort((a, b) => a.칸 - b.칸), h = innerWidth <= 560 ? 72 : 64;
-      const 빠 = 고른.filter(i => !i.r);
-      아래칸 = `<h3>아이템 차례 · 제품 정보</h3><p class="nt" style="margin:0 0 8px">${esc(쪽이름(고름))}: 이 장 아이템이 레퍼런스에 있던 차례(왼쪽)와 지금 차례(오른쪽)예요. 노란 선이 자리가 바뀐 아이템이에요.</p>` + (왼.length ? `<div class="lad"><div class="lh">레퍼런스</div><div></div><div class="lh">제작본</div>${왼.map((i, n) => 칸(i, 'l') + (n ? '' : `<svg viewBox="0 0 54 ${왼.length * h}" preserveAspectRatio="none" style="grid-row:2 / span ${왼.length}">${왼.map((x, a) => { const c = 오.indexOf(x), 곧 = a === c; return `<line x1="0" y1="${a * h + h / 2}" x2="54" y2="${c * h + h / 2}" stroke="${곧 ? '#6F8FE0' : '#FFC46B'}" stroke-opacity="${곧 ? .5 : .95}" stroke-width="2" vector-effect="non-scaling-stroke"/>`; }).join('')}</svg>`) + 칸(오[n], 'r')).join('')}</div>` : '')
-        + (빠.length ? `<p class="nt">레퍼런스 짝을 못 찾은 글: ${빠.map(i => esc(i.이름)).join(', ')}</p>` : '');
-    }
     const 값들 = 템.filter(i => i.값체크), 유사 = Math.max(+d.구도, +d.색), 끝 = d.쪽.length, 레퍼장 = Math.max(1, d.참조수 - 1), 대표 = d.쪽.filter(p => p.r.length).map(p => p.r[0][0]);
     const 완료 = 템.filter(i => !체크글(i, 새글).length && (이름됨(i) || i.값체크 === '맞음' || i.사진체크 === '맞음')), 못잼 = 템.length - 완료.length - 볼.length;
     const 순서 = (이름, 수, 섞임) => 수 < 2 ? `<p class="mut">${이름} 비교할 게 없음</p>` : `<p class="${섞임 ? 'ok' : 'bad'}">${이름} ${섞임 ? '섞임' : '그대로'}</p>`;
-    const 띠 = `<div class="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
-      + `<div><span>제품 정보</span><b>${완료.length}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${체크글(i, 새글).length ? 'w' : 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${볼.length ? `<p class="warn">*${볼.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
+    const 볼쪽 = [...new Set(볼.map(i => i.쪽))], 파트 = {}; 짝(j.files).forEach(({ f }) => 파트[parseInt(f.name)] = f.name.replace(/\.(png|jpg)$/, ''));
+    const 띠 = () => { const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
+      + `<div><span>제품 정보</span><b>${수}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${남.includes(i) ? 'w' : 볼.includes(i) || 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${남.length ? `<p class="warn">*${남.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
       + `<div><span>내지 · 제품 순서</span>${순서('내지 순서', new Set(대표).size, 대표.some((r, i) => i && r < 대표[i - 1]))}${순서('제품 순서', 짝있.length, 짝있.some(i => i.상태 !== '그대로'))}</div>`
-      + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`;
-    const 순번 = p => p.r.length ? `${+p.r[0][0]}번째${p.r.length > 1 ? ` 외 ${p.r.length - 1}장` : ''}` : '없음';
-    const 볼쪽 = new Set(볼.map(i => i.쪽));
-    const 짝칸 = `<div class="mapb"><div class="prs">${쪽들.map(p => `<button class="pr ${p.k === 고름 ? 'on' : ''} ${볼쪽.has(p.k) ? 'w' : ''}" ${볼쪽.has(p.k) ? 'title="추가 확인이 필요해요"' : ''} ${나란히(p.r.length ? p.r[0][0] : 0, p.k)} onclick="대조골라(${j.row},${+p.k})"><span class="tt">${그림(d.참조[p.r.length ? p.r[0][0] : 0])}${그림(파일[p.k])}</span><span class="cap">${p.k === 1 ? '표지 → <b>썸네일</b>' : `내지 순서 : <b>${순번(p)} → ${d.쪽.indexOf(p) + 1}번째</b>`}</span></button>`).join('')}</div>${안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} " data-k="r${+r}">${그림(d.참조[r])}</span>`).join('')}</div>` : ''}</div>`;
-    const 큰칸 = (id, x, y, 여럿) => 여럿 ? 조각(id, x, y, 3) : 그림(id);
-    const 확인 = 볼.length ? `<div class="mapb"><p class="cdh"><b>확인할 아이템 ${볼.length}개</b> <small>눌러서 그 장을 봐요</small></p><div class="cds">${볼.slice(0, 12).map(i => `<button class="cd" ${나란히(i.r, i.쪽)} onclick="대조골라(${j.row},${+i.쪽})"><span class="tt"><span><small>레퍼런스</small>${큰칸(d.참조[i.r], 레퍼x(i), 레퍼y(i), i.r수 > 1)}</span><span><small>제작본</small>${큰칸(파일[i.쪽], i.ox, i.oy, 템.filter(x => x.쪽 === i.쪽).length > 1)}</span></span><b>${esc(i.이름)}</b><small>${esc(쪽이름(i.쪽))}${i.r ? ` ← 레퍼런스 ${+i.r}번째` : ''}</small><em>${esc(체크글(i, 새글).join(' · '))}</em></button>`).join('')}</div>${볼.length > 12 ? `<small>외 ${볼.length - 12}개</small>` : ''}</div>` : '';
-    return `<h2>레퍼런스 대조</h2>${띠}${짝칸}`
-      + 확인 + 아래칸 + `<p class="nt">사진은 ${템.filter(i => i.사진체크 === '맞음').length}개만 자동으로 같은 제품임을 확인했어요. 나머지는 위 표에서 양쪽 사진을 눈으로 비교해 주세요. 자동 대조로 못 잡는 차이도 있어요.</p>`;
+      + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
+    확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽, 고름, 구도: +d.구도, 색: +d.색,
+      쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}</button></div>`; },
+      판그림: k => 그림(파일[k]), 쪽말: k => { const a = 확장(k); return k === 1 ? '썸네일' : `${esc(a.n)} · ${a.r0 ? `레퍼런스 ${+a.r0}번째 → ` : ''}${+a.번째}번째`; },
+      요청: k => j.reqs.filter(q => parseInt(q.part) === k).map(mark).join(''),
+      장: 쪽들.map((p, n) => { const 말들 = i => 체크글(i, 새글); return { k: p.k, n: p.n, r0: p.r.length ? p.r[0][0] : 0, 번째: n, 볼: 볼쪽.includes(p.k),
+        템: 템.filter(i => i.쪽 === p.k).map(i => ({ 키: i.쪽 + '|' + i.칸, 이름: i.이름, 정보: (i.글 || '').replace(/^출처:[^·]*·\s*/, '').replace(/\s*·\s*$/, ''), 이름말: 말들(i).filter(t => /^이름|같은 이름/.test(t)).join(' · '), 값말: 말들(i).filter(t => /^가격/.test(t)).join(' · '), 사진말: 말들(i).filter(t => /^사진(이|이 )/.test(t) && !/같은 이름/.test(t)).join(' · ') })) }; }) };
+    return 띠() + 확상자() + (안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} " data-k="r${+r}">${그림(d.참조[r])}</span>`).join('')}</div>` : '');
   }
   function card(i, how) {
     const j = mine[i];
@@ -1437,7 +1484,7 @@
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + 예상칸(j)
       + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
-      + (j.files.length ? `고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.${busy}</p>`
+      + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
           return `<div><div class="ph${on ? ' tw' : ''}" data-k="${esc(k)}">`
@@ -1784,6 +1831,7 @@
   }
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
   ['mouseover', 'mouseout', 'click'].forEach(t => $('detail').addEventListener(t, 크게));
+  $('detail').addEventListener('input', 확글받기);
   ['code', 'pw'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && enter()));
   ['pw1', 'pw2'].forEach(id => $(id).addEventListener('keydown', e => e.key === 'Enter' && !e.isComposing && !$('pwgo').disabled && pwChange()));
   addItem();
