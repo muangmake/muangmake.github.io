@@ -176,11 +176,39 @@
   .gauge li.on { color:var(--c); } .gauge li.on::before { background:currentColor; }
   .gauge li.now { color:var(--text); } .gauge li.now::before { background:var(--c); border-color:var(--c); }
   .card .gauge { margin:0 12px 12px; } .card .gauge ol { display:none; }
-  #detail > .gauge { margin:26px 0 10px; } #detail > .gauge .track { height:18px; } #detail > .gauge ol { margin-top:12px; font-size:13px; } 
-  #detail .left { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:18px 0 4px; } #detail .left b { font-size:40px; font-weight:800; color:var(--run); letter-spacing:-.03em; }
-  #detail .left span { color:var(--text); font-size:15px; font-weight:700; } #detail .left small { display:block; color:var(--dim); font-size:12px; font-weight:500; margin-top:2px; }
-  #detail .ahead { color:var(--dim); font-size:14px; margin:4px 0 0; } #detail .ahead b { color:var(--wait); }
-  #detail > .gauge .track i::after { right:-14px; width:28px; height:28px; margin-top:-14px; } #detail > .gauge li::before { width:10px; height:10px; }
+  
+  .s7 { --c:var(--run); display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:5px; }
+  .s7 i { height:10px; border-radius:3px; background:var(--line); transition:background .96s cubic-bezier(.22,1,.36,1); }
+  .s7 i.on { background:var(--ok); } .s7 i.now { background:var(--c); animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; } .s7.bad { --c:var(--bad); }
+  .card .s7 { margin:0 12px 12px; gap:3px; } .card .s7 i { height:6px; }
+  .pr { margin:24px 0 8px; } .pr .k { color:var(--dim); font-size:14px; font-weight:700; }
+  .pr .big { display:block; font-size:42px; line-height:1.25; font-weight:800; color:var(--eta); letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+  .pr .say { font-size:14px; line-height:1.5; margin-top:6px; } .pr .hint { color:var(--dim); font-size:13px; font-weight:500; margin-top:10px; }
+  .rr { display:grid; grid-template-columns:64px minmax(0,1fr) 104px; gap:10px; align-items:center; margin-top:10px; font-size:13px; color:var(--dim); }
+  .rr .track { position:relative; height:12px; border-radius:6px; background:var(--line); }
+  .rr .track i { position:absolute; top:0; bottom:0; border-radius:6px; background:color-mix(in srgb, var(--eta) 45%, var(--line)); transition:left .96s cubic-bezier(.22,1,.36,1), width .96s cubic-bezier(.22,1,.36,1); }
+  .rr.now { --c:var(--eta); color:var(--text); font-weight:700; } .rr.now .track i { background:var(--eta); animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; }
+  .rr span:last-child { text-align:right; font-variant-numeric:tabular-nums; }
+  .pb { margin-top:14px; padding:16px 18px; background:var(--field); border:1.5px solid var(--line); border-radius:12px; font-size:14px; font-weight:700; } .pb .s7 { margin-top:12px; }
+  .pb b { color:var(--run); } .pb b.w { color:var(--wait); } .pb.bad { background:color-mix(in srgb, var(--bad) 12%, var(--field)); border-color:var(--bad); } .pb.bad b, .pb b.x { color:var(--bad); }
+  .chs { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; } .chs span { padding:6px 10px; border-radius:8px; font-size:13px; font-weight:500; color:var(--dim); border:1px solid var(--line); } .chs .me { color:#1B1206; background:var(--run); border-color:var(--run); font-weight:700; }
+  .pr.bad .big { color:var(--bad); } .pr button.ask { --c:var(--bad); margin-top:16px; background:var(--bad); color:#1B0B0C; font-weight:800; animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; }
+  .st small.stuck { display:block; margin:2px 0 4px; color:var(--bad); font-size:11px; font-weight:700; }
+  @media (max-width:640px) { .pr .big { font-size:34px; } .rr { grid-template-columns:52px minmax(0,1fr) 92px; gap:8px; font-size:12px; } .pb { padding:14px; } }
+  
+  :where(#cost .gg i, #cost .mix i, #cost .lg i, #cost .two li u i, #dj .gu i, #dj .bar2 i, #dj .dots i, #dj .gs u, .bx i, .pth i, .s7 i) { position:relative; }
+  .s7 i::after, .rr .track i::after, #cost .gg i::after, #cost .mix i::after, #cost .lg i::after, #cost .two li u i::after, #dj .gu i::after, #dj .bar2 i::after, #dj .dots i::after, #dj .gs u::after, .bx i::after, .pth i::after {
+    content:""; position:absolute; inset:-1px; border-radius:inherit; background:inherit; filter:blur(7px); opacity:.2; pointer-events:none; animation:숨빛 3.36s cubic-bezier(.45,0,.55,1) calc(var(--n, 0) * -.48s) infinite; }
+  .s7 i.now::after, .rr.now .track i::after { inset:-3px; filter:blur(10px); }
+  :is(#cost .mix, #dj .dots, #dj .gs, .pth) > :nth-child(3n+2)::after { animation-delay:-1.12s; } :is(#cost .mix, #dj .dots, #dj .gs, .pth) > :nth-child(3n)::after { animation-delay:-2.24s; }
+  #cost .gg, #cost .two li u, .bx.bx, .pth.pth { overflow:visible; } #cost .gg i, #cost .two li u i { border-radius:inherit; } .pth > :first-child { border-radius:6px 0 0 6px; } .pth > :last-child { border-radius:0 6px 6px 0; }
+  .dots i, .gauge li::before { animation:숨점 3.36s cubic-bezier(.45,0,.55,1) infinite; } .dots i { color:var(--navy2); } .dots i:nth-child(2) { animation-delay:-1.12s; } .dots i:nth-child(3) { animation-delay:-2.24s; } #dj .dots i { animation:none; }
+  .gauge li:nth-child(2)::before { animation-delay:-.84s; } .gauge li:nth-child(3)::before { animation-delay:-1.68s; } .gauge li:nth-child(4)::before { animation-delay:-2.52s; }
+  .gauge li.now::before { animation:breathe 3.36s cubic-bezier(.45,0,.55,1) infinite; }
+  .rsl.on .rp { --c:var(--navy2); animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; } 
+  @keyframes 숨빛 { 0%, 100% { opacity:.14; transform:scale(1); } 50% { opacity:.78; transform:scale(1.02, 1.3); } }
+  @keyframes 숨점 { 0%, 100% { box-shadow:0 0 2px 0 color-mix(in srgb, currentColor 30%, transparent); } 50% { box-shadow:0 0 9px 2px color-mix(in srgb, currentColor 75%, transparent); } }
+  @media (prefers-reduced-motion:reduce) { *::after, *::before, .dots i, .s7 i.now, .rr.now .track i, .pr button.ask, .rsl.on .rp { animation-play-state:paused !important; } }
   @keyframes grow { from { width:0; } }
   @keyframes glow { 0%, 100% { box-shadow:0 0 6px color-mix(in srgb, var(--c) 35%, transparent); filter:brightness(1); } 50% { box-shadow:0 0 16px 2px color-mix(in srgb, var(--c) 60%, transparent), 0 0 34px 6px color-mix(in srgb, var(--c) 25%, transparent); filter:brightness(1.22) saturate(1.15); } }
   @keyframes flow { from { background-position:100% 0; } to { background-position:-100% 0; } }
@@ -1106,7 +1134,7 @@
       who.channels.find(x => x.name === chan).coupon = r.coupon;
       $('cp').textContent = tk(r.coupon);
       load(true);
-      $('job').textContent = [chan, r.jobs.length > 1 && r.jobs.length + '건', '예상 약 ' + (r.min || 15) + '분'].filter(Boolean).join(' · ');
+      $('job').textContent = [chan, r.jobs.length > 1 && r.jobs.length + '건', r.eta && '완료 예상 ' + r.eta].filter(Boolean).join(' · ');
       reset();
       view('done');
     });
@@ -1221,7 +1249,7 @@
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
-        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
+        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + 진행게이지(j, q) + '</div>';
       let e = 있던.get(String(j.row));
       if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
@@ -1236,8 +1264,8 @@
     : `<b class="s-wait">✓ 접수</b> · ${esc(q.text)}`)
     + (/^(반영됨|실패)/.test(q.state || '') ? '' : gauge('수정', 수정단계(q), q.pct))
     + (q.phase || q.eta ? `<small class="eta">${esc([q.phase, q.eta && '완료 ' + q.eta].filter(Boolean).join(' · '))}</small>` : '') + '</div>';
-  const 단계말 = { 제작: ['접수', '기획', '포토샵', '완료'], 수정: ['접수', '검토', '다시 제작', '반영'] };
-  const 제작단계 = j => /^대기/.test(j.state) ? 0 : /포토샵|조립|올리는/.test(j.step) ? 2 : 1;
+  const 단계말 = { 수정: ['접수', '검토', '다시 제작', '반영'] };
+  const 제작칸 = ['접수', '레퍼런스 읽기', '기획', '사진 준비', '포토샵 차례', '포토샵 조립', '드라이브에 올리기'];
   const 수정단계 = q => /^반영중/.test(q.state || '') ? (/검토/.test(q.phase || '') ? 1 : 2) : 0;
   const stc = s => /^완료/.test(s) ? 'ok' : /^실패/.test(s) ? 'bad' : /^대기/.test(s) ? 'wait' : 'run';
   function gauge(kind, n, pct) {
@@ -1245,10 +1273,30 @@
     return `<div class="gauge${n ? '' : ' wait'}"><div class="track"><i style="width:${w}%"></i></div><ol>`
       + 단계말[kind].map((s, i) => `<li class="${i < n ? 'on' : i === n ? 'now' : ''}" style="animation-delay:${i * .096}s">${s}</li>`).join('') + '</ol></div>';
   }
-  const 남은 = j => j.left == null ? '' : `<div class="left"><b>${j.left ? '약 ' + j.left + '분' : '곧 끝나요'}</b>`
-    + `<span>${j.left ? '남음 · ' + j.done + '쯤 완료' : '예상보다 늦어지는 중'}<small>${esc(단계말.제작[제작단계(j)])}${j.step ? ' · ' + esc(j.step) : ''}</small></span></div>`
-    + `<p class="ahead">${j.ahead ? `앞에 <b>${j.ahead}건</b> 대기 중` : '앞에 대기 중인 건 없음 — 지금 내 차례'}</p>`;
-  const 진행게이지 = (j, q) => /^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j)) : q ? gauge('수정', 수정단계(q), q.pct) : '';
+  const 일곱칸 = j => `<div class="s7${j.stuck ? ' bad' : ''}">${제작칸.map((_, i) => `<i class="${i < j.si ? 'on' : i === j.si ? 'now' : ''}" style="--n:${i}"></i>`).join('')}</div>`;
+  const 카드예상 = j => j.stuck ? `<small class="stuck">${esc(j.stuck.t)}${j.asked ? ' · 문의 ' + esc(j.asked) : ''}</small>` : j.eta ? `<small class="eta">${esc(j.eta)} 완료 예상</small>` : '';
+  const 앞말 = j => j.ahead ? `내 앞 ${j.ahead}건` : '내 앞 없음';
+  function 대기칸(j) {
+    const 앞 = [j.sheet && `시트 제작 ${j.sheet}건 앞`, j.ahead - j.sheet && `제작기 ${j.ahead - j.sheet}건 앞`].filter(Boolean);
+    return `<div class="pb"><p>포토샵 대기열 ${j.stuck ? '<b class="x">막힘</b>' : `<b class="w">${앞말(j)}</b>`}</p><div class="chs">${앞.map(x => `<span>${x}</span>`).join('')}<span class="me">#${j.row} 내 건</span>${j.behind ? `<span>${j.behind}건 뒤</span>` : ''}</div></div>`;
+  }
+  function 예상칸(j) {
+    if (j.si == null) return '';
+    const 장 = String(j.step || '').split(' · ')[1], 다음 = 제작칸[j.si + 1];
+    if (j.stuck) return `<section class="pr bad"><p class="k">완료 예상</p><b class="big">알 수 없음</b><p class="say"><b>${esc(j.stuck.t)}</b> — ${esc(j.stuck.s)}</p>`
+      + `<div class="pb bad"><p>막힌 곳 <b>${esc(j.stuck.곳)}</b>${j.stuck.장 ? ' · ' + esc(j.stuck.장) : ''}</p>${일곱칸(j)}<p class="hint">마지막 움직임 ${esc(j.stuck.at)}</p></div>`
+      + (j.asked ? `<p class="hint">${esc(j.asked)}에 관리자에게 문의했어요</p>` : `<button class="ask" onclick="문의하기(this, ${j.row})">관리자에게 문의</button><p class="hint">실패로 끝나면 티켓은 돌려드려요</p>`)
+      + 대기칸(j) + '</section>';
+    const a = Math.min(...j.hist.map(x => x.a)), b = Math.max(...j.hist.map(x => x.b)), 폭 = b - a || 1, h = j.hist;
+    return `<section class="pr"><p class="k">완료 예상</p><b class="big">${esc(j.eta)}</b>`
+      + h.map((x, i) => `<div class="rr${i === h.length - 1 ? ' now' : ''}"><span>${esc(x.t)}</span><div class="track"><i style="left:${(x.a - a) / 폭 * 100}%;width:${Math.max(6, (x.b - x.a) / 폭 * 100)}%"></i></div><span>${esc(x.l)}</span></div>`).join('')
+      + (h.length > 1 ? '<p class="hint">단계가 지날수록 범위가 좁아져요</p>' : '')
+      + `<div class="pb"><p>지금 <b>${제작칸[j.si]}</b>${장 ? ' · ' + esc(장) : ''}</p>${일곱칸(j)}${다음 ? `<p class="hint">다음 단계 · ${다음}</p>` : ''}</div>` + 대기칸(j) + '</section>';
+  }
+  function 문의하기(b, row) {
+    call('문의', [code, row], b, 'err3', r => { const i = mine.findIndex(x => x.row === row); mine[i].asked = r.asked; card(i, 'refresh'); });
+  }
+  const 진행게이지 = (j, q) => /^(대기|제작중)/.test(j.state) ? (j.si == null ? '' : 일곱칸(j)) : q ? gauge('수정', 수정단계(q), q.pct) : '';
   const 대조기억 = new Map(), 대조고름 = new Map();
   function 대조받기(j) {
     const 열쇠 = j.files.map(f => f.id).join(), m = 대조기억.get(j.row);
@@ -1331,8 +1379,8 @@
       + `<h1><span class="num">#${j.row}</span> ${esc(j.title || j.channel + ' 제작 건')}</h1>`
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
-      + (/^(대기|제작중)/.test(j.state) ? gauge('제작', 제작단계(j), j.pct) + 남은(j) : '')
-      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.left == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
+      + 예상칸(j)
+      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
       + (j.files.length ? `고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
