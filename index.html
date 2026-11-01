@@ -1666,7 +1666,7 @@
     call('계정', [code, 'add', v], b, 'err4', r => { cpDraw(r); $('an').value = $('ac').value = $('ae').value = ''; });
   }
   function pwUnlock(b, row) { call('unlock', [code, row], b, 'err4', cpDraw); }
-  function pwReset(b, row) { if (confirm('이 담당자에게 새 임시 비밀번호를 발급할까요?\n그 사람의 로그인이 모두 끝나요. 표에 뜨는 임시 비밀번호를 그 사람에게만 알려 주세요.')) call('pwreset', [code, row], b, 'err4', cpDraw); }
+  function pwReset(b, row) { if (confirm('이 담당자에게 새 임시 비밀번호를 발급할까요?\n그 사람의 로그인이 모두 끝나요. 표에 뜨는 임시 비밀번호는 지금 한 번만 보이니 바로 그 사람에게만 알려 주세요.')) call('pwreset', [code, row], b, 'err4', cpDraw); }
   function cpLoad() {
     type($('coup').querySelector('h1'));
     google.script.run.withSuccessHandler(cpDraw).withFailureHandler(e => $('err4').textContent = e.message.replace(/^Error:\s*/, '')).coupons(code);
