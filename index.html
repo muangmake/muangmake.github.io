@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+<style id="틀막이">html { display:none; }</style>
 <title>파워페이지 제작기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" integrity="sha384-ei/b2Mz3F5J8nqTvpKS89CkzDCuD7Cc+/F+OsaPUKItzHgLNKnGq3rjtYq/B7RnO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Do+Hyeon&display=swap">
@@ -330,6 +331,7 @@
     <p class="sub"><b>내 이름</b>(담당자 탭에 적힌 그대로)과 <b>비밀번호</b>를 넣어 주세요. 처음이면 관리자에게 받은 <b>임시 비밀번호</b> — 들어가기 전에 새 비밀번호를 정해요.</p>
     <input type="text" id="code" name="pp-login-name" placeholder="이름 (예: 김파페)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore>
     <input type="password" id="pw" name="pp-login-pw" placeholder="비밀번호" autocomplete="current-password" style="margin-top:10px">
+    <input type="text" id="otp" hidden inputmode="numeric" maxlength="6" placeholder="인증 앱 6자리 숫자" autocomplete="one-time-code" style="margin-top:10px">
     <div id="pwbox" hidden>
       <p class="sub" id="pwmsg" style="margin:18px 0 10px"></p>
       <input type="password" id="pw1" placeholder="새 비밀번호 (8자 이상)" autocomplete="new-password">
@@ -451,6 +453,7 @@
     <h1>계정 · 쿠폰 관리</h1><span class="cur"></span>
     <p class="sub"><b>담당자 · 채널 더하기</b> — 있는 사람이면 그 비밀번호 그대로 채널만 늘어요. 새 사람은 아래 표 '비밀번호' 칸에 뜨는 임시 비밀번호를 알려 주면 그걸로 들어와 새로 정해요. 아직 만들지 않는 채널은 '준비 중'으로 들어가요.</p>
     <div class="cpbar"><input id="an" placeholder="이름" style="width:110px"><input id="ac" list="acl" placeholder="채널" style="width:120px"><datalist id="acl"></datalist><input id="ae" type="email" placeholder="이메일(선택 · 폴더 공유)" style="width:190px"><button onclick="acAdd(this)">＋ 더하기</button></div>
+    <div class="cpbar"><button class="ghost" onclick="이단계켜끄기(this)">관리자 2단계 로그인</button><button class="ghost" onclick="전체끊기(this)">모든 기기 로그아웃</button><span class="note" style="margin:0">계정이 샌 것 같을 때 — 자세한 기록은 시트 보안기록 탭</span></div>
     <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 매일 00:00 에 다시 채워지는 장 수예요. 바꾼 남은 쿠폰은 오늘 자정까지 그대로예요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
@@ -460,8 +463,10 @@
 </div>
 
 <script>
-  if (location.hostname.endsWith('github.io')) {
-    if (top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); }
+  const 공개판 = location.hostname === 'muangmake.github.io';
+  if (공개판 && top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); }
+  document.getElementById('틀막이').remove();
+  if (공개판) {
     const API = 'https://script.google.com/macros/s/AKfycbzk9f66VR2EigqnlQFj26YITn8IJmNPYG65ml93DSz26ro1XNsXKR-6yblJG4t3jpT22g/exec';
     const 정책 = document.createElement('meta');
     정책.httpEquiv = 'Content-Security-Policy';
@@ -501,7 +506,7 @@
       들어감_(saved(), w);
       return google.script.run.withSuccessHandler(새로_).withFailureHandler(쫓겨남_).나(code);
     }
-    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw], $('in'), 'err1', r => r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
+    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value], $('in'), 'err1', r => r.otp ? 코드칸() : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
     로그인중_(auto ? '이전 계정으로 로그인 중' : '로그인 중');
   }
   function pwMode(on, msg) {
@@ -514,8 +519,10 @@
     const 틀림 = !name || !cur ? '위에 이름과 지금 비밀번호(처음이면 임시 비밀번호)를 넣어 주세요.'
       : a.length < 8 ? '새 비밀번호는 8자 이상이에요.' : a !== $('pw2').value ? '새 비밀번호 두 칸이 달라요.' : '';
     if (틀림) return $('err1').textContent = 틀림;
-    call('비번변경', [name, cur, a], $('pwgo'), 'err1', r => { $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
+    call('비번변경', [name, cur, a, 기기(), $('otp').value], $('pwgo'), 'err1', r => { if (r.otp) return 코드칸(); $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
   }
+  function 기기(새) { try { if (새) localStorage.setItem('pp_d', 새); return localStorage.getItem('pp_d') || ''; } catch (e) { return ''; } }
+  function 코드칸() { $('otp').hidden = false; $('otp').value = ''; $('otp').focus(); $('err1').textContent = '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.'; }
   function pwFind(a) {
     const name = $('code').value.trim();
     if (!name) return $('err1').textContent = '위에 이름을 넣고 비밀번호 찾기를 눌러 주세요.';
@@ -525,7 +532,9 @@
   function 들어감_(t, r) {
     $('code').disabled = false;
     code = t;
-    $('code').value = $('pw').value = '';
+    $('code').value = $('pw').value = $('otp').value = '';
+    $('otp').hidden = true;
+    if (r.device) 기기(r.device);
     store(code); 화면기억_(r);
     채움_(r);
     warp();
@@ -576,7 +585,7 @@
   function store(t) { try { localStorage.removeItem('pp_name'); t ? localStorage.setItem('pp_t', t) : ['pp_t', 'pp_w', 'pp_j'].forEach(k => localStorage.removeItem(k)); } catch (e) {} }
   function 화면기억_(r) {
     try {
-      if (r) return localStorage.setItem('pp_w', JSON.stringify(Object.assign({}, r, { name: '', token: '' })));
+      if (r) return localStorage.setItem('pp_w', JSON.stringify(Object.assign({}, r, { name: '', token: '', device: '' })));
       const w = JSON.parse(localStorage.getItem('pp_w') || 'null');
       return w && w.channels ? w : null;
     } catch (e) { return null; }
@@ -1471,6 +1480,22 @@
       + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
       + `<td><span class="step"><button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button><button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
+  }
+  function 이단계켜끄기(b) {
+    const 봄 = (op, v, ok) => call('이단계', [code, op, v], b, 'err4', ok);
+    봄('봄', '', r => {
+      if (r.on) { const c = prompt('2단계 로그인이 켜져 있어요. 끄려면 인증 앱의 6자리 숫자를 넣어 주세요.'); return c && 봄('끄기', c, () => alert('2단계 로그인을 껐어요.')); }
+      if (!confirm('켜면 로그인할 때마다 인증 앱(구글 Authenticator 등) 코드를 넣어요. 켤까요?')) return;
+      봄('새키', '', k => {
+        prompt('인증 앱에서 설정 키 입력을 골라 아래 키를 넣어 주세요(이름: 파워페이지 · 시간 기준).', k.key);
+        const c = prompt('인증 앱에 뜬 6자리 숫자를 넣어 주세요.');
+        if (c) 봄('켜기', c, () => alert('켰어요. 다음 로그인부터 코드를 넣어요.'));
+      });
+    });
+  }
+  function 전체끊기(b) {
+    if (!confirm('관리자를 포함해 모든 담당자가 로그아웃돼요. 계속할까요?')) return;
+    call('계정', [code, 'killall'], b, 'err4', () => { store(''); location.reload(); });
   }
   function acOp(b, op, row) { call('계정', [code, op, { row }], b, 'err4', cpDraw); }
   function acDel(b, row) { if (confirm('이 담당자 · 채널 줄을 지울까요?\n그 사람의 마지막 줄이면 로그인도 끝나요(드라이브 폴더 · 지난 제작물은 그대로).')) acOp(b, 'del', row); }
