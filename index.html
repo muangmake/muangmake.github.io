@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>파워페이지 제작기</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" integrity="sha384-ei/b2Mz3F5J8nqTvpKS89CkzDCuD7Cc+/F+OsaPUKItzHgLNKnGq3rjtYq/B7RnO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Pen+Script&family=Gaegu:wght@400;700&family=Black+Han+Sans&family=Do+Hyeon&display=swap">
 <style>
   :root { --bg:#0B0B0C; --grid:#18181B; --win:#141416; --bar:#1B1B1E; --field:#0E0E10; --chip:#000; --line:#2E2E33; --text:#F2F2F4; --dim:#8A8A90; --navy:#1E3A8A; --navy2:#6F8FE0;
@@ -462,13 +462,13 @@
 <script>
   if (location.hostname.endsWith('github.io')) {
     if (top !== self) { document.documentElement.innerHTML = ''; throw new Error('frame'); }
+    const API = 'https://script.google.com/macros/s/AKfycbzk9f66VR2EigqnlQFj26YITn8IJmNPYG65ml93DSz26ro1XNsXKR-6yblJG4t3jpT22g/exec';
     const 정책 = document.createElement('meta');
     정책.httpEquiv = 'Content-Security-Policy';
     정책.content = ['default-src \'none\'', 'script-src \'unsafe-inline\'', 'style-src \'unsafe-inline\' https://cdn.jsdelivr.net https://fonts.googleapis.com',
       'font-src https://cdn.jsdelivr.net https://fonts.gstatic.com', 'img-src data: https://drive.google.com https://*.googleusercontent.com https://*.cdninstagram.com https://*.fbcdn.net',
-      'connect-src https://script.google.com https://script.googleusercontent.com', 'base-uri \'none\'', 'form-action \'none\''].join('; ');
+      'connect-src ' + API + ' https://script.googleusercontent.com', 'base-uri \'none\'', 'form-action \'none\''].join('; ');
     document.head.append(정책);
-    const API = 'https://script.google.com/macros/s/AKfycbzk9f66VR2EigqnlQFj26YITn8IJmNPYG65ml93DSz26ro1XNsXKR-6yblJG4t3jpT22g/exec';
     const 부름 = (ok, no) => new Proxy({}, { get: (_, fn) =>
       fn === 'withSuccessHandler' ? f => 부름(f, no) : fn === 'withFailureHandler' ? f => 부름(ok, f) : (...args) => {
         fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ fn, args }) })
