@@ -128,7 +128,10 @@
   
   @media (max-width:860px) { .tabs { gap:8px; padding:10px; } .tabs a { position:relative; flex-direction:column; justify-content:center; gap:4px; min-height:60px; padding:7px 2px; } .tabs .ic { width:26px; height:26px; } .tabs b { font-size:13px; white-space:nowrap; } .tabs span { display:none; } .tabs em { position:absolute; top:4px; right:4px; padding:1px 6px; } .tabs em::after { content:none; } }
   @media (max-width:360px) { .tabs { gap:6px; padding:8px; } .tabs b { font-size:12px; } }
-  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; transition:opacity .15s; } .cards.wait { opacity:.4; pointer-events:none; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+  .뼈 { border:2px solid var(--line); border-radius:14px; background:var(--bar); aspect-ratio:3/4.45; animation:뼈숨 1.44s cubic-bezier(.45,0,.55,1) infinite; } 
+  @keyframes 뼈숨 { 0%, 100% { opacity:.45; } 50% { opacity:1; } }
+  @media (prefers-reduced-motion: reduce) { .뼈 { animation:none; opacity:.6; } }
   @media (max-width:640px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .card p { padding:8px 10px; font-size:12px; } } 
   .card { background:var(--field); border:2px solid var(--line); border-radius:14px; overflow:hidden; cursor:pointer; }
   .card:hover { border-color:var(--navy2); }
@@ -687,7 +690,7 @@
     r.channels.forEach((c, i) => Object.assign(who.channels[i], { coupon: c.coupon, folder: c.folder }));
     who.name = r.name; who.folder = r.folder;
     if (r.admin) 거르기칸_(r);
-    if (mine.length) 현황그림_(mine, true);
+    if (mine.length && !목록나감) 현황그림_(mine, true);
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
     const ch = who.channels.find(x => x.name === chan);
     if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
@@ -721,7 +724,7 @@
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
     await 터짐_();
-    who = {}; cur = ''; mine = []; 보일 = 30; $('more').hidden = true; $('cards').innerHTML = '';
+    who = {}; cur = ''; mine = []; 보일 = 30; 목록나감 = null; $('more').hidden = true; $('cards').innerHTML = '';
     cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
@@ -1306,16 +1309,33 @@
   }
   function load(quiet) {
     const 차례 = ++현황차례;
-    if (!quiet && !mine.length) $('lsub').textContent = '불러오는 중…';
-    google.script.run.withSuccessHandler(r => {
-      if (!code || 차례 !== 현황차례) return;
-      $('cards').classList.remove('wait');
+    if (!quiet && !mine.length && !목록나감) $('lsub').textContent = '불러오는 중…';
+    google.script.run.withSuccessHandler(async r => {
+      const 맞나 = () => code && 차례 === 현황차례;
+      if (!맞나()) return;
+      const 전환 = !!목록나감;
+      await 목록나감;
+      if (!맞나()) return;
+      목록나감 = null;
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
-      현황그림_(r, quiet);
-    }).withFailureHandler(e => { if (차례 !== 현황차례) return; $('cards').classList.remove('wait'); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
+      현황그림_(r, quiet, 전환);
+    }).withFailureHandler(e => { if (차례 !== 현황차례) return; if (목록나감) 목록나감.then(() => { 목록나감 = null; mine = []; $('cards').innerHTML = ''; }); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
   }
-  function 거름() { 보일 = 30; $('cards').classList.add('wait'); load(); }
+  let 목록나감 = null;
+  const 움직임끔 = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function 거름() {
+    보일 = 30; $('lsub').textContent = ''; $('more').hidden = true;
+    const c = $('cards'), 끔 = 움직임끔();
+    if (!목록나감) {
+      if (!끔) [...c.children].forEach(e => e.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(8px)' }], { duration: 180, easing: 'ease-in', fill: 'forwards' }));
+      목록나감 = new Promise(다음 => setTimeout(() => {
+        if (code) c.replaceChildren(...Array.from({ length: Math.max(2, c.children.length) }, () => Object.assign(document.createElement('div'), { className: '뼈' })));
+        다음();
+      }, 끔 ? 0 : 190));
+    }
+    load();
+  }
   function 더보기() { 보일 = mine.length + 30; $('more').textContent = '불러오는 중…'; load(true); }
   function 현황기억_(r) {
     try {
@@ -1323,7 +1343,7 @@
       return who.admin ? null : JSON.parse(localStorage.getItem('pp_j') || 'null');
     } catch (e) { return null; }
   }
-  function 현황그림_(r, quiet) {
+  function 현황그림_(r, quiet, 전환) {
     mine = r;
     $('more').hidden = r.length < 보일; $('more').textContent = '더 보기';
     const n = r.filter(busy).length;
@@ -1336,7 +1356,7 @@
     const 새로 = !quiet && !$('list').hidden, sub = $('lsub'), 전 = sub.textContent;
     sub.textContent = r.length ? '' : $('fch').value || $('fwho').value ? '조건에 맞는 제작이 없어요.' : '아직 맡긴 제작이 없어요.';
     if (새로 && sub.textContent !== 전) 타자([sub], 0, 2);
-    const c = $('cards'), 줄 = new Set(r.map(j => String(j.row))), 새 = [], 낱 = [];
+    const c = $('cards'), 전높이 = c.offsetHeight, 줄 = new Set(r.map(j => String(j.row))), 새 = [], 낱 = [];
     [...c.children].forEach(e => 줄.has(e.dataset.row) || e.remove());
     const 있던 = new Map([...c.children].map(e => [e.dataset.row, e]));
     let at = c.firstElementChild;
@@ -1351,7 +1371,15 @@
       e.html = html;
       if (e === at) at = e.nextElementSibling; else c.insertBefore(e, at);
     });
-    타자(새, 0, 2, 낱);
+    if (!전환) return 타자(새, 0, 2, 낱);
+    if (움직임끔()) return;
+    const 쭉 = 'cubic-bezier(.22,1,.36,1)', 높이 = c.offsetHeight;
+    새.forEach((e, i) => e.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 340, delay: Math.min(i, 12) * 45, easing: 쭉, fill: 'backwards' }));
+    if (높이 !== 전높이) {
+      c.style.overflow = 'hidden';
+      const a = c.animate([{ height: 전높이 + 'px' }, { height: 높이 + 'px' }], { duration: 360, easing: 쭉 });
+      a.onfinish = a.oncancel = () => c.style.overflow = '';
+    }
   }
   const mark = q => '<div class="q">' + (q.state && /^실패/.test(q.state) ? `<i class="bad">✕ ${esc(q.state)}</i> · ${esc(q.text)}`
     : /^반영(중|됨)/.test(q.state || '') ? `<b class="s-${/^반영됨/.test(q.state) ? 'ok' : 'run'}">${esc(q.state.replace(/^반영중/, '⟳ 반영 중').replace(/^반영됨/, '✓ 반영됨'))}</b> — ${esc(q.text)}`
