@@ -122,7 +122,7 @@
   
   @media (max-width:860px) { .tabs { gap:8px; padding:10px; } .tabs a { position:relative; flex-direction:column; justify-content:center; gap:4px; min-height:60px; padding:7px 2px; } .tabs .ic { width:26px; height:26px; } .tabs b { font-size:13px; white-space:nowrap; } .tabs span { display:none; } .tabs em { position:absolute; top:4px; right:4px; padding:1px 6px; } .tabs em::after { content:none; } }
   @media (max-width:360px) { .tabs { gap:6px; padding:8px; } .tabs b { font-size:12px; } }
-  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; transition:opacity .15s; } .cards.wait { opacity:.4; pointer-events:none; }
   @media (max-width:640px) { .cards { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .card p { padding:8px 10px; font-size:12px; } } 
   .card { background:var(--field); border:2px solid var(--line); border-radius:14px; overflow:hidden; cursor:pointer; }
   .card:hover { border-color:var(--navy2); }
@@ -382,6 +382,8 @@
   .tg { display:inline-block; font-size:11px; font-weight:700; border-radius:6px; padding:1px 6px; margin:2px 4px 2px 0; background:var(--bar); color:var(--dim); } .tg.auto { background:rgba(94,230,168,.15); color:var(--ok); }
   .act tr.r { cursor:pointer; } .act tr.r:hover td { background:var(--bar); } .act tr.off td { color:var(--dim); }
   .act select { background:var(--field); border:1.5px solid var(--line); border-radius:8px; color:var(--text); padding:5px; font:inherit; font-size:13px; }
+  
+  :is(.cpbar,#cost,#ref .in,.act) select { appearance:none; -webkit-appearance:none; text-align:center; text-align-last:center; padding-left:26px; padding-right:26px; background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%); background-size:5px 5px; background-repeat:no-repeat; background-position:right 15px center,right 10px center; }
   .act td.x { background:var(--field); padding:14px 14px 18px; } .act td.x p { font-size:13px; color:var(--dim); line-height:1.5; margin:0 0 10px; } .act td.x p b { color:var(--text); }
   .act td.x input { width:100%; text-align:left; font-size:14px; padding:8px 10px; }
   @media (max-width:640px) { .act th:nth-child(3), .act th:nth-child(6), .act tr.r td:nth-child(3), .act tr.r td:nth-child(6) { display:none; } .act td.x { white-space:normal; } } 
@@ -496,7 +498,7 @@
   <div class="body" id="list" hidden>
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 제작 현황</div>
     <h1>제작 현황</h1><span class="cur"></span>
-    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="보일 = 30; load()"></select><select id="fwho" onchange="보일 = 30; load()"></select></div>
+    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="거름()"></select><select id="fwho" onchange="거름()"></select></div>
     <p class="sub" id="lsub"></p>
     <div class="cards" id="cards"></div>
     <button class="ghost" id="more" hidden onclick="더보기()">더 보기</button>
@@ -641,12 +643,13 @@
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
     $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(매일 00:00 에 다시 채워져요).';
-    if (r.admin) {
-      const o = (l, all) => `<option value="">${all}</option>` + l.map(x => `<option>${esc(x)}</option>`).join('');
-      $('fch').innerHTML = o(r.channels.map(c => c.name), '모든 채널'); $('fwho').innerHTML = o(r.people || [], '모든 담당자');
-    }
+    if (r.admin) 거르기칸_(r);
     $('chpick').hidden = !(r.channels.length > 1);
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
+  }
+  function 거르기칸_(r) {
+    const o = (id, l, all) => { const e = $(id), v = e.value; e.innerHTML = `<option value="">${all}</option>` + l.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join(''); e.value = l.includes(v) ? v : ''; };
+    o('fch', r.channels.map(c => c.name), '모든 채널'); o('fwho', r.people || [], '모든 담당자');
   }
   function 새로_(r) {
     화면기억_(r);
@@ -654,6 +657,7 @@
     if (k(r) !== k(who)) return 채움_(r);
     r.channels.forEach((c, i) => Object.assign(who.channels[i], { coupon: c.coupon, folder: c.folder }));
     who.name = r.name; who.folder = r.folder;
+    if (r.admin) 거르기칸_(r);
     if (mine.length) 현황그림_(mine, true);
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
     const ch = who.channels.find(x => x.name === chan);
@@ -1162,7 +1166,7 @@
       view('done');
     });
   }
-  let mine = [], 보일 = 30;
+  let mine = [], 보일 = 30, 현황차례 = 0;
   const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
   const tk = c => who.admin ? '무제한' : c;
@@ -1237,14 +1241,17 @@
     try { localStorage.setItem('pp_blk', JSON.stringify(seen.concat(새.map(j => j.row)).slice(-50))); } catch (e) {}
   }
   function load(quiet) {
+    const 차례 = ++현황차례;
     if (!quiet && !mine.length) $('lsub').textContent = '불러오는 중…';
     google.script.run.withSuccessHandler(r => {
-      if (!code) return;
+      if (!code || 차례 !== 현황차례) return;
+      $('cards').classList.remove('wait');
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
       현황그림_(r, quiet);
-    }).withFailureHandler(e => { $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
+    }).withFailureHandler(e => { if (차례 !== 현황차례) return; $('cards').classList.remove('wait'); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
   }
+  function 거름() { 보일 = 30; $('cards').classList.add('wait'); load(); }
   function 더보기() { 보일 = mine.length + 30; $('more').textContent = '불러오는 중…'; load(true); }
   function 현황기억_(r) {
     try {
@@ -1263,7 +1270,7 @@
     const i = r.findIndex(j => j.row === openRow);
     if (quiet && !$('detail').hidden && i >= 0 && ![...$('detail').querySelectorAll('textarea')].some(t => t.value.trim())) card(i, 'refresh');
     const 새로 = !quiet && !$('list').hidden, sub = $('lsub'), 전 = sub.textContent;
-    sub.textContent = r.length ? '' : '아직 맡긴 제작이 없어요.';
+    sub.textContent = r.length ? '' : $('fch').value || $('fwho').value ? '조건에 맞는 제작이 없어요.' : '아직 맡긴 제작이 없어요.';
     if (새로 && sub.textContent !== 전) 타자([sub], 0, 2);
     const c = $('cards'), 줄 = new Set(r.map(j => String(j.row))), 새 = [], 낱 = [];
     [...c.children].forEach(e => 줄.has(e.dataset.row) || e.remove());
