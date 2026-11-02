@@ -54,6 +54,15 @@
   #dj .cr { width:52px; height:52px; flex:none; border-radius:7px; background:var(--bar) no-repeat; background-size:300% auto; display:block; }
   #dj .bar2 { display:grid; grid-template-columns:40px minmax(0,1fr) 30px; gap:8px; align-items:center; font-size:12.5px; margin-bottom:4px; } #dj .bar2 u { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; } #dj .bar2 i { display:block; height:100%; border-radius:4px; background:var(--navy2); } #dj .bar2 s { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .nt { color:var(--dim); font-size:12px; line-height:1.5; margin:6px 0 0; }
   @media (max-width:560px) { #dj .zs { grid-template-columns:repeat(2,minmax(0,1fr)); } #dj .zs > div:nth-child(3) { border-left:0; } #dj .zs > div:nth-child(n+3) { border-top:1px solid var(--line); } #dj .one { grid-template-columns:minmax(0,1fr); } #dj .snd { flex-direction:column; align-items:stretch; } #dj .cr { width:38px; height:38px; } }
+  
+  #dj .nkb { all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; width:100%; padding:9px; border-radius:9px; border:1.5px solid var(--navy2); color:#C9D5F6; font-weight:700; font-size:14px; } #dj .nkb small { color:var(--dim); font-weight:500; font-size:12px; } #dj .nkb.on { background:rgba(111,143,224,.18); }
+  #dj .nkp { margin-top:12px; } #dj .nkin { padding:12px; border-radius:12px; background:var(--field); border:1.5px solid var(--navy2); display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:14px; }
+  #dj .nkin .cvw { display:grid; place-items:center; background:var(--bar); border-radius:10px; padding:8px; min-width:0; } #dj .nkin canvas { display:block; max-width:100%; max-height:520px; cursor:crosshair; border-radius:6px; touch-action:manipulation; }
+  #dj .nkin .tools { display:grid; gap:8px; align-content:start; font-size:13px; } #dj .nkin .tools p { margin:0; line-height:1.5; } #dj .nkin button { all:unset; box-sizing:border-box; cursor:pointer; text-align:center; padding:8px 10px; border-radius:9px; background:var(--bar); border:1.5px solid var(--line); font-weight:700; font-size:13.5px; } #dj .nkin button.on { border-color:var(--navy2); color:#C9D5F6; } #dj .nkin button.go { background:var(--navy); border-color:var(--navy2); color:#fff; } #dj .nkin button:disabled { opacity:.5; cursor:default; }
+  #dj .nkin .two { display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:4px; } #dj .nkin .two button { padding:6px 4px; font-size:12.5px; } #dj .nkm { color:var(--ok); font-size:12.5px; min-height:18px; }
+  #dj .nkf { grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:10px; color:var(--dim); font-size:13px; } #dj .nkf div { display:flex; gap:6px; }
+  #dj .nkw { position:absolute; right:6px; top:20px; z-index:2; padding:3px 9px; border-radius:99px; background:rgba(14,14,16,.88); border:1.5px solid var(--run); color:var(--run); font-size:12px; font-weight:700; pointer-events:none; }
+  @media (max-width:560px) { #dj .nkin { grid-template-columns:minmax(0,1fr); } }
   :root { color-scheme:dark; } 
   * { box-sizing:border-box; margin:0; }
   body { min-height:100vh; background:var(--bg); color:var(--text); font-family:Pretendard,sans-serif; letter-spacing:-.04em; word-break:keep-all; overflow-wrap:anywhere; 
@@ -1538,14 +1547,14 @@
     return `<div class="endb"><b>${잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(찍.length ? 찍[0].n : '')} 확인 완료`}</b><div class="rec"><i>✓</i>${잠.강제 ? esc(잠.강제) : `${esc(찍.length ? 찍[0].n : '')} · 전 장 ${확.장.length}장${때}`}</div><div class="fs">${확파일()}</div></div>`;
   }
   const 확카드 = a => `<article class="lc ${확찍힘(a.k) ? 'done' : ''}" data-c="${+a.k}"><div class="ln"><span>${확.쪽말(a.k)}</span><button class="rv" onclick="확원래(${+a.k})" data-re="rv" ${확손댐(a.k) ? '' : 'hidden'}>원래대로</button></div>`
-    + `<div class="one">${확.쌍(a.k)}<div class="fds">${확칸들(a)}${확추가(a.k)}${확버튼(a.k)}${확.요청(a.k) ? `<div class="sent">${확.요청(a.k)}</div>` : ''}</div></div></article>`;
+    + `<div class="one">${확.쌍(a.k)}<div class="fds">${확칸들(a)}${확추가(a.k)}${확누끼(a.k)}${확버튼(a.k)}${확.요청(a.k) ? `<div class="sent">${확.요청(a.k)}</div>` : ''}</div></div>${확누끼판(a.k)}</article>`;
   const 확보내기칸 = c => `<div class="qs" data-re="qs">${확담글()}</div><div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div>`;
   function 확상자() {
     if (확.잠금) return 확막대() + `<div class="ls">${확.장.map(확카드).join('')}</div>` + 확보내기칸(확합()) + (확.잠금.열림 ? 확끝칸() : '');
     const k = 확.고름, c = 확합(), 요청 = 확.요청(k);
     return `<div class="hbx"><div class="tp"><h3>내지 확인하기</h3><span class="htag ${c.끝 >= c.전 ? 'ok' : ''}" data-re="sum">${c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`}</span></div>${확필름()}`
       + `<div class="ln"><span>${확.쪽말(k)}</span><button class="rv" onclick="확원래(${k})" data-re="rv" ${확손댐(k) ? '' : 'hidden'}>원래대로</button></div>`
-      + `<div class="one">${확.쌍(k)}<div class="fds">${확칸들(확장(k))}${확추가(k)}${확버튼(k)}${요청 ? `<div class="sent">${요청}</div>` : ''}</div></div>`
+      + `<div class="one">${확.쌍(k)}<div class="fds">${확칸들(확장(k))}${확추가(k)}${확누끼(k)}${확버튼(k)}${요청 ? `<div class="sent">${요청}</div>` : ''}</div></div>${확누끼판(k)}`
       + `<div class="qs" data-re="qs">${확담글()}</div><div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div></div>`;
   }
   function 확갱신(k) {
@@ -1561,7 +1570,7 @@
     확저장(확.row);
   }
   let 확줄 = Promise.resolve(), 확남음 = 0;
-  function 확한장(k) { const 칸 = $('dj').querySelector(`[data-c="${k}"]`); if (칸) 칸.outerHTML = 확카드(확장(k)); $('dj').querySelector('[data-re=lockb]').outerHTML = 확막대(); const z = $('dj').querySelector('[data-re=zs]'); if (z) z.outerHTML = 확.띠(); $('dj').querySelector('[data-re=snd]').innerHTML = 확끝글(확합()); }
+  function 확한장(k) { const 칸 = $('dj').querySelector(`[data-c="${k}"]`); if (칸) 칸.outerHTML = 확카드(확장(k)); $('dj').querySelector('[data-re=lockb]').outerHTML = 확막대(); const z = $('dj').querySelector('[data-re=zs]'); if (z) z.outerHTML = 확.띠(); $('dj').querySelector('[data-re=snd]').innerHTML = 확끝글(확합()); 누끼붙이기(); }
   function 확찍기(k, on) {
     const row = 확.row, 잠 = 확.잠금, 전 = 잠.장[k];
     if (on) 잠.장[k] = { f: 확.파일이름[k], n: who.name, t: Date.now() }; else delete 잠.장[k];
@@ -1608,6 +1617,86 @@
       대조그림(row);
       clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
     });
+  }
+  let 누끼판 = null;
+  const 누끼열림 = k => 누끼판 && 누끼판.row === 확.row && 누끼판.k === k;
+  const 확누끼표 = k => { const w = [...new Set(확.누끼(k).flatMap(x => x.경고 || []))]; return w.length ? `<span class="nkw" title="${esc(w.join(' · '))}">⚠ 누끼</span>` : ''; };
+  const 확누끼 = k => !확.누끼(k).length || 확.바쁨 || 확.대기(k) ? '' : `<button class="nkb ${누끼열림(k) ? 'on' : ''}" onclick="누끼열기(${+k})">✂ 누끼 다듬기 <small>제품 ${확.누끼(k).length}개</small></button>`;
+  const 확누끼판 = k => 누끼열림(k) && !확.바쁨 ? `<div class="nkp" data-nkp="${+k}"></div>` : '';
+  function 누끼붙이기() { const p = 누끼판 && 확 && 누끼판.row === 확.row && $('dj').querySelector(`[data-nkp="${누끼판.k}"]`); if (p && p.firstChild !== 누끼판.el) p.replaceChildren(누끼판.el); }
+  function 누끼열기(k) {
+    if (누끼열림(k)) { 누끼판 = null; 대조그림(확.row); return; }
+    누끼판 = { row: 확.row, k, i: 0, el: document.createElement('div'), 바탕: '어둠' };
+    누끼판.el.className = 'nkin'; 누끼판.el.addEventListener('click', 누끼누름);
+    대조그림(확.row); 누끼층고름(0);
+  }
+  function 누끼층고름(i) {
+    const 판 = 누끼판, x = 확.누끼(판.k)[i];
+    Object.assign(판, { i, ops: [], 쌓: [], 층: null }); 판.el.innerHTML = '<p class="mut">누끼 층을 불러오는 중…</p>';
+    google.script.run.withSuccessHandler(src => { if (누끼판 !== 판 || 판.i !== i) return; const im = new Image(); im.onload = () => 누끼판짜기(판, im); im.src = src; })
+      .withFailureHandler(e => { if (누끼판 === 판) 판.el.innerHTML = `<p class="bad">${esc(e.message)}</p>`; }).누끼층(code, 판.row, x.id);
+  }
+  function 누끼판짜기(판, im) {
+    const l = 확.누끼(판.k), W = im.width, H = im.height, t = document.createElement('canvas'); t.width = W; t.height = H;
+    const tx = t.getContext('2d'); tx.drawImage(im, 0, 0); 판.층 = tx.getImageData(0, 0, W, H); 판.처음 = new Uint8ClampedArray(판.층.data); 판.t = t;
+    판.el.innerHTML = '<div class="cvw"><canvas></canvas></div><div class="tools">'
+      + (l.length > 1 ? `<div class="two">${l.map((x, n) => `<button class="${n === 판.i ? 'on' : ''}" data-n="${n}">제품 ${n + 1}</button>`).join('')}</div>` : '')
+      + '<p class="mut"><b>남은 배경을 찍으면 지워져요</b><br>찍은 곳과 이어진 비슷한 색만 빠지고, 장 바탕 · 글은 그대로예요.</p>'
+      + `<div class="two">${[['어둠', '어둡게'], ['밝음', '밝게'], ['격자', '격자']].map(([v, n]) => `<button data-bg="${v}" class="${판.바탕 === v ? 'on' : ''}">${n}</button>`).join('')}</div>`
+      + '<button data-a="auto">자동 다듬기 (가장자리 흰 테)</button><div class="two"><button data-a="undo">되돌리기</button><button data-a="reset">처음으로</button></div><p class="nkm" data-m></p></div>'
+      + '<div class="nkf"><span>저장하면 이 장만 다시 쌓아요 · 0원 · 몇 분 · 이 장 확인은 새 그림으로 다시</span><div><button data-a="close">닫기</button><button class="go" data-a="save">이 장 누끼 저장</button></div></div>';
+    const cv = 판.el.querySelector('canvas'); cv.width = W + 40; cv.height = H + 40; 판.cv = cv;
+    cv.onclick = e => { const r = cv.getBoundingClientRect(), x = ((e.clientX - r.left) * cv.width / r.width - 20) / W, y = ((e.clientY - r.top) * cv.height / r.height - 20) / H;
+      if (x < 0 || y < 0 || x >= 1 || y >= 1) return 누끼말(판, '제품 둘레를 찍어 주세요'); 누끼한일(판, { t: 'erase', x, y }); };
+    누끼칠(판);
+  }
+  const 누끼말 = (판, s) => { const m = 판.el.querySelector('[data-m]'); if (m) m.textContent = s; };
+  function 누끼칠(판) {
+    const cv = 판.cv, cx = cv.getContext('2d');
+    if (판.바탕 === '격자') { for (let y = 0; y < cv.height; y += 16) for (let x = 0; x < cv.width; x += 16) { cx.fillStyle = (x + y) / 16 % 2 ? '#bbb' : '#fff'; cx.fillRect(x, y, 16, 16); } }
+    else { cx.fillStyle = 판.바탕 === '밝음' ? '#fff' : '#262626'; cx.fillRect(0, 0, cv.width, cv.height); }
+    판.t.getContext('2d').putImageData(판.층, 0, 0); cx.drawImage(판.t, 20, 20);
+  }
+  function 누끼한일(판, op) {
+    const d = 판.층.data, W = 판.층.width, H = 판.층.height;
+    if (op.t === 'erase') {
+      const px = Math.min(W - 1, Math.floor(op.x * W)), py = Math.min(H - 1, Math.floor(op.y * H)), i0 = (py * W + px) * 4;
+      if (!d[i0 + 3]) return 누끼말(판, '이미 빈 곳이에요 — 제품 둘레에 남은 배경을 찍어 주세요');
+      판.쌓.push(new Uint8ClampedArray(d)); 판.ops.push(op);
+      const r = d[i0], g = d[i0 + 1], b = d[i0 + 2], 본 = new Uint8Array(W * H), q = [px, py]; 본[py * W + px] = 1; let n = 0;
+      while (q.length) { const y = q.pop(), x = q.pop(); n++;
+        for (const [a, c] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]) { if (a < 0 || c < 0 || a >= W || c >= H) continue; const k = c * W + a, j = k * 4; if (본[k] || !d[j + 3] || Math.abs(d[j] - r) + Math.abs(d[j + 1] - g) + Math.abs(d[j + 2] - b) > 60) continue; 본[k] = 1; q.push(a, c); } }
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let 가 = 0; for (let dy = -1; dy <= 1 && !가; dy++) for (let dx = -1; dx <= 1; dx++) { const a = x + dx, c = y + dy; if (a >= 0 && c >= 0 && a < W && c < H && 본[c * W + a]) { 가 = 1; break; } } if (가) d[(y * W + x) * 4 + 3] = 0; }
+      누끼말(판, n > W * H / 3 ? '많이 지워졌어요 — 이상하면 되돌리기' : '지웠어요');
+    } else {
+      판.쌓.push(new Uint8ClampedArray(d)); 판.ops.push(op);
+      const 속 = new Uint8Array(W * H), 띠 = 4;
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { let 다 = d[(y * W + x) * 4 + 3] > 127; for (let dy = -띠; dy <= 띠 && 다; dy++) for (let dx = -띠; dx <= 띠; dx++) { const a = x + dx, c = y + dy; if (a < 0 || c < 0 || a >= W || c >= H || d[(c * W + a) * 4 + 3] <= 127) { 다 = false; break; } } 속[y * W + x] = 다; }
+      for (let k = 0; k < W * H; k++) { const j = k * 4; if (!d[j + 3] || 속[k]) continue; const a = Math.min(d[j + 3] / 255, Math.min(1, (255 - Math.min(d[j], d[j + 1], d[j + 2])) / 70)); if (a > .02) for (let c = 0; c < 3; c++) d[j + c] = Math.max(0, Math.min(255, (d[j + c] - (1 - a) * 255) / a)); d[j + 3] = Math.round(a * 255); }
+      누끼말(판, '가장자리 흰 테를 뺐어요 — 하얀 제품이면 테두리가 옅어지니 확인해 주세요');
+    }
+    누끼칠(판);
+  }
+  function 누끼누름(e) {
+    const b = e.target.closest('button'), 판 = 누끼판; if (!b || !판) return;
+    if (b.dataset.n) { if (+b.dataset.n !== 판.i && (!판.ops.length || confirm('저장 안 한 다듬기가 사라져요. 다른 제품으로 갈까요?'))) 누끼층고름(+b.dataset.n); return; }
+    if (b.dataset.bg) { 판.바탕 = b.dataset.bg; 판.el.querySelectorAll('[data-bg]').forEach(x => x.classList.toggle('on', x === b)); return 누끼칠(판); }
+    const a = b.dataset.a; if (!판.층 && a !== 'close') return;
+    if (a === 'auto') 누끼한일(판, { t: 'auto' });
+    else if (a === 'undo') { if (판.쌓.length) { 판.층.data.set(판.쌓.pop()); 판.ops.pop(); 누끼칠(판); 누끼말(판, '되돌렸어요'); } }
+    else if (a === 'reset') { 판.층.data.set(판.처음); 판.ops = []; 판.쌓 = []; 누끼칠(판); 누끼말(판, '처음 누끼로'); }
+    else if (a === 'close') { 누끼판 = null; 대조그림(확.row); }
+    else if (a === 'save') {
+      if (!판.ops.length) return 누끼말(판, '다듬은 곳이 없어요');
+      const row = 판.row, k = 판.k, part = 확.파트[k], 층 = 확.누끼(k)[판.i].층;
+      b.disabled = true; b.textContent = '보내는 중…';
+      google.script.run.withSuccessHandler(r => {
+        const j = mine.find(x => x.row === row); if (j) j.reqs.push(Object.assign({ state: '접수' }, r));
+        if (누끼판 === 판) 누끼판 = null;
+        if (확 && 확.row === row) { if (확.잠금) delete 확.잠금.장[k]; 대조그림(row); }
+        clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
+      }).withFailureHandler(e => { b.disabled = false; b.textContent = '이 장 누끼 저장'; 누끼말(판, e.message.replace(/^Error:\s*/, '')); }).누끼보내기(code, row, k, part, 층, 판.ops);
+    }
   }
   const 캡션기억 = new Map();
   const 캡션잠김 = j => j.확인 && !j.확인.열림 && !j.확인.표기;
@@ -1662,7 +1751,7 @@
     const a = f.getBoundingClientRect(), b = on.getBoundingClientRect();
     f.scrollLeft += b.left < a.left ? b.left - a.left : b.right > a.right ? b.right - a.right : 0;
   }
-  function 대조넣기(j) { const f = $('dj').querySelector('.film'), x = f ? f.scrollLeft : 0; $('dj').innerHTML = 대조칸(j); 필름자리(x); }
+  function 대조넣기(j) { const f = $('dj').querySelector('.film'), x = f ? f.scrollLeft : 0; $('dj').innerHTML = 대조칸(j); 필름자리(x); 누끼붙이기(); }
   function 대조채움(j) {
     const 새 = [], z = $('dj').querySelector('.zs.빈'), 칸 = 제작본칸(), 앞 = 칸 && 칸.getBoundingClientRect().top;
     const html = 대조칸(j);
@@ -1671,6 +1760,7 @@
     새.concat(z && z.isConnected ? z : []).filter(e => e.nodeType === 1).forEach(e => e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280 }));
     const 차이 = 칸 && 칸 === 제작본칸() ? 앞 - 칸.getBoundingClientRect().top : 0;
     if (차이) $('detail').querySelectorAll('#dj > :not(.zs), #dj ~ *').forEach(e => e.animate([{ transform: `translateY(${차이}px)` }, { transform: 'none' }], { duration: 280, easing: 멈춤곡선, composite: 'add' }));
+    누끼붙이기();
   }
   const 대조그림 = row => { 대조넣기(mine.find(j => j.row === row)); 확저장(row); };
   function 대조골라(row, k) { 대조고름.set(row, k); 대조그림(row); }
@@ -1714,7 +1804,8 @@
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
     확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽: 잠금 ? 쪽들.map(p => p.k) : 볼쪽, 고름, 구도: +d.구도, 색: +d.색, 잠금, 파일이름, 빈자료, 폴더: j.folder, 바쁨: !/^완료/.test(j.state),
       대기: k => j.reqs.some(q => parseInt(q.part) === k && /^(접수|반영중)/.test(q.state)),
-      쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}${확도장(k)}</button></div>`; },
+      쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}${확도장(k)}${확누끼표(k)}</button></div>`; },
+      누끼: k => [].concat((j.nk || {})[k] || []),
       판그림: k => 그림(파일[k]), 쪽말: k => { const a = 확장(k); return k === 1 ? '썸네일' : `${esc(a.n)} · ${a.r0 ? `레퍼런스 ${+a.r0}번째 → ` : ''}${+a.번째}번째`; },
       요청: k => j.reqs.filter(q => parseInt(q.part) === k).map(mark).join(''),
       장: 쪽들.map((p, n) => { const 말들 = i => 체크글(i, 새글); return { k: p.k, n: p.n, r0: p.r.length ? p.r[0][0] : 0, 번째: n, 볼: 볼쪽.includes(p.k),
