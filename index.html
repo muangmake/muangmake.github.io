@@ -566,9 +566,9 @@
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
     <h1>제작 후보</h1><span class="cur"></span>
-    <p class="sub">'레퍼런스' 탭 채널들의 최근 72시간 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 걸 체크하고 채널을 확인한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
+    <p class="sub">레퍼런스 채널들의 최근 2일 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 걸 체크하고 채널을 확인한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
     <div class="cpbar"><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span id="rstate" class="scan"></span>
-      <button class="ghost" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button>
+      <button class="ghost" id="racc" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button>
       <span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> 안 만든 것만</label></div>
     <div class="cards" id="rcards"></div>
     <p class="err" id="err5"></p>
@@ -699,7 +699,10 @@
     who = r;
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name || '내 계정') + '<small>로그아웃</small>';
     $('drive').hidden = true;
-    $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
+    $('t-cp').hidden = $('t-cost').hidden = !r.admin;
+    $('t-ref').hidden = !r.admin && !r.channels.some(c => !c.demo);
+    $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '내 채널 후보 · 골라 제작';
+    $('rscan').hidden = $('racc').hidden = !r.admin;
     $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 제작 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 제작 티켓 1장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요.';
     if (r.admin) 거르기칸_(r);
@@ -1300,7 +1303,7 @@
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|ref|acc)$/.test(s.v) ? home() : s.v || home());
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|acc)$/.test(s.v) ? home() : s.v || home());
   });
   let timer = 0, openRow = 0;
   const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
@@ -1885,7 +1888,7 @@
   function refShow(r) {
     refs = r.items;
     refs.forEach(j => { if (!j.state && made[j.link]) j.state = '제작 요청함'; });
-    $('rmeta').textContent = r.last ? `마지막으로 찾음 ${r.last} · 레퍼런스 채널 ${r.accs}개.` : '';
+    $('rmeta').textContent = r.last ? `마지막으로 찾음 ${r.last} · ${who.admin ? '' : '내 채널 '}레퍼런스 채널 ${r.accs}개.` : '';
     const s = r.scan;
     $('rstate').textContent = !s ? '' : s.phase === 'wait' ? '작업 맥에 보내는 중 · 1분 안에 시작해요'
       : s.phase === 'nomac' ? '작업 맥이 꺼져 있나 봐요 — 켜지면 시작해요' : `훑는 중 · ${s.min}분째 (보통 1~3분)`;
@@ -1900,7 +1903,7 @@
     const chs = who.channels.filter(c => !c.demo).map(c => c.name), f = $('rch').value;
     const ch = j => sel[j.link] || (chs.includes(j.ch) ? j.ch : '');
     const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !ch(j) : ch(j) === f)));
-    $('rcards').innerHTML = !l.length ? '<p class="note">후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.</p>' : l.map(j => {
+    $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 2일 후보가 없어요 — 새 후보는 하루 두어 번 들어와요.'}</p>` : l.map(j => {
       const i = refs.indexOf(j), on = j.link in sel;
       return `<div class="card${on ? ' on' : ''}"><div class="cv" onclick="refPick(${i})">${j.img ? `<img src="${esc(j.img)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.remove()">` : '미리보기 없음'}<span class="ck">${on ? '✓' : ''}</span>${j.kind ? `<span class="kd">${esc(j.kind)}</span>` : ''}</div>
         <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
@@ -1919,14 +1922,17 @@
   function refSum() {
     const l = Object.entries(sel), n = {};
     l.forEach(([, c]) => n[c || '채널 없음'] = (n[c || '채널 없음'] || 0) + 1);
-    $('rsum').textContent = l.length ? `${l.length}개 · ` + Object.entries(n).map(([c, k]) => c + ' ' + k).join(' · ') + ' · 티켓 안 씀' : refMsg || '만들 후보를 체크하세요';
+    $('rsum').textContent = l.length ? `${l.length}개 · ` + Object.entries(n).map(([c, k]) => c + ' ' + k).join(' · ') + (who.admin ? ' · 티켓 안 씀' : ` · 오늘 제작 티켓 ${l.length}장`) : refMsg || '만들 후보를 체크하세요';
     $('rbar').classList.toggle('has', l.length > 0 && l.every(([, c]) => c));
   }
   function refScan(btn) { call('refscan', [code], btn, 'err5', refShow); }
   function refGo(btn) {
     const items = Object.entries(sel).map(([link, ch]) => ({ link, ch }));
-    if (!confirm(`${items.length}개를 만들까요? 끝나면 제작 현황에 떠요.`)) return;
+    if (!confirm(`${items.length}개를 만들까요?${who.admin ? '' : ` 오늘 제작 티켓 ${items.length}장을 써요.`} 끝나면 제작 현황에 떠요.`)) return;
     call('refmake', [code, items], btn, 'err5', r => {
+      Object.entries(r.티켓 || {}).forEach(([c, t]) => { const ch = who.channels.find(x => x.name === c); if (ch) Object.assign(ch, t); });
+      const ch = who.channels.find(x => x.name === chan);
+      if (ch && !who.admin) $('cp').innerHTML = tkCh(ch);
       sel = {};
       items.forEach(x => made[x.link] = 1);
       refs.forEach(j => { if (made[j.link]) j.state = '제작 요청함'; });
