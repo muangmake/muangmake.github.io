@@ -62,7 +62,9 @@
   .chip { background:var(--chip); border:1.5px solid var(--line); border-radius:999px; padding:8px 14px; font-weight:700; font-size:14px; white-space:nowrap; color:var(--text); text-decoration:none; }
   .chip.accent { background:var(--navy); color:#fff; border-color:var(--navy); }
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
-  #chs .chip { cursor:pointer; }
+  #chs .chip, #days .chip { cursor:pointer; }
+  .cpt small.tmr { display:block; font-size:11px; color:var(--dim); margin-top:3px; }
+  #days .chip small { font-size:11px; font-weight:500; margin-left:4px; }
   #chs .chip.off { cursor:default; color:var(--dim); border-style:dashed; }
   #chs .chip small { font-size:11px; font-weight:500; margin-left:4px; }
   .cnt { font-weight:500; color:var(--dim); font-size:12px; margin-left:6px; }
@@ -494,6 +496,7 @@
     <h1>레퍼런스 넣기</h1><span class="cur"></span>
     <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(매일 오후 4시에 다시 채워져요).</span></p>
     <div id="chpick" hidden><label>만들 채널</label><div class="chips" id="chs"></div></div>
+    <div><label>올릴 날</label><div class="chips" id="days"></div></div>
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
     <button id="go" disabled onclick="go()">제작하기 ▸</button>
@@ -595,10 +598,10 @@
     <p class="sub"><b>담당자 · 채널 더하기</b> — 있는 사람이면 그 비밀번호 그대로 채널만 늘어요. 새 사람은 아래 표 '비밀번호' 칸에 뜨는 임시 비밀번호를 알려 주면 그걸로 들어와 새로 정해요. 아직 만들지 않는 채널은 '준비 중'으로 들어가요.</p>
     <div class="cpbar"><input id="an" placeholder="이름" style="width:110px"><input id="ac" list="acl" placeholder="채널" style="width:120px"><datalist id="acl"></datalist><input id="ae" type="email" placeholder="이메일(선택 · 폴더 공유)" style="width:190px"><button onclick="acAdd(this)">＋ 더하기</button></div>
     <div class="cpbar"><button class="ghost" onclick="이단계켜끄기(this)">관리자 2단계 로그인</button><button class="ghost" onclick="전체끊기(this)">모든 기기 로그아웃</button><span class="note" style="margin:0">계정이 샌 것 같을 때 — 자세한 기록은 시트 보안기록 탭</span></div>
-    <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 매일 오후 4시에 다시 채워지는 장 수예요. 바꾼 남은 쿠폰은 오늘 자정까지 그대로예요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
+    <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 올리는 날마다 주는 장 수예요 — 오늘 올릴 건 · 내일 올릴 건 통이 따로고, 그날이 지나면 남은 장은 사라져요. 여기서 바꾸는 남은 쿠폰은 오늘 통이에요(오늘 자정까지). 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
-    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰</th><th class="dl">하루 제공</th><th></th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
+    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰(오늘)</th><th class="dl">하루 제공</th><th></th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
     <p class="err" id="err4"></p>
   </div>
 </div>
@@ -628,7 +631,7 @@
   }
   const $ = id => document.getElementById(id);
   const MAX = 20 * 1024 * 1024;
-  let code = '', who = {}, chan = '';
+  let code = '', who = {}, chan = '', 날 = 'today';
   function call(fn, args, btn, err, ok) {
     const label = btn.textContent;
     btn.disabled = true; btn.dataset.sending = 1; btn.textContent = '잠시만요…'; $(err).textContent = '';
@@ -690,7 +693,7 @@
     $('drive').hidden = true;
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
     $('lf').hidden = !r.admin;
-    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(매일 오후 4시에 다시 채워져요).';
+    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장 · 오늘 올릴 건과 내일 올릴 건 티켓이 따로예요(그날이 지나면 남은 티켓은 사라져요).';
     if (r.admin) 거르기칸_(r);
     $('chpick').hidden = !(r.channels.length > 1);
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
@@ -703,13 +706,13 @@
     화면기억_(r);
     const k = x => x.channels.map(c => c.name + c.demo).join() + x.admin;
     if (k(r) !== k(who)) return 채움_(r);
-    r.channels.forEach((c, i) => Object.assign(who.channels[i], { coupon: c.coupon, folder: c.folder }));
+    r.channels.forEach((c, i) => Object.assign(who.channels[i], { coupon: c.coupon, tomorrow: c.tomorrow, folder: c.folder }));
     who.name = r.name; who.folder = r.folder;
     if (r.admin) 거르기칸_(r);
     if (mine.length && !목록나감) 현황그림_(mine, true);
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
     const ch = who.channels.find(x => x.name === chan);
-    if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
+    if (ch) { $('cp').textContent = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
     check();
   }
   async function 쫓겨남_(e) {
@@ -808,8 +811,8 @@
       : `<span class="chip${x.name === c ? ' accent' : ''}" onclick="pickCh(who.channels[${who.channels.indexOf(x)}].name)">${esc(x.name)}</span>`).join('');
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : c);
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
-    if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
-    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 하루 ${ch.daily}장 · 매일 오후 4시에 다시 채워져요).`;
+    if (ch) { $('cp').textContent = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
+    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 올리는 날마다 ${ch.daily}장 · 내일 올릴 건은 오늘 미리 넣어요 · 그날이 지나면 남은 티켓은 사라져요).`;
     its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; drawD(el); });
     템플릿타자_();
     if (ch && !ch.types && !ch.ld) {
@@ -1197,7 +1200,8 @@
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
   function check() {
-    const ch = (who.channels || []).find(x => x.name === chan), left = ch ? ch.coupon : 0, seen = {};
+    const ch = (who.channels || []).find(x => x.name === chan), left = !ch ? 0 : 날 === 'tomorrow' ? ch.tomorrow ?? ch.daily : ch.coupon, seen = {};
+    drawDays();
     let bad = 0;
     its().forEach((el, i) => {
       el.querySelector('.ihead b').textContent = '제작 건 ' + (i + 1);
@@ -1220,7 +1224,7 @@
     }
     $('add').disabled = !ch || n >= left;
     $('add').textContent = ch && n >= left ? `티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
-    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `티켓 ${n}장 씀 · 오늘 ${chan} 티켓 ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
+    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `티켓 ${n}장 씀 · ${날 === 'tomorrow' ? '내일' : '오늘'} 올릴 ${chan} 티켓 ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
     $('left').style.color = over ? '#FF8A8A' : '';
   }
   const read = f => new Promise((ok, no) => {
@@ -1240,11 +1244,12 @@
       delete $('go').dataset.sending; $('err2').textContent = '참고 자료 파일을 못 읽었어요.'; check();
       return;
     }
-    call('make', [code, items, chan], $('go'), 'err2', r => {
-      who.channels.find(x => x.name === chan).coupon = r.coupon;
-      $('cp').textContent = tk(r.coupon);
+    call('make', [code, items, chan, 날], $('go'), 'err2', r => {
+      const ch = who.channels.find(x => x.name === chan);
+      Object.assign(ch, { coupon: r.coupon, tomorrow: r.tomorrow });
+      $('cp').textContent = tkCh(ch);
       load(true);
-      $('job').textContent = [chan, r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
+      $('job').textContent = [chan, 날 === 'tomorrow' ? '내일 올릴 건' : '', r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
       reset();
       view('done');
     });
@@ -1253,6 +1258,13 @@
   const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
   const tk = c => who.admin ? '무제한' : c;
+  const tkCh = ch => who.admin ? '무제한' : `오늘 ${ch.coupon} · 내일 ${ch.tomorrow ?? ch.daily}`;
+  function drawDays() {
+    const ch = (who.channels || []).find(x => x.name === chan);
+    $('days').innerHTML = [['today', '오늘 올릴 건', ch && ch.coupon], ['tomorrow', '내일 올릴 건', ch && (ch.tomorrow ?? ch.daily)]]
+      .map(([k, l, n]) => `<span class="chip${k === 날 ? ' accent' : ''}" onclick="pickDay('${k}')">${l}${ch ? `<small>${who.admin ? '무제한' : esc(n) + '장'}</small>` : ''}</span>`).join('');
+  }
+  function pickDay(d) { 날 = d; drawDays(); check(); }
   const 의뢰자 = j => j.name && (who.admin || who.name && j.name !== who.name) ? esc(String(j.name).replace(/^관리자\d*$/, '관리자')) : '';
   const DRIVE = 'https://drive.google.com';
   const img = id => DRIVE + '/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
@@ -1390,7 +1402,7 @@
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
-        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
+        + `<p><span>${esc(j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
       let e = 있던.get(String(j.row));
       if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
@@ -1730,7 +1742,7 @@
     const busy = 다 ? (다.전체 ? ' 지금 보이는 장은 지난 결과예요. 끝나면 새 결과로 바뀌어요.' : ' 표시된 장만 새 결과로 바뀌어요.') + ' 수정 요청은 지금 보내도 끝난 뒤 이어서 고쳐요.' : j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
     const html = `<div class="path">POWERPAGE.zip › ${esc(j.channel)} › 제작 현황</div>`
       + `<h1><span class="num">#${j.row}</span> ${esc(j.title || j.channel + ' 제작 건')}</h1>`
-      + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작</p>`
+      + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작${j.post ? ` · ${esc(j.post)} 게시` : ''}</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
       + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
@@ -2095,7 +2107,7 @@
     $('cpb').innerHTML = Object.values(묶음).map(g => g.map((x, k) => `<tr class="${x.demo ? 'off' : ''}${k ? ' more' : ''}">`
       + (k ? '' : `<td rowspan="${g.length}" class="nm">${esc(x.name)}</td>`)
       + `<td class="ch">${esc(x.channel)}${x.demo ? '<small>준비 중</small>' : ''}</td>`
-      + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span></td>`
+      + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span><small class="tmr">내일 ${x.tomorrow ?? '-'}</small></td>`
       + `<td class="dl"><input type="number" min="0" value="${x.daily}" onchange="cpOp(this, ${x.row}, 'daily', this.value)"> 장</td>`
       + `<td><button class="ghost" onclick="cpOp(this, ${x.row}, 'reset', 0)">리셋</button></td>`
       + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
