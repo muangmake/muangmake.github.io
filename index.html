@@ -358,8 +358,9 @@
   .rch { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
   .rch:empty { display:none; }
   
+  .rca { grid-column:1/-1; } 
   .rcc.rce { background:none; border-style:dashed; pointer-events:none; animation:recEmpty 2.4s ease-in-out infinite; }
-  .rce:nth-child(2) { animation-delay:-.8s; } .rce:nth-child(3) { animation-delay:-1.6s; }
+  .rce:nth-child(2), .rce:nth-child(4) { animation-delay:-.8s; } .rce:nth-child(3) { animation-delay:-1.6s; }
   @keyframes recEmpty { 50% { border-color:#44444B; } }
   .rcb { position:absolute; inset:0; display:grid; grid-template-columns:inherit; grid-auto-rows:1fr; gap:8px; }
   .rch.up { animation:recUp .36s cubic-bezier(.22,1,.36,1) both; }
@@ -958,7 +959,7 @@
   const recW = h => Math.round(h * 1080 / (Number(types().H) || 1350));
   const rq = (el, c) => el.querySelector(c);
   const recCap = i => i ? '내지 ' + i : '썸네일';
-  const 빈칩 = '<div class="rcc rce">&nbsp;<small>&nbsp;</small></div>'.repeat(3);
+  const 빈칩 = '<div class="rcc rce rca">&nbsp;<small>&nbsp;</small></div>' + '<div class="rcc rce">&nbsp;<small>&nbsp;</small></div>'.repeat(3);
   const recSl = (i, t, cov, on) => `<div class="rsl${on ? ' on' : ''}" style="--i:${i}"><div class="rp" style="width:${recW(recH())}px;height:${recH()}px">${!t ? '' : i ? mini(t, types().H, recH()) : '<div class="rthm"><i></i><i></i></div>'}${cov ? '<div class="rcov"></div>' : ''}</div><div class="rcap">${recCap(i)}</div></div>`;
   function recK(box) {
     box.querySelectorAll('.rp .pg').forEach(pg => [...pg.children].filter(c => c.tagName !== 'STYLE').forEach((c, k) => {
@@ -1025,13 +1026,13 @@
       rq(el, '.rst').innerHTML = '';
       rq(el, '.rwhy').textContent = '';
       rq(el, '.rch').innerHTML = '';
-      rq(el, '.rt').textContent = (r && r.over ? '오늘 새 추천을 다 썼어요' : '추천을 못 불러왔어요') + ' · AI가 골라서 만들어요';
+      rq(el, '.rt').textContent = '추천을 못 불러왔어요 · AI가 골라서 만들어요';
       rq(el, '.rl').textContent = '';
       check();
       return;
     }
     el._rec = { forms: f, pages: Number(r.pages) || REC_N };
-    if (!el.dataset.my) el.dataset.d = tkey(f[0]);
+    if (!el.dataset.my) el.dataset.d = '';
     rq(el, '.rwhy').textContent = r.why || '';
     recDraw(el);
     check();
@@ -1077,10 +1078,9 @@
     void box.offsetWidth;
     if (sw && t) box.classList.add('go');
     rq(el, '.rwhy').classList.remove('wave');
-    ch.className = 'rch' + (sw || t ? '' : ' up');
-    ch.innerHTML = (!sw && t ? `<div class="rcb">${빈칩}</div>` : '') + s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('')
-      + `<div class="rcc${t ? '' : ' on'}" data-d="">자동<small>AI가 고르기</small></div>`;
-    if (!sw && t) recWave(el);
+    ch.className = 'rch';
+    ch.innerHTML = (!sw ? `<div class="rcb">${빈칩}</div>` : '') + `<div class="rcc rca${t ? '' : ' on'}" data-d="">자동<small>AI가 고르기 · 기본</small></div>` + s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('');
+    if (!sw) recWave(el);
   }
   function recPick(e) {
     const c = e.target.closest('.rcc[data-d]');
