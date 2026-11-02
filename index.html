@@ -276,6 +276,9 @@
   #dupDlg .two { display:flex; gap:8px; margin-top:18px; } #dupDlg .two button { margin:0; flex:1; }
   #dupDlg .two .ghost { background:transparent; border:2px solid var(--line); color:var(--text); }
   .st small.pre, p.pre b { color:#FFC46B; }
+  .upc { font-size:13px; line-height:1.6; color:var(--dim); margin:8px 0 4px; } .upc.ok { color:#7FD99A; } .upc.bad { color:#FF8A8A; } .upc a { color:inherit; }
+  .upc .row { display:flex; gap:6px; margin-top:6px; } .upc .row input { flex:1; min-width:0; padding:7px 10px; font-size:13px; } .upc .row button { width:auto; margin:0; padding:7px 12px; font-size:13px; }
+  b.upbad { color:#FF8A8A; font-weight:700; }
   p.pre { font-size:13px; line-height:1.6; color:#C9C9CF; border:1.5px solid color-mix(in srgb, #FFC46B 45%, transparent); background:color-mix(in srgb, #FFC46B 8%, transparent); border-radius:12px; padding:10px 14px; margin:12px 0 4px; }
   .add { background:transparent; border:2px dashed var(--line); color:var(--text); margin-top:16px; font-size:15px; padding:14px; }
   .add:hover:not(:disabled) { border-color:var(--navy2); }
@@ -602,7 +605,7 @@
     <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 올리는 날마다 주는 장 수예요 — 오늘 올릴 건 · 내일 올릴 건 통이 따로고, 그날이 지나면 남은 장은 사라져요. 여기서 바꾸는 남은 쿠폰은 오늘 통이에요(오늘 자정까지). 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
-    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰(오늘)</th><th class="dl">하루 제공</th><th></th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
+    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰(오늘)</th><th class="dl">하루 제공</th><th></th><th>업로드</th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
     <p class="err" id="err4"></p>
   </div>
 </div>
@@ -1255,6 +1258,22 @@
       view('done');
     });
   }
+  function 업로드칸(j) {
+    if (!/^(완료|수정중)/.test(j.state)) return '';
+    const u = j.up || {}, 링크 = (u.links || []).map((l, i) => `<a href="${esc(주소(l))}" target="_blank" rel="noopener">게시물${u.links.length > 1 ? ' ' + (i + 1) : ''} ↗</a>`).join(' · ');
+    const 넣기 = `<div class="row"><input id="upl" placeholder="올린 게시물 링크 (instagram.com/p/…)"><button onclick="postGo(this, ${j.row})">링크 넣기</button></div>`;
+    return u.s === '확인' ? `<div class="upc ok">✓ ${esc(j.channel)} 계정 업로드 확인 · ${링크}</div>`
+      : u.s === '링크확인중' ? `<div class="upc">넣은 링크를 확인하고 있어요 — 다음 확인(10시 · 20시)에 반영돼요.</div>`
+      : u.s === '미확인' ? `<div class="upc bad">⚠ ${esc(j.channel)} 계정에서 이 게시물을 못 찾았어요. 올렸다면 게시물 링크를 넣어 주세요.${넣기}</div>`
+      : u.s === '다른계정' ? `<div class="upc bad">⚠ 넣은 링크가 ${esc(j.channel)} 계정 게시물이 아니에요. ${esc(j.channel)} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
+      : `<div class="upc">올리면 하루 두 번(10시 · 20시) ${esc(j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
+  }
+  function postGo(btn, row) {
+    call('postlink', [code, row, $('upl').value.trim()], btn, 'err3', r => {
+      const j = mine.find(x => x.row === row);
+      if (j) { j.up = r; $('upc').innerHTML = 업로드칸(j); }
+    });
+  }
   let mine = [], 보일 = 30, 현황차례 = 0;
   const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
@@ -1403,7 +1422,7 @@
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
-        + `<p><span>${esc(j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
+        + `<p><span>${esc(j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}${j.up && /^(미확인|다른계정)$/.test(j.up.s) ? '<br><b class="upbad">⚠ 업로드 미확인</b>' : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
       let e = 있던.get(String(j.row));
       if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
@@ -1744,6 +1763,7 @@
     const html = `<div class="path">POWERPAGE.zip › ${esc(j.channel)} › 제작 현황</div>`
       + `<h1><span class="num">#${j.row}</span> ${esc(j.title || j.channel + ' 제작 건')}</h1>`
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작${j.post ? ` · ${esc(j.post)} 게시` : ''}</p>`
+      + `<div id="upc">${업로드칸(j)}</div>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
       + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
@@ -2111,6 +2131,7 @@
       + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span><small class="tmr">내일 ${x.tomorrow ?? '-'}</small></td>`
       + `<td class="dl"><input type="number" min="0" value="${x.daily}" onchange="cpOp(this, ${x.row}, 'daily', this.value)"> 장</td>`
       + `<td><button class="ghost" onclick="cpOp(this, ${x.row}, 'reset', 0)">리셋</button></td>`
+      + `<td class="ch">${(u => [u.확인 && '확인 ' + u.확인, u.미확인 && `<b class="upbad">미확인 ${u.미확인}</b>`, u.다른계정 && `<b class="upbad">다른 계정 ${u.다른계정}</b>`, u.링크확인중 && '확인 중 ' + u.링크확인중].filter(Boolean).join(' · ') || '-')(x.up || {})}</td>`
       + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
       + `<td><span class="step"><button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button><button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
