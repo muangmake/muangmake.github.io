@@ -1621,8 +1621,8 @@
   function 대조받기(j) {
     const 열쇠 = j.files.map(f => f.id).join(), m = 대조기억.get(j.row);
     if (!j.files.length || m && m.열쇠 === 열쇠 && m.d) return;
-    const 받음 = d => { 대조기억.set(j.row, { 열쇠, d }); if ($('dj') && openRow === j.row) 대조채움(j); };
-    google.script.run.withSuccessHandler(받음).withFailureHandler(() => 받음(null)).대조(code, j.row);
+    const 받음 = (d, 끊김) => { 대조기억.set(j.row, { 열쇠, d, 끊김 }); if ($('dj') && openRow === j.row) 대조채움(j); };
+    google.script.run.withSuccessHandler(d => 받음(d)).withFailureHandler(() => 받음(null, true)).대조(code, j.row);
   }
   function 필름자리(x) {
     const f = $('dj').querySelector('.film'), on = f && f.querySelector('.on');
@@ -1634,9 +1634,13 @@
   }
   function 대조넣기(j) { const f = $('dj').querySelector('.film'), x = f ? f.scrollLeft : 0; $('dj').innerHTML = 대조칸(j); 필름자리(x); }
   function 대조채움(j) {
-    const 새 = [], z = $('dj').querySelector('.zs.빈');
-    맞춤($('dj'), 틀_(`<div id="dj">${대조칸(j)}</div>`).firstElementChild, 새, []);
+    const 새 = [], z = $('dj').querySelector('.zs.빈'), 칸 = 제작본칸(), 앞 = 칸 && 칸.getBoundingClientRect().top;
+    const html = 대조칸(j);
+    if (z && !/class="zs/.test(html)) z.remove();
+    맞춤($('dj'), 틀_(`<div id="dj">${html}</div>`).firstElementChild, 새, []);
     새.concat(z && z.isConnected ? z : []).filter(e => e.nodeType === 1).forEach(e => e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280 }));
+    const 차이 = 칸 && 칸 === 제작본칸() ? 앞 - 칸.getBoundingClientRect().top : 0;
+    if (차이) $('detail').querySelectorAll('#dj > :not(.zs), #dj ~ *').forEach(e => e.animate([{ transform: `translateY(${차이}px)` }, { transform: 'none' }], { duration: 280, easing: 멈춤곡선, composite: 'add' }));
   }
   const 대조그림 = row => { 대조넣기(mine.find(j => j.row === row)); 확저장(row); };
   function 대조골라(row, k) { 대조고름.set(row, k); 대조그림(row); }
@@ -1654,7 +1658,8 @@
   }
   function 대조칸(j) {
     const 원자료 = (대조기억.get(j.row) || {}).d, 빈자료 = !(원자료 && 원자료.쪽), 잠금 = j.확인;
-    if (빈자료 && !잠금 && 대조기억.has(j.row)) return '';
+    const 자리만 = 빈자료 && !j.대조없음 && !대조기억.has(j.row);
+    if (빈자료 && !잠금 && !자리만 && !(대조기억.get(j.row) || {}).끊김) return '';
     const d = 빈자료 ? { 쪽: [], 템: [], 참조: {}, 구도: 0, 색: 0, 참조수: 0 } : 원자료;
     const 템 = d.템;
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
@@ -1673,7 +1678,7 @@
     const 완료 = 템.filter(i => !체크글(i, 새글).length && (이름됨(i) || i.값체크 === '맞음' || i.사진체크 === '맞음')), 못잼 = 템.length - 완료.length - 볼.length;
     const 순서 = (이름, 수, 섞임) => 수 < 2 ? `<p class="mut">${이름} 비교할 게 없음</p>` : `<p class="${섞임 ? 'ok' : 'bad'}">${이름} ${섞임 ? '섞임' : '그대로'}</p>`;
     const 볼쪽 = [...new Set(볼.map(i => i.쪽))], 파트 = {}; 짝(j.files).forEach(({ f }) => 파트[parseInt(f.name)] = f.name.replace(/\.(png|jpg)$/, ''));
-    const 띠 = () => { if (빈자료) return 대조기억.has(j.row) ? '' : `<div class="zs 빈" data-re="zs">${'<div><span>&nbsp;</span><b>&nbsp;</b><u class="gu"></u><p class="sub">&nbsp;</p></div>'.repeat(4)}</div>`; const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
+    const 띠 = () => { if (빈자료) return 자리만 ? '<div class="zs 빈" data-re="zs"><div><span>&nbsp;</span><b>&nbsp;</b><u class="gu"></u></div><div><span>&nbsp;</span><b>&nbsp;</b><div class="dots"><i></i></div><p class="sub">&nbsp;</p></div><div><span>&nbsp;</span><p class="ok">&nbsp;</p><p class="ok">&nbsp;</p></div><div><span>&nbsp;</span><b>&nbsp;</b><div class="gs"><u></u></div></div></div>' : ''; const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
       + `<div><span>제품 정보</span><b>${수}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${남.includes(i) ? 'w' : 볼.includes(i) || 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${남.length ? `<p class="warn">*${남.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
       + `<div><span>내지 · 제품 순서</span>${순서('내지 순서', new Set(대표).size, 대표.some((r, i) => i && r < 대표[i - 1]))}${순서('제품 순서', 짝있.length, 짝있.some(i => i.상태 !== '그대로'))}</div>`
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
