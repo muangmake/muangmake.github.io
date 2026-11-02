@@ -95,8 +95,8 @@
   .home { cursor:pointer; }
   #ch { cursor:pointer; } #ch small { color:var(--dim); font-weight:500; font-size:12px; margin-left:6px; }
   html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; }
-  .card, .pc, button, .chip, .tabs a { transition:transform .096s ease, border-color .12s; }
-  .card:active, .pc:active, button:active:not(:disabled), .home:active, #ch:active { transform:scale(.97); }
+  .card, button, .chip, .tabs a { transition:transform .096s ease, border-color .12s; }
+  .card:active, button:active:not(:disabled), .home:active, #ch:active { transform:scale(.97); }
   .body { padding:22px 26px 28px; }
   .path { color:var(--dim); font-size:13px; margin-bottom:18px; }
   h1 { font-size:30px; font-weight:700; display:inline; border-bottom:3px solid var(--text); }
@@ -297,22 +297,6 @@
   .add:hover:not(:disabled) { border-color:var(--navy2); }
   .add:disabled { background:transparent; }
   
-  .dz { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:0 12px; align-items:start; }
-  .dz label { grid-column:1/-1; margin:16px 0 8px; font-size:13px; display:flex; justify-content:space-between; gap:8px; }
-  .dz label small { color:var(--dim); font-weight:500; }
-  .pick { display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:8px; }
-  .pc { background:var(--field); border:2px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer; display:flex; flex-direction:column; }
-  .pc:hover { border-color:var(--navy2); }
-  .pc.on { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.3); }
-  .pc .th { height:122px; display:grid; grid-template-columns:minmax(0,1fr); place-items:center; background:var(--bar); position:relative; overflow:hidden; }
-  .pc.on .th::after { content:"✓"; position:absolute; right:6px; top:6px; width:22px; height:22px; border-radius:50%; background:var(--navy2); color:#0B0B0C; font-weight:800; font-size:13px; display:grid; place-items:center; z-index:2; }
-  .pc span { padding:7px 9px 8px; font-size:12px; font-weight:700; line-height:1.35; }
-  .pc span small { display:block; color:var(--dim); font-weight:500; font-size:11px; }
-  .pc.auto .th { color:var(--dim); font-size:12px; font-weight:700; background:repeating-linear-gradient(135deg, var(--bar) 0 8px, var(--field) 8px 16px); }
-  .pv { border:2px solid var(--navy); border-radius:12px; overflow:hidden; background:var(--field); position:sticky; top:var(--headH,90px); }
-  .pv .stage { display:grid; place-items:center; padding:10px; background:#060607; }
-  .pv p { padding:9px 11px; font-size:12px; color:var(--dim); line-height:1.5; }
-  .pv p b { color:var(--text); }
   
   .rec { margin-top:16px; padding-top:14px; border-top:1.5px solid var(--line); }
   .rhd { display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--dim); margin-bottom:10px; }
@@ -368,8 +352,6 @@
   .rcc:hover { border-color:var(--navy2); }
   .rcc.on { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.3); }
   .rcc small { display:block; color:var(--dim); font-weight:500; font-size:11px; }
-  .allt { display:inline-block; margin-top:12px; font-size:12px; color:var(--navy2); cursor:pointer; }
-  .allt[hidden] { display:none; }
   @media (max-width:640px) { .rch { grid-template-columns:minmax(0,1fr); } }
   @media (prefers-reduced-motion:reduce) { .rst.go .rcov { display:none; } .rst *, .rch { animation:none !important; transition:none !important; } }
   #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .096s, transform .096s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
@@ -399,7 +381,7 @@
   .pg .ph { display:flex; align-items:center; justify-content:center; text-align:center; font:700 44px Pretendard; color:#1E3A8A; background:repeating-linear-gradient(135deg,rgba(30,58,138,.2) 0 8px,rgba(30,58,138,.05) 8px 30px); border:5px dashed rgba(30,58,138,.55); }
   .pg .ph.full { color:#fff; background:repeating-linear-gradient(135deg,#5B6B86 0 8px,#46546C 8px 30px); border:0; }
   
-  #form.fast .rec, #form.fast .allt, #form.fast .dz { display:none !important; } 
+  #form.fast .rec { display:none !important; } 
   
   .cpt { width:100%; border-collapse:collapse; font-size:14px; }
   .cpt th { text-align:left; color:var(--dim); font-weight:700; font-size:12px; padding:0 8px 8px; border-bottom:2px solid var(--line); }
@@ -458,8 +440,6 @@
   .act .pl { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:6px; } .act .pl td { padding:6px 4px; border-bottom:1px solid var(--line); } .act .pl a { color:var(--navy2); text-decoration:none; }
   @media (max-width:640px) { .cpt .dl { display:none; } } 
   @media (max-width:640px) { .cols { grid-template-columns:1fr; gap:0; } .body { padding:20px 18px 24px; } }
-  @media (max-width:640px) { .pick { grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; } .pc .th { height:100px; } .pc .th .mini { transform:scale(.72); } .pc span { padding:6px 7px 7px; font-size:11px; } .pc span small { font-size:10px; } } 
-  @media (max-width:640px) { .dz { grid-template-columns:1fr; } .pv { order:-1; margin-bottom:8px; z-index:3; display:flex; align-items:center; } .pv .stage { flex:none; } .pv p { flex:1; min-width:0; } .dz label { order:-2; } } 
   @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpt button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt .step button { min-width:40px; } } 
   [hidden] { display:none !important; }
 </style>
@@ -545,12 +525,6 @@
       <div class="rst"></div>
       <p class="rwhy"></p>
       <div class="rch" onclick="recPick(event)"></div>
-    </div>
-    <a class="allt" hidden onclick="allD(this)">전체 템플릿 보기 ›</a>
-    <div class="dz" hidden>
-      <label>템플릿 <small>올리면 미리보기 · 안 고르면 AI가 골라요</small></label>
-      <div class="pick" onclick="pickD(event)" onmouseover="peekD(event)" onmouseleave="peekD(event)"></div>
-      <div class="pv" onmouseenter="zoomD(event)" onmouseleave="zoomD(event)"></div>
     </div>
   </div></template>
   <div id="zoom"></div>
@@ -829,11 +803,10 @@
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').innerHTML = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
     if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 제작 티켓 1장(${c} 하루 ${ch.daily}장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).`;
-    its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; drawD(el); });
-    템플릿타자_();
+    its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; });
     if (ch && !ch.types && !ch.ld) {
       ch.ld = 1;
-      google.script.run.withSuccessHandler(t => { ch.types = t; ch.ld = 0; if (chan === c) { its().forEach(drawD); 템플릿타자_(); check(); } })
+      google.script.run.withSuccessHandler(t => { ch.types = t; ch.ld = 0; if (chan === c) check(); })
         .withFailureHandler(() => { ch.ld = 0; check(); }).designs(code, c);
     }
     check();
@@ -870,7 +843,6 @@
   let 타자끝 = 0;
   const 칸_ = e => /^(INPUT|TEXTAREA|SELECT|BUTTON|IMG|SVG|CANVAS)$/i.test(e.tagName) || e.classList.contains('mini')
     || (s => s.backgroundImage !== 'none' || !/^rgba\(.*,\s*0\)$|^transparent$/.test(s.backgroundColor) || parseFloat(s.borderTopWidth) + parseFloat(s.borderBottomWidth) + parseFloat(s.borderLeftWidth) > 0)(getComputedStyle(e));
-  const 템플릿타자_ = () => !$('make').hidden && 타자(its().map(e => e.querySelector('.dz')));
   const 원글 = new WeakMap();
   function 타자(roots, 시작 = 0, 빠르기 = 1, 낱개 = []) {
     const ns = [];
@@ -945,7 +917,6 @@
     $('items').append($('tpl').content.cloneNode(true));
     check();
     const last = its().pop();
-    drawD(last);
     if (its().length > 1) { last.scrollIntoView({ behavior: 'smooth', block: 'center' }); last.querySelector('.ln').focus(); }
   }
   function delItem(a) { if (its().length > 1) a.closest('.item').remove(); else reset(); check(); }
@@ -963,38 +934,6 @@
     return 틀기억.get(s);
   };
   const mini = (x, H, h) => { H = Number(H) || 1350; const w = Math.round(h * 1080 / H); return `<div class="mini" style="width:${w}px;height:${h}px"><div class="pg" style="height:${H}px;transform:scale(${h / H})">${안전틀(String(x.html))}</div></div>`; };
-  function drawD(el) {
-    const { H, list } = types(), d = el.dataset.d || '', z = el.querySelector('.dz'), t = list.find(x => tkey(x) === d), all = el.querySelector('.allt');
-    z.hidden = !list.length || !el.dataset.all;
-    all.hidden = !list.length;
-    all.textContent = el.dataset.all ? '전체 템플릿 접기' : '전체 템플릿 보기 ›';
-    if (!list.length) return;
-    z.querySelector('.pick').innerHTML = `<div class="pc auto${t ? '' : ' on'}" data-d=""><div class="th">AI가 고르기</div><span>AI 추천<small>지금처럼 자동</small></span></div>`
-      + list.map(x => `<div class="pc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}"><div class="th">${mini(x, H, 120)}</div><span>${esc(x.name)}<small>${esc(x.sub)}</small></span></div>`).join('');
-    pvD(z, t);
-  }
-  function pvD(z, t) {
-    const { H } = types(), pv = z.querySelector('.pv'), w = matchMedia('(max-width:640px)').matches ? 96 : 196;
-    pv.style.setProperty('--headH', (document.querySelector('.head').offsetHeight + 12) + 'px');
-    pv.innerHTML = t
-      ? `<div class="stage">${mini(t, H, Math.round(w * H / 1080))}</div><p><b>${esc(t.name)}</b> · ${esc(t.sub)}<br>${esc(t.when)}</p>`
-      : '<p><b>AI가 고르기</b> · 기획 AI가 레퍼런스를 보고 템플릿을 골라요(지금 방식).</p>';
-  }
-  function pickD(e) {
-    const c = e.target.closest('.pc');
-    if (!c) return;
-    const el = c.closest('.item');
-    el.dataset.d = c.dataset.d;
-    el.dataset.my = 1;
-    drawD(el);
-    recDraw(el, true);
-  }
-  function allD(a) {
-    const el = a.closest('.item');
-    if (el.dataset.all) delete el.dataset.all; else el.dataset.all = 1;
-    drawD(el);
-    템플릿타자_();
-  }
   const REC_N = 5, recH = () => matchMedia('(max-width:640px)').matches ? 76 : 112, REC_글 = ['게시물 가져오는 중', '유형 파악하는 중', '추천 고르는 중'], 추천기억 = {};
   let recId = 0;
   const recW = h => Math.round(h * 1080 / (Number(types().H) || 1350));
@@ -1009,7 +948,7 @@
     }));
   }
   function recOff(el) {
-    if (el.dataset.rk) { delete el.dataset.my; el.dataset.d = ''; drawD(el); }
+    if (el.dataset.rk) { delete el.dataset.my; el.dataset.d = ''; }
     el._rec = null;
     el.dataset.rk = '';
     rq(el, '.rec').hidden = true;
@@ -1027,7 +966,6 @@
     const id = ++recId, box = rq(el, '.rst'), need = Number(types().wait) || 17000, t0 = Date.now();
     el._rec = { id };
     if (!el.dataset.my) el.dataset.d = '';
-    drawD(el);
     rq(el, '.rec').hidden = false;
     rq(el, '.rwhy').textContent = ' ';
     rq(el, '.rwhy').classList.remove('wave');
@@ -1068,17 +1006,13 @@
       rq(el, '.rst').innerHTML = '';
       rq(el, '.rwhy').textContent = '';
       rq(el, '.rch').innerHTML = '';
-      rq(el, '.rt').textContent = (r && r.over ? '오늘 새 추천을 다 썼어요' : '추천을 못 불러왔어요') + ' · 아래에서 고르거나 AI가 고르게 둘 수 있어요';
+      rq(el, '.rt').textContent = (r && r.over ? '오늘 새 추천을 다 썼어요' : '추천을 못 불러왔어요') + ' · AI가 골라서 만들어요';
       rq(el, '.rl').textContent = '';
-      el.dataset.all = 1;
-      drawD(el);
-      템플릿타자_();
       check();
       return;
     }
     el._rec = { forms: f, pages: Number(r.pages) || REC_N };
     if (!el.dataset.my) el.dataset.d = tkey(f[0]);
-    drawD(el);
     rq(el, '.rwhy').textContent = r.why || '';
     recDraw(el);
     check();
@@ -1125,7 +1059,8 @@
     if (sw && t) box.classList.add('go');
     rq(el, '.rwhy').classList.remove('wave');
     ch.className = 'rch' + (sw || t ? '' : ' up');
-    ch.innerHTML = (!sw && t ? `<div class="rcb">${빈칩}</div>` : '') + s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('');
+    ch.innerHTML = (!sw && t ? `<div class="rcb">${빈칩}</div>` : '') + s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('')
+      + `<div class="rcc${t ? '' : ' on'}" data-d="">자동<small>AI가 고르기</small></div>`;
     if (!sw && t) recWave(el);
   }
   function recPick(e) {
@@ -1134,27 +1069,7 @@
     const el = c.closest('.item');
     el.dataset.d = c.dataset.d;
     el.dataset.my = 1;
-    drawD(el);
     recDraw(el, true);
-  }
-  function peekD(e) {
-    const z = e.currentTarget.closest('.dz'), c = e.type === 'mouseover' && e.target.closest('.pc');
-    const d = c ? c.dataset.d : z.closest('.item').dataset.d || '';
-    if (z.dataset.peek === d) return;
-    z.dataset.peek = d;
-    pvD(z, types().list.find(x => tkey(x) === d));
-  }
-  function zoomD(e) {
-    const zm = $('zoom'), pv = e.currentTarget, { H, list } = types();
-    const t = e.type === 'mouseenter' && matchMedia('(hover:hover)').matches && list.find(x => tkey(x) === (pv.closest('.item').dataset.d || ''));
-    zm.classList.toggle('show', !!t);
-    if (!t) return;
-    const r = pv.getBoundingClientRect(), fit = Math.min(560, r.left - 16 - 12 - 28);
-    const h = Math.min(Math.round(fit * H / 1080), innerHeight - 32 - 28 - 60), w = Math.round(h * 1080 / H) + 28;
-    zm.innerHTML = `<div class="stage">${mini(t, H, h)}</div><p><b>${esc(t.name)}</b> · ${esc(t.when)}</p>`;
-    zm.style.width = w + 'px';
-    zm.style.left = r.left - w - 12 + 'px';
-    zm.style.top = Math.max(16, Math.min(r.top, innerHeight - h - 28 - 60 - 16)) + 'px';
   }
   const 큰그림칸 = t => t && t.closest('[data-z]');
   function 크게(e) {
