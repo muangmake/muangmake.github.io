@@ -164,6 +164,15 @@
   .card:hover { border-color:var(--navy2); }
   .card .cv { aspect-ratio:3/4; background:var(--bar) center/cover; display:flex; align-items:center; justify-content:center; color:var(--dim); font-size:13px; }
   .card .cv { position:relative; }
+  .cv .미배 { position:absolute; inset:0; background:center/cover; } 
+  .cv .미배.흐림 { filter:blur(7px) brightness(.45) saturate(.8); transform:scale(1.12); }
+  .cv .미배.초안 { filter:brightness(.66); } 
+  .cv .미표 { position:absolute; left:8px; top:8px; z-index:2; max-width:calc(100% - 16px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:800; padding:3px 7px; border-radius:6px; background:rgba(0,0,0,.72); color:#D6D6DB; border:1px solid rgba(255,255,255,.14); }
+  .cv .미표.y { background:var(--run); color:#2A1B00; border-color:transparent; }
+  .cv .미제 { position:absolute; left:10px; right:10px; bottom:38px; z-index:2; font-size:15px; font-weight:800; line-height:1.3; color:#fff; text-shadow:0 1px 10px rgba(0,0,0,.75); }
+  .cv .미제 small { display:block; font-size:10.5px; color:#FFD34D; font-weight:700; margin-bottom:4px; }
+  .cv .미말 { position:relative; z-index:2; color:#CFCFD4; }
+  @media (max-width:640px) { .cv .미제 { font-size:13px; bottom:32px; } }
   .wh { position:absolute; right:8px; bottom:8px; max-width:calc(100% - 16px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:rgba(0,0,0,.74); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:99px; padding:3px 10px; font-size:12px; font-weight:700; } 
   @media (max-width:640px) { .wh { right:5px; bottom:5px; padding:2px 8px; font-size:11px; } }
   .card p { padding:10px 12px; font-size:13px; display:flex; justify-content:space-between; gap:6px; }
@@ -1295,6 +1304,15 @@
   let timer = 0, openRow = 0;
   const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
   const busy = j => /^(대기|제작중|수정중)/.test(j.state) || j.reqs.some(q => /^(접수|반영중)/.test(q.state));
+  function 미리표지(j) {
+    const m = j.미리;
+    if (!m || !m.ref && !m.t) return '만드는 중';
+    const 판 = m.bg ? `<i class="미배 초안" style="background-image:url('${img(m.bg)}')"></i>`
+      : m.ref ? `<i class="미배 흐림" style="background-image:url('${esc(m.ref.replace(/['"()\\\s]/g, ''))}')"></i>` : '';
+    const 표 = m.bg ? '초안' : m.t ? ['기획안', m.k, m.n ? '내지 ' + m.n + '장' : ''].filter(Boolean).join(' · ') : '레퍼런스';
+    const 글 = m.t ? `<b class="미제">${m.s ? `<small>${esc(m.s)}</small>` : ''}${esc(m.t).replace(/\n/g, '<br>')}</b>` : `<span class="미말">${esc(j.step || '만드는 중')}</span>`;
+    return 판 + `<span class="미표${m.bg || m.t ? ' y' : ''}">${esc(표)}</span>` + 글;
+  }
   function 다시표_(j) {
     const qs = j.state === '수정중' ? j.reqs.filter(q => /^반영중 · (경고 고침|AI 검수|관리자 요청)/.test(q.state)) : [];
     if (!qs.length) return null;
@@ -1371,7 +1389,7 @@
     let at = c.firstElementChild;
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
-      const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
+      const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : 미리표지(j)}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<p><span>${esc(j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}${j.up && /^(미확인|다른계정)$/.test(j.up.s) ? '<br><b class="upbad">⚠ 업로드 미확인</b>' : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
       let e = 있던.get(String(j.row));
