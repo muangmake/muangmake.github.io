@@ -763,7 +763,7 @@
     if (ch && !ch.types && !ch.ld) {
       ch.ld = 1;
       google.script.run.withSuccessHandler(t => { ch.types = t; ch.ld = 0; if (chan === c) { its().forEach(drawD); 템플릿타자_(); check(); } })
-        .withFailureHandler(() => { ch.ld = 0; }).designs(code, c);
+        .withFailureHandler(() => { ch.ld = 0; check(); }).designs(code, c);
     }
     check();
   }
@@ -982,6 +982,7 @@
       setTimeout(() => el._rec && el._rec.id === id && recFin(el, r), 남.length * 56 + 208);
     };
     if (추천기억[key]) return 끝(추천기억[key]);
+    setTimeout(() => 끝(null), 90000);
     google.script.run.withSuccessHandler(끝).withFailureHandler(() => 끝(null)).추천(code, link, chan);
   }
   function recFin(el, r) {
@@ -996,6 +997,7 @@
       el.dataset.all = 1;
       drawD(el);
       템플릿타자_();
+      check();
       return;
     }
     el._rec = { forms: f, pages: Number(r.pages) || REC_N };
@@ -1003,6 +1005,7 @@
     drawD(el);
     rq(el, '.rwhy').textContent = r.why || '';
     recDraw(el);
+    check();
   }
   function recDraw(el, sw) {
     const s = el._rec;
@@ -1123,10 +1126,10 @@
       if (!link || msg || rb) bad++;
       recCheck(el, link && !msg ? link : '');
     });
-    const n = its().length, over = n > left;
+    const n = its().length, over = n > left, 분석중 = its().some(el => el._rec && !el._rec.forms) || !bad && ch && ch.ld;
     if (!$('go').dataset.sending) {
-      $('go').disabled = !ch || ch.demo || bad > 0 || over;
-      $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      $('go').disabled = !ch || ch.demo || bad > 0 || over || !!분석중;
+      $('go').textContent = 분석중 ? '레이아웃 분석 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
     }
     $('add').disabled = !ch || n >= left;
     $('add').textContent = ch && n >= left ? `티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
