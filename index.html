@@ -39,6 +39,12 @@
   #dj .film { display:flex; gap:5px; overflow-x:auto; padding:3px 3px 3px; margin:0 0 10px; scrollbar-width:none; } #dj .film button { all:unset; cursor:pointer; flex:none; width:62px; position:relative; } #dj .film img { display:block; width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:6px; opacity:.55; } #dj .film .on img { opacity:1; outline:2px solid var(--navy2); } #dj .film .w img { outline:2.5px solid var(--run); opacity:1; } #dj .film .on.w img { outline-color:var(--navy2); } #dj .film small { display:block; text-align:center; font-size:10.5px; color:var(--dim); margin-top:2px; } #dj .mk { position:absolute; right:3px; top:3px; width:16px; height:16px; border-radius:50%; background:#000; color:var(--ok); font-size:11px; font-weight:800; font-style:normal; display:grid; place-items:center; } #dj .mk.fix { color:#C9D5F6; } #dj .mk.draft { color:var(--run); }
   #dj .snd { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); color:var(--dim); font-size:13.5px; } #dj .snd b { color:var(--run); font-weight:700; } #dj .go { all:unset; box-sizing:border-box; cursor:pointer; background:var(--navy); color:#fff; font-weight:700; padding:9px 15px; border-radius:10px; text-align:center; white-space:nowrap; } #dj .go:disabled { opacity:.35; cursor:default; } #dj .qs button { all:unset; box-sizing:border-box; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; width:100%; cursor:pointer; margin-top:8px; padding:8px 11px; border-radius:9px; background:var(--bar); color:var(--dim); font-size:13px; line-height:1.45; white-space:pre-line; } #dj .qs button:focus-visible { outline:2px solid var(--navy2); } #dj .qs b { color:#C9D5F6; font-weight:700; margin-right:7px; } #dj .bars { min-width:0; } #dj .sent { margin-top:0; }
   #dj .un { display:flex; align-items:center; gap:6px; flex-wrap:wrap; color:var(--dim); font-size:13px; margin-bottom:12px; } #dj .un span { width:30px; cursor:zoom-in; } #dj .un img { display:block; width:100%; border-radius:3px; }
+  #dj .lockb { position:sticky; top:calc(var(--headH,64px) + 6px); z-index:3; display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:12px; align-items:center; padding:10px 13px; border-radius:12px; background:var(--field); border:1.5px solid var(--run); margin-bottom:12px; } #dj .lockb > svg { width:30px; height:30px; color:var(--run); } #dj .lockb.open { border-color:var(--ok); background:#0C1712; } #dj .lockb.open > svg { color:var(--ok); } #dj .lockb.nope { animation:lockno .32s; } @keyframes lockno { 25% { transform:translateX(-6px); } 60% { transform:translateX(5px); } }
+  #dj .lt { min-width:0; } #dj .lt b { display:block; font-weight:800; font-size:15px; } #dj .lt small { display:block; color:var(--dim); font-size:13px; } #dj .lt u { display:block; height:5px; border-radius:3px; background:var(--bar); overflow:hidden; margin-top:6px; } #dj .lt i { display:block; height:100%; background:var(--run); transition:width .3s; }
+  #dj .fs { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; } #dj .fs button, #dj .fs a { all:unset; box-sizing:border-box; cursor:pointer; padding:7px 11px; border-radius:9px; font-weight:700; font-size:13.5px; background:var(--bar); border:1.5px solid var(--line); color:var(--dim); white-space:nowrap; } #dj .fs a { background:var(--ok); border-color:var(--ok); color:#07130D; } #dj .fs a + a { background:transparent; color:var(--ok); }
+  #dj .ls { display:grid; gap:10px; } #dj .lc { padding:11px; border-radius:12px; background:var(--win); border:1.5px solid var(--line); min-width:0; } #dj .lc.done { border-color:rgba(94,230,168,.5); } #dj .pp2 button { position:relative; } #dj .vb.hot:disabled, #dj .vb:disabled { cursor:default; color:var(--dim); }
+  #dj .dojang { position:absolute; left:50%; bottom:9%; transform:translateX(-50%) rotate(-5deg); width:90%; padding:6px 7px; text-align:center; border-radius:8px; background:rgba(12,23,18,.93); border:2px solid var(--ok); color:var(--ok); font-weight:900; font-size:14px; line-height:1.3; pointer-events:none; } #dj .dojang small { display:block; font-weight:700; font-size:11.5px; color:var(--ok); margin:0; opacity:.85; }
+  @media (max-width:560px) { #dj .lockb { position:static; grid-template-columns:auto minmax(0,1fr); } #dj .fs { grid-column:1 / -1; justify-content:flex-start; } }
   #detail:has(#dj > *) .hl, #detail:has(#dj > *) .pages .rev, #detail:has(#dj > *) #rvBar { display:none; } 
   #dj .cr { width:52px; height:52px; flex:none; border-radius:7px; background:var(--bar) no-repeat; background-size:300% auto; display:block; }
   #dj .bar2 { display:grid; grid-template-columns:40px minmax(0,1fr) 30px; gap:8px; align-items:center; font-size:12.5px; margin-bottom:4px; } #dj .bar2 u { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; } #dj .bar2 i { display:block; height:100%; border-radius:4px; background:var(--navy2); } #dj .bar2 s { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .nt { color:var(--dim); font-size:12px; line-height:1.5; margin:6px 0 0; }
@@ -1337,7 +1343,7 @@
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
-        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
+        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.확인 && !j.확인.열림 && /^완료/.test(j.state) ? '<small class="eta">확인 전</small>' : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + 진행게이지(j, q) + '</div>';
       let e = 있던.get(String(j.row));
       if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
@@ -1439,20 +1445,36 @@
   const 확장 = k => 확.장.find(a => a.k === k), 확값 = (i, n) => (확.상.값[i.키] || i)[n];
   const 확고침 = k => 확장(k).템.some(i => 확값(i, '이름') !== i.이름 || 확값(i, '정보') !== i.정보);
   const 확손댐 = k => 확고침(k) || !!(확.상.추가[k] || '').trim();
-  const 확판 = k => 확손댐(k) ? (확.상.담[k] ? 'fix' : 'draft') : 확.상.판[k] || '';
+  const 확찍힘 = k => { const m = 확.잠금 && 확.잠금.장[k]; return m && m.f === 확.파일이름[k] ? m : null; };
+  const 확판 = k => 확손댐(k) ? (확.상.담[k] ? 'fix' : 'draft') : (확.잠금 ? (확찍힘(k) ? 'ok' : '') : 확.상.판[k]) || '';
   const 확됨 = k => ['ok', 'fix'].includes(확판(k));
   const 확합 = () => { const 끝 = 확.볼쪽.filter(확됨).length, ks = 확.장.map(a => a.k); return { 끝, 전: 확.볼쪽.length, 수: ks.filter(k => 확판(k) === 'fix').length, 안눌림: ks.filter(k => 확판(k) === 'draft').length }; };
   const 확끝글 = c => c.수 ? `수정 ${c.수}장${c.안눌림 ? ` · <b>안 누른 수정 ${c.안눌림}장</b>` : ''}` : c.안눌림 ? `<b>안 누른 수정 ${c.안눌림}장</b>` : c.끝 >= c.전 ? '✓ 모두 확인했어요' : `${c.끝}/${c.전}장 확인`;
   const 확입력 = (i, n, 칸) => { const v = esc(확값(i, n)), ch = 확값(i, n) !== i[n] ? 'ch' : ''; return 칸 === 'in' ? `<input type="text" class="${ch}" data-f="${n}" data-i="${esc(i.키)}" value="${v}" aria-label="${n}">` : `<textarea class="${ch}" data-f="${n}" data-i="${esc(i.키)}" rows="3" aria-label="${n}">${v}</textarea>`; };
   function 확칸들(a) {
-    if (!a.템.length) return a.k === 1 ? `<div class="bars">${[['구도', 확.구도], ['색', 확.색]].map(([n, v]) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`).join('')}</div>` : '';
+    if (!a.템.length) return a.k === 1 && !확.빈자료 ? `<div class="bars">${[['구도', 확.구도], ['색', 확.색]].map(([n, v]) => `<div class="bar2"><span>${n}</span><u><i style="width:${+v}%"></i><s></s></u><b>${+v}</b></div>`).join('')}</div>` : '';
     if (a.템.length === 1) { const i = a.템[0], 사진 = i.사진말 ? `<em>${esc(i.사진말)}</em>` : ''; return `<label class="fd ${i.이름말 ? 'w' : ''}"><span>이름</span>${확입력(i, '이름', 'in')}${i.이름말 ? `<em>${esc(i.이름말)}</em>` : ''}</label><label class="fd ${i.값말 ? 'w' : ''}"><span>정보</span>${확입력(i, '정보', 'ta')}${i.값말 ? `<em>${esc(i.값말)}</em>` : ''}</label>${사진}`; }
     return `<div class="pl"><span class="hd">이름</span><span class="hd">가격 · 정보</span>${a.템.map(i => `<span class="${i.이름말 ? 'w' : ''}">${확입력(i, '이름', 'in')}</span><span class="${i.값말 ? 'w' : ''}">${확입력(i, '정보', 'in')}</span>${i.이름말 || i.값말 || i.사진말 ? `<em>${esc([i.이름말, i.값말, i.사진말].filter(Boolean).join(' · '))}</em>` : ''}`).join('')}</div>`;
   }
   const 확추가 = k => { const 보임 = 확손댐(k) || 확.상.열림[k]; return `<button class="ad" onclick="확열기(${k})" data-re="adb" ${보임 ? 'hidden' : ''}>＋ 수정 사항 적기</button><label class="fd" data-re="add" ${보임 ? '' : 'hidden'}><span>추가 수정 사항</span><textarea data-add="${k}" rows="2" placeholder="예: 깨진 제품 이미지 복원, 배경 밝게">${esc(확.상.추가[k] || '')}</textarea></label>`; };
-  const 확버튼 = k => { const p = 확판(k); return `<div data-re="vb">` + (p === 'draft' ? `<button class="vb hot" onclick="확담기(${k})">수정하기</button>` : p === 'fix' ? '<button class="vb fix" disabled>✓ 수정 담김</button>' : `<button class="vb ${p}" onclick="확체크(${k})">${p === 'ok' ? '✓ 확인' : '내지 및 디자인 확인'}</button>`) + '</div>'; };
+  const 확잠금버튼 = k => 확찍힘(k) ? (확.잠금.열림 ? '' : `<button class="rv" onclick="확찍기(${k}, false)">확인 취소</button>`)
+    : 확.대기(k) ? '<button class="vb" disabled>수정 반영을 기다려요</button>' : 확.바쁨 ? '<button class="vb" disabled>수정 반영 중</button>'
+    : who.admin ? '' : `<button class="vb hot" onclick="확찍기(${k}, true)">담당자 ${esc(who.name)} 확인</button>`;
+  const 확버튼 = k => { const p = 확판(k); return `<div data-re="vb">` + (확.잠금 && (!p || p === 'ok') ? 확잠금버튼(k) : p === 'draft' ? `<button class="vb hot" onclick="확담기(${k})">수정하기</button>` : p === 'fix' ? '<button class="vb fix" disabled>✓ 수정 담김</button>' : `<button class="vb ${p}" onclick="확체크(${k})">${p === 'ok' ? '✓ 확인' : '내지 및 디자인 확인'}</button>`) + '</div>'; };
   const 확필름 = () => `<div class="film" data-re="film">${확.장.map(a => { const p = 확판(a.k); return `<button class="${a.k === 확.고름 ? 'on' : ''} ${a.볼 && !확됨(a.k) ? 'w' : ''}" onclick="대조골라(${확.row},${+a.k})">${확.판그림(a.k)}${p ? `<i class="mk ${p}">${{ ok: '✓', fix: '✎', draft: '•' }[p]}</i>` : ''}<small>${a.k === 1 ? '표지' : `${a.r0 ? +a.r0 : '-'} → ${+a.번째}`}</small></button>`; }).join('')}</div>`;
+  const 확도장 = k => { const m = 확찍힘(k); return m ? `<span class="dojang">담당자 ${esc(m.n)} 확인 완료<small>${new Date(m.t).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })}</small></span>` : ''; };
+  const 쇠그림 = '<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M10 15v-4.5a7 7 0 0 1 14 0V15"/><rect x="6.5" y="15" width="21" height="15" rx="3.5" fill="currentColor" stroke="none"/></svg>';
+  function 확막대() {
+    const 잠 = 확.잠금, 끝 = 확.장.filter(a => 확찍힘(a.k)).length, 전 = 확.장.length, m = 확.장.map(a => 확찍힘(a.k)).find(Boolean);
+    const 파일 = (t, 주소) => 잠.열림 ? `<a href="${esc(주소)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
+    return `<div class="lockb ${잠.열림 ? 'open' : ''}" data-re="lockb">${쇠그림}<div class="lt"><b>${잠.열림 ? (잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(m ? m.n : '')} 확인 완료`) : 'PSD 잠김'}</b><small>${잠.열림 ? esc(잠.강제 || `전 장 ${전}장 · PSD가 열렸어요`) : `담당자 확인 ${끝} / ${전}장`}</small>${잠.열림 ? '' : `<u><i style="width:${끝 / 전 * 100}%"></i></u>`}</div>`
+      + `<div class="fs">${파일('PSD 받기', 잠.psd ? `${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view` : 주소(확.폴더))}${파일('드라이브 폴더', 주소(확.폴더))}${who.admin && !잠.열림 ? `<button onclick="확강제()">강제 열기</button>` : ''}</div></div>`;
+  }
+  const 확카드 = a => `<article class="lc ${확찍힘(a.k) ? 'done' : ''}" data-c="${+a.k}"><div class="ln"><span>${확.쪽말(a.k)}</span><button class="rv" onclick="확원래(${+a.k})" data-re="rv" ${확손댐(a.k) ? '' : 'hidden'}>원래대로</button></div>`
+    + `<div class="one">${확.쌍(a.k)}<div class="fds">${확칸들(a)}${확추가(a.k)}${확버튼(a.k)}${확.요청(a.k) ? `<div class="sent">${확.요청(a.k)}</div>` : ''}</div></div></article>`;
+  const 확보내기칸 = c => `<div class="qs" data-re="qs">${확담글()}</div><div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div>`;
   function 확상자() {
+    if (확.잠금) return 확막대() + `<div class="ls">${확.장.map(확카드).join('')}</div>` + 확보내기칸(확합());
     const k = 확.고름, c = 확합(), 요청 = 확.요청(k);
     return `<div class="hbx"><div class="tp"><h3>내지 확인하기</h3><span class="htag ${c.끝 >= c.전 ? 'ok' : ''}" data-re="sum">${c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`}</span></div>${확필름()}`
       + `<div class="ln"><span>${확.쪽말(k)}</span><button class="rv" onclick="확원래(${k})" data-re="rv" ${확손댐(k) ? '' : 'hidden'}>원래대로</button></div>`
@@ -1460,12 +1482,41 @@
       + `<div class="qs" data-re="qs">${확담글()}</div><div class="snd"><span data-re="snd">${확끝글(c)}</span><button class="go" onclick="확보내기(this)" data-re="go" ${c.수 ? '' : 'disabled'}>수정 보내기</button></div></div>`;
   }
   function 확갱신(k) {
-    const c = 확합(), 칸 = 이름 => $('dj').querySelector(`[data-re=${이름}]`), x = 칸('film').scrollLeft;
-    칸('zs').outerHTML = 확.띠(); 칸('film').outerHTML = 확필름(); 필름자리(x); 칸('vb').outerHTML = 확버튼(k);
-    칸('qs').innerHTML = 확담글(); 칸('snd').innerHTML = 확끝글(c); 칸('go').disabled = !c.수; 칸('rv').hidden = !확손댐(k);
-    칸('sum').textContent = c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`; 칸('sum').classList.toggle('ok', c.끝 >= c.전);
-    const 보임 = 확손댐(k) || 확.상.열림[k]; 칸('add').hidden = !보임; 칸('adb').hidden = !!보임;
+    const c = 확합(), 칸 = 이름 => $('dj').querySelector(`[data-re=${이름}]`), 장칸 = 확.잠금 ? 이름 => $('dj').querySelector(`[data-c="${k}"] [data-re=${이름}]`) : 칸;
+    if (칸('zs')) 칸('zs').outerHTML = 확.띠();
+    장칸('vb').outerHTML = 확버튼(k);
+    칸('qs').innerHTML = 확담글(); 칸('snd').innerHTML = 확끝글(c); 칸('go').disabled = !c.수; 장칸('rv').hidden = !확손댐(k);
+    if (!확.잠금) {
+      const x = 칸('film').scrollLeft; 칸('film').outerHTML = 확필름(); 필름자리(x);
+      칸('sum').textContent = c.끝 >= c.전 ? '✓ 모두 확인' : `${c.끝}/${c.전}장 확인`; 칸('sum').classList.toggle('ok', c.끝 >= c.전);
+    }
+    const 보임 = 확손댐(k) || 확.상.열림[k]; 장칸('add').hidden = !보임; 장칸('adb').hidden = !!보임;
     확저장(확.row);
+  }
+  let 확줄 = Promise.resolve(), 확남음 = 0;
+  function 확한장(k) { const 칸 = $('dj').querySelector(`[data-c="${k}"]`); if (칸) 칸.outerHTML = 확카드(확장(k)); $('dj').querySelector('[data-re=lockb]').outerHTML = 확막대(); const z = $('dj').querySelector('[data-re=zs]'); if (z) z.outerHTML = 확.띠(); $('dj').querySelector('[data-re=snd]').innerHTML = 확끝글(확합()); }
+  function 확찍기(k, on) {
+    const row = 확.row, 잠 = 확.잠금, 전 = 잠.장[k];
+    if (on) 잠.장[k] = { f: 확.파일이름[k], n: who.name, t: Date.now() }; else delete 잠.장[k];
+    확한장(k); $('err3').textContent = ''; 확남음++;
+    확줄 = 확줄.then(() => new Promise(끝 => google.script.run.withSuccessHandler(r => { 끝(); 확남음--; 확받음(row, r); }).withFailureHandler(e => {
+      끝(); 확남음--;
+      if (전) 잠.장[k] = 전; else delete 잠.장[k];
+      if (openRow === row && 확.row === row) { 확한장(k); $('err3').textContent = e.message; }
+    }).담당자확인(code, row, k, on)));
+  }
+  function 확받음(row, r) {
+    const j = mine.find(x => x.row === row);
+    if (!j || !r || 확남음 && !r.열림) return;
+    j.확인 = r; j.folder = r.folder;
+    if (openRow !== row) return;
+    if (r.열림) card(mine.indexOf(j), 'refresh'); else if (확.row === row) 확.잠금 = r;
+  }
+  function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); $('err3').textContent = `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
+  function 확강제() {
+    const 사유 = (prompt('강제로 여는 사유를 적어 주세요. 기록에 남아요.') || '').trim(), row = 확.row;
+    if (!사유) return;
+    google.script.run.withSuccessHandler(r => 확받음(row, r)).withFailureHandler(e => { $('err3').textContent = e.message; }).강제열기(code, row, 사유);
   }
   function 확글받기(e) {
     const t = e.target, 상 = 확 && 확.상;
@@ -1476,7 +1527,7 @@
   const 확다음 = () => { const n = 확.볼쪽.find(k => !확됨(k)); if (n) 대조고름.set(확.row, n); 대조그림(확.row); };
   function 확체크(k) { 확.상.판[k] = 확.상.판[k] === 'ok' ? '' : 'ok'; 확.상.판[k] ? 확다음() : 대조그림(확.row); }
   function 확담기(k) { 확.상.담[k] = true; 확다음(); }
-  function 확열기(k) { 확.상.열림[k] = true; 대조그림(확.row); const t = $('dj').querySelector('[data-add]'); if (t) t.focus(); }
+  function 확열기(k) { 확.상.열림[k] = true; 대조그림(확.row); const t = $('dj').querySelector(`[data-add="${k}"]`); if (t) t.focus(); }
   function 확원래(k) { const 상 = 확.상; 확장(k).템.forEach(i => delete 상.값[i.키]); 상.추가[k] = ''; 상.담[k] = 상.열림[k] = false; 대조그림(확.row); }
   const 확요청글 = a => { const 줄 = []; a.템.forEach(i => { [['이름', '이름'], ['정보', a.템.length > 1 ? `${i.이름} 가격 · 정보` : '정보']].forEach(([n, 말]) => { if (확값(i, n) !== i[n]) 줄.push(`${말}: '${i[n]}' → '${확값(i, n)}' 로 바꿔 주세요`); }); }); const 더 = (확.상.추가[a.k] || '').trim(); if (더) 줄.push(더); return 줄.join('\n'); };
   const 확담글 = () => 확.장.filter(a => 확판(a.k) === 'fix').map(a => `<button onclick="대조골라(${확.row},${+a.k})"><b>${a.k === 1 ? '썸네일' : esc(a.n)}</b>${esc(확요청글(a))}</button>`).join('');
@@ -1486,7 +1537,7 @@
     call('revises', [code, row, items], b, 'err3', rs => {
       const j = mine.find(x => x.row === row), 상 = 확상태(row);
       items.forEach((q, i) => j.reqs.push(Object.assign({ state: '접수' }, q, rs[i])));
-      장들.forEach(a => { a.템.forEach(i => delete 상.값[i.키]); 상.추가[a.k] = ''; 상.담[a.k] = 상.열림[a.k] = false; 상.판[a.k] = 'ok'; });
+      장들.forEach(a => { a.템.forEach(i => delete 상.값[i.키]); 상.추가[a.k] = ''; 상.담[a.k] = 상.열림[a.k] = false; 상.판[a.k] = 'ok'; if (확.잠금) delete 확.잠금.장[a.k]; });
       대조그림(row);
       clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
     });
@@ -1524,14 +1575,17 @@
     return l;
   }
   function 대조칸(j) {
-    const d = (대조기억.get(j.row) || {}).d;
-    if (!d || !d.쪽) return '';
+    const 원자료 = (대조기억.get(j.row) || {}).d, 빈자료 = !(원자료 && 원자료.쪽), 잠금 = j.확인;
+    if (빈자료 && !잠금) return '';
+    const d = 빈자료 ? { 쪽: [], 템: [], 참조: {}, 구도: 0, 색: 0, 참조수: 0 } : 원자료;
     const 템 = d.템;
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
     const 상 = 확상태(j.row); 확그림맞춤(상, 파일);
     const 새글 = 템.filter(i => i.이름체크 === '없음').length * 2 > 템.length;
     const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length), 고름 = 대조고름.get(j.row) || 1;
-    const 쪽들 = [{ k: 1, n: '썸네일', r: [[1, 0]] }].concat(d.쪽), 쓴 = new Set(쪽들.flatMap(p => p.r.map(x => x[0])));
+    const 볼장 = 짝(j.files).map(x => x.f).filter(f => !/팔로우/.test(f.name)), 파일이름 = {}; 볼장.forEach(f => 파일이름[parseInt(f.name)] = f.name);
+    const 쪽들 = 잠금 ? 볼장.map(f => { const k = parseInt(f.name); return d.쪽.find(p => p.k === k) || { k, n: k === 1 ? '썸네일' : 판(f.name).replace(/^\d+_/, ''), r: k === 1 ? [[1, 0]] : [] }; })
+      : [{ k: 1, n: '썸네일', r: [[1, 0]] }].concat(d.쪽), 쓴 = new Set(쪽들.flatMap(p => p.r.map(x => x[0])));
     const 안쓴 = Object.keys(d.참조).map(Number).sort((a, b) => a - b).filter(r => !쓴.has(r));
     const 주소 = id => id ? img(id) : '', 그림 = id => id ? `<img src="${img(id)}" alt="" loading="lazy">` : '<i class="cr"></i>';
     const 나란히 = (r, k) => `data-z="${주소(d.참조[r])} ${주소(파일[k])}" data-k="${+k}"`;
@@ -1541,12 +1595,13 @@
     const 완료 = 템.filter(i => !체크글(i, 새글).length && (이름됨(i) || i.값체크 === '맞음' || i.사진체크 === '맞음')), 못잼 = 템.length - 완료.length - 볼.length;
     const 순서 = (이름, 수, 섞임) => 수 < 2 ? `<p class="mut">${이름} 비교할 게 없음</p>` : `<p class="${섞임 ? 'ok' : 'bad'}">${이름} ${섞임 ? '섞임' : '그대로'}</p>`;
     const 볼쪽 = [...new Set(볼.map(i => i.쪽))], 파트 = {}; 짝(j.files).forEach(({ f }) => 파트[parseInt(f.name)] = f.name.replace(/\.(png|jpg)$/, ''));
-    const 띠 = () => { const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
+    const 띠 = () => { if (빈자료) return ''; const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
       + `<div><span>제품 정보</span><b>${수}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${남.includes(i) ? 'w' : 볼.includes(i) || 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${남.length ? `<p class="warn">*${남.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
       + `<div><span>내지 · 제품 순서</span>${순서('내지 순서', new Set(대표).size, 대표.some((r, i) => i && r < 대표[i - 1]))}${순서('제품 순서', 짝있.length, 짝있.some(i => i.상태 !== '그대로'))}</div>`
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
-    확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽, 고름, 구도: +d.구도, 색: +d.색,
-      쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}</button></div>`; },
+    확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽: 잠금 ? 쪽들.map(p => p.k) : 볼쪽, 고름, 구도: +d.구도, 색: +d.색, 잠금, 파일이름, 빈자료, 폴더: j.folder, 바쁨: !/^완료/.test(j.state),
+      대기: k => j.reqs.some(q => parseInt(q.part) === k && /^(접수|반영중)/.test(q.state)),
+      쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}${확도장(k)}</button></div>`; },
       판그림: k => 그림(파일[k]), 쪽말: k => { const a = 확장(k); return k === 1 ? '썸네일' : `${esc(a.n)} · ${a.r0 ? `레퍼런스 ${+a.r0}번째 → ` : ''}${+a.번째}번째`; },
       요청: k => j.reqs.filter(q => parseInt(q.part) === k).map(mark).join(''),
       장: 쪽들.map((p, n) => { const 말들 = i => 체크글(i, 새글); return { k: p.k, n: p.n, r0: p.r.length ? p.r[0][0] : 0, 번째: n, 볼: 볼쪽.includes(p.k),
@@ -1568,7 +1623,7 @@
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + 예상칸(j)
-      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a><br>`
+      + `<p class="sub"><span class="st ${stc(j.state)}">${esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
       + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
