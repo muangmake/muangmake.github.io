@@ -442,7 +442,7 @@
   <div class="body" id="form">
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 새 제작</div>
     <h1>레퍼런스 넣기</h1><span class="cur"></span>
-    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(채널마다 하루 7장 · 매일 00:00 에 다시 채워져요).</span></p>
+    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(매일 00:00 에 다시 채워져요).</span></p>
     <div id="chpick" hidden><label>만들 채널</label><div class="chips" id="chs"></div></div>
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
@@ -640,7 +640,7 @@
     $('drive').hidden = true;
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
     $('lf').hidden = !r.admin;
-    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(채널마다 하루 7장 · 매일 00:00 에 다시 채워져요).';
+    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(매일 00:00 에 다시 채워져요).';
     if (r.admin) {
       const o = (l, all) => `<option value="">${all}</option>` + l.map(x => `<option>${esc(x)}</option>`).join('');
       $('fch').innerHTML = o(r.channels.map(c => c.name), '모든 채널'); $('fwho').innerHTML = o(r.people || [], '모든 담당자');
@@ -757,6 +757,7 @@
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : c);
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
+    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 하루 ${ch.daily}장 · 매일 00:00 에 다시 채워져요).`;
     its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; drawD(el); });
     템플릿타자_();
     if (ch && !ch.types && !ch.ld) {
