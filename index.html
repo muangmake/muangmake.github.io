@@ -212,6 +212,7 @@
   .pb b { color:var(--run); } .pb b.w { color:var(--wait); } .pb.bad { background:color-mix(in srgb, var(--bad) 12%, var(--field)); border-color:var(--bad); } .pb.bad b, .pb b.x { color:var(--bad); }
   .chs { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; } .chs span { padding:6px 10px; border-radius:8px; font-size:13px; font-weight:500; color:var(--dim); border:1px solid var(--line); } .chs .me { color:#1B1206; background:var(--run); border-color:var(--run); font-weight:700; }
   .pr.bad .big { color:var(--bad); } .pr button.ask { --c:var(--bad); margin-top:16px; background:var(--bad); color:#1B0B0C; font-weight:800; animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; }
+  .st small.okd { display:block; margin:2px 0 4px; color:var(--ok); font-size:11px; font-weight:600; }
   .st small.stuck { display:block; margin:2px 0 4px; color:var(--bad); font-size:11px; font-weight:700; }
   @media (max-width:640px) { .pr .big { font-size:34px; } .rr { grid-template-columns:52px minmax(0,1fr) 92px; gap:8px; font-size:12px; } .pb { padding:14px; } }
   
@@ -1138,7 +1139,7 @@
     const ims = 장.map(x => Object.assign(new Image(), { src: x.s, alt: '' }));
     Promise.all(ims.map(im => im.decode().catch(() => {}))).then(() => {
       if (zm.dataset.u !== u) return;
-      zm.innerHTML = `<div class="zz">${장.map(x => `<figure><figcaption>${esc(x.n)}</figcaption></figure>`).join('')}</div>`;
+      zm.innerHTML = `<div class="zz">${장.map(x => `<figure><figcaption>${x.n}</figcaption></figure>`).join('')}</div>`;
       zm.querySelectorAll('figure').forEach((f, i) => f.append(ims[i]));
       zm.style.cssText = 'left:0;top:0';
       const r = el.getBoundingClientRect(), W = zm.offsetWidth, H = zm.offsetHeight;
@@ -1367,7 +1368,7 @@
     r.forEach(j => {
       const f = j.files[0], q = j.reqs.find(x => x.eta);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : '만드는 중'}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
-        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.확인 && !j.확인.열림 && /^완료/.test(j.state) ? '<small class="eta">확인 전</small>' : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
+        + `<p><span>${esc(j.channel)}<br>${j.time}</span><span class="st ${stc(j.state)}">${esc(j.state.split(' ')[0])}${live(j) ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">수정 완료 ${esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + 진행게이지(j, q) + '</div>';
       let e = 있던.get(String(j.row));
       if (!e) { e = 틀_(html).firstElementChild; 새.push(e); 낱.push(e); }
@@ -1498,11 +1499,11 @@
   const 쇠그림 = '<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M10 15v-4.5a7 7 0 0 1 14 0V15"/><rect x="6.5" y="15" width="21" height="15" rx="3.5" fill="currentColor" stroke="none"/></svg>';
   function 확막대() {
     const 잠 = 확.잠금, 끝 = 확.장.filter(a => 확찍힘(a.k)).length, 전 = 확.장.length, m = 확.장.map(a => 확찍힘(a.k)).find(Boolean);
-    return `<div class="lockb ${잠.열림 ? 'open' : ''}" data-re="lockb">${쇠그림}<div class="lt"><b>${잠.열림 ? (잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(m ? m.n : '')} 확인 완료`) : 'PSD 잠김'}</b><small>${잠.열림 ? esc(잠.강제 || `전 장 ${전}장 · PSD가 열렸어요`) : `담당자 확인 ${끝} / ${전}장`}</small>${잠.열림 ? '' : `<u><i style="width:${끝 / 전 * 100}%"></i></u>`}</div>`
+    return `<div class="lockb ${잠.열림 ? 'open' : ''}" data-re="lockb">${쇠그림}<div class="lt"><b>${잠.열림 ? (잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(m ? m.n : '')} 확인 완료`) : 잠.표기 ? '확인 전' : 'PSD 잠김'}</b><small>${잠.열림 ? esc(잠.강제 || `전 장 ${전}장 · PSD가 열렸어요`) : `담당자 확인 ${끝} / ${전}장`}</small>${잠.열림 ? '' : `<u><i style="width:${끝 / 전 * 100}%"></i></u>`}</div>`
       + `<div class="fs">${확파일()}${who.admin && !잠.열림 ? `<button onclick="확강제()">강제 열기</button>` : ''}</div></div>`;
   }
   function 확파일() {
-    const 잠 = 확.잠금, 칸 = (t, u) => 잠.열림 ? `<a href="${esc(u)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
+    const 잠 = 확.잠금, 칸 = (t, u) => 잠.열림 || 잠.표기 ? `<a href="${esc(u)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
     return 칸('PSD 받기', 잠.psd ? `${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view` : 주소(확.폴더)) + 칸('드라이브 폴더', 주소(확.폴더));
   }
   function 확끝칸() {
@@ -1583,7 +1584,7 @@
     });
   }
   const 캡션기억 = new Map();
-  const 캡션잠김 = j => j.확인 && !j.확인.열림;
+  const 캡션잠김 = j => j.확인 && !j.확인.열림 && !j.확인.표기;
   const 캡션수 = m => `${m.글.length}자${m.저장중 ? ' · 저장 중' : ''}`;
   const 캡션말 = m => m.걸림 && m.걸림.length ? `<p class="warn">리스크 낱말: ${esc(m.걸림.join(' · '))}</p>` : '';
   const 캡션단추 = (row, m) => m.복사 ? `<button class="cp done" onclick="캡션복사하기(${row})">✓ 복사 완료</button><p class="capn">${esc(m.복사.n)} · ${new Date(m.복사.t).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })} 복사</p>` : `<button class="cp" onclick="캡션복사하기(${row})">복사하기</button>`;
