@@ -44,6 +44,8 @@
   #dj .fs { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; } #dj .fs button, #dj .fs a { all:unset; box-sizing:border-box; cursor:pointer; padding:7px 11px; border-radius:9px; font-weight:700; font-size:13.5px; background:var(--bar); border:1.5px solid var(--line); color:var(--dim); white-space:nowrap; } #dj .fs a { background:var(--ok); border-color:var(--ok); color:#07130D; } #dj .fs a + a { background:transparent; color:var(--ok); } #dj .fs a { --c:var(--ok); animation:glow 2.4s ease-in-out infinite; } @media (prefers-reduced-motion:reduce) { #dj .fs a { animation:none; } }
   #dj .endb { display:grid; gap:10px; margin-top:12px; padding:14px; border-radius:12px; background:var(--field); border:1.5px solid var(--ok); } #dj .endb b { font-weight:800; font-size:17px; } #dj .endb .fs { justify-content:flex-start; } #dj .rec { display:flex; align-items:center; gap:8px; color:#D6D6DA; font-size:14px; } #dj .rec i { flex:none; width:20px; height:20px; border-radius:50%; font:800 12px/20px var(--f, inherit); text-align:center; background:var(--ok); color:#07130D; }
   #cj { display:grid; gap:8px; margin-top:12px; padding:12px 13px; border-radius:12px; background:var(--field); border:1.5px solid var(--line); min-width:0; } #cj .caph { display:flex; justify-content:space-between; align-items:baseline; gap:10px; } #cj .caph b { font-weight:800; font-size:15px; } #cj .caph small, #cj .capn { color:var(--dim); font-size:12.5px; } #cj .capn { margin:5px 0 0; text-align:center; } #cj .warn { color:var(--run); font-size:13px; margin:0; } #cj textarea { display:block; width:100%; min-height:170px; resize:vertical; margin:0; } #cj .shut { padding:18px 12px; text-align:center; color:var(--dim); font-size:14px; border:1.5px dashed var(--line); border-radius:10px; } #cj .cp { all:unset; box-sizing:border-box; cursor:pointer; display:block; width:100%; text-align:center; font-weight:800; font-size:15px; padding:11px; border-radius:10px; background:var(--navy); border:1.5px solid var(--navy2); color:#fff; } #cj .cp.done { background:transparent; border-color:var(--ok); color:var(--ok); }
+  #dj .zs.빈 { animation:뼈숨 1.44s cubic-bezier(.45,0,.55,1) infinite; } #dj .zs.빈 > div > * { visibility:hidden; } 
+  #dj .lc.대기, #dj .hbx.대기 { background:transparent; border-color:transparent; } #dj .pp2 button:last-child { z-index:1; } 
   #dj .ls { display:grid; gap:10px; } #dj .lc { padding:11px; border-radius:12px; background:var(--win); border:1.5px solid var(--line); min-width:0; } #dj .lc.done { border-color:rgba(94,230,168,.5); } #dj .pp2 button { position:relative; } #dj .vb.hot:disabled, #dj .vb:disabled { cursor:default; color:var(--dim); }
   #dj .dojang { position:absolute; left:50%; bottom:9%; transform:translateX(-50%) rotate(-5deg); width:90%; padding:6px 7px; text-align:center; border-radius:8px; background:rgba(12,23,18,.93); border:2px solid var(--ok); color:var(--ok); font-weight:900; font-size:14px; line-height:1.3; pointer-events:none; } #dj .dojang small { display:block; font-weight:700; font-size:11.5px; color:var(--ok); margin:0; opacity:.85; }
   @media (max-width:560px) { #dj .lockb { position:static; grid-template-columns:auto minmax(0,1fr); } #dj .fs { grid-column:1 / -1; justify-content:flex-start; } }
@@ -1618,10 +1620,8 @@
   function 대조받기(j) {
     const 열쇠 = j.files.map(f => f.id).join(), m = 대조기억.get(j.row);
     if (!j.files.length || m && m.열쇠 === 열쇠 && m.d) return;
-    google.script.run.withSuccessHandler(d => {
-      대조기억.set(j.row, { 열쇠, d });
-      if (d && $('dj') && openRow === j.row) 대조넣기(j);
-    }).withFailureHandler(() => {}).대조(code, j.row);
+    const 받음 = d => { 대조기억.set(j.row, { 열쇠, d }); if ($('dj') && openRow === j.row) 대조채움(j); };
+    google.script.run.withSuccessHandler(받음).withFailureHandler(() => 받음(null)).대조(code, j.row);
   }
   function 필름자리(x) {
     const f = $('dj').querySelector('.film'), on = f && f.querySelector('.on');
@@ -1632,6 +1632,11 @@
     f.scrollLeft += b.left < a.left ? b.left - a.left : b.right > a.right ? b.right - a.right : 0;
   }
   function 대조넣기(j) { const f = $('dj').querySelector('.film'), x = f ? f.scrollLeft : 0; $('dj').innerHTML = 대조칸(j); 필름자리(x); }
+  function 대조채움(j) {
+    const 새 = [], z = $('dj').querySelector('.zs.빈');
+    맞춤($('dj'), 틀_(`<div id="dj">${대조칸(j)}</div>`).firstElementChild, 새, []);
+    새.concat(z && z.isConnected ? z : []).filter(e => e.nodeType === 1).forEach(e => e.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280 }));
+  }
   const 대조그림 = row => { 대조넣기(mine.find(j => j.row === row)); 확저장(row); };
   function 대조골라(row, k) { 대조고름.set(row, k); 대조그림(row); }
   const 내값 = i => [(i.글.match(/[\d,.]+ ?원/) || [''])[0]].filter(Boolean).join('');
@@ -1648,7 +1653,7 @@
   }
   function 대조칸(j) {
     const 원자료 = (대조기억.get(j.row) || {}).d, 빈자료 = !(원자료 && 원자료.쪽), 잠금 = j.확인;
-    if (빈자료 && !잠금) return '';
+    if (빈자료 && !잠금 && 대조기억.has(j.row)) return '';
     const d = 빈자료 ? { 쪽: [], 템: [], 참조: {}, 구도: 0, 색: 0, 참조수: 0 } : 원자료;
     const 템 = d.템;
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
@@ -1667,7 +1672,7 @@
     const 완료 = 템.filter(i => !체크글(i, 새글).length && (이름됨(i) || i.값체크 === '맞음' || i.사진체크 === '맞음')), 못잼 = 템.length - 완료.length - 볼.length;
     const 순서 = (이름, 수, 섞임) => 수 < 2 ? `<p class="mut">${이름} 비교할 게 없음</p>` : `<p class="${섞임 ? 'ok' : 'bad'}">${이름} ${섞임 ? '섞임' : '그대로'}</p>`;
     const 볼쪽 = [...new Set(볼.map(i => i.쪽))], 파트 = {}; 짝(j.files).forEach(({ f }) => 파트[parseInt(f.name)] = f.name.replace(/\.(png|jpg)$/, ''));
-    const 띠 = () => { if (빈자료) return ''; const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
+    const 띠 = () => { if (빈자료) return 대조기억.has(j.row) ? '' : `<div class="zs 빈" data-re="zs">${'<div><span>&nbsp;</span><b>&nbsp;</b><u class="gu"></u><p class="sub">&nbsp;</p></div>'.repeat(4)}</div>`; const 남 = 볼.filter(i => !확됨(i.쪽)), 수 = 완료.length + 볼.length - 남.length; return `<div class="zs" data-re="zs"><div><span>유사도</span><b>${유사}점<small>/50점</small></b><u class="gu"><i class="${유사 < 50 ? '' : 'hi'}" style="width:${유사}%"></i><s></s></u></div>`
       + `<div><span>제품 정보</span><b>${수}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${남.includes(i) ? 'w' : 볼.includes(i) || 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${남.length ? `<p class="warn">*${남.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
       + `<div><span>내지 · 제품 순서</span>${순서('내지 순서', new Set(대표).size, 대표.some((r, i) => i && r < 대표[i - 1]))}${순서('제품 순서', 짝있.length, 짝있.some(i => i.상태 !== '그대로'))}</div>`
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
@@ -1714,35 +1719,92 @@
     if (!$('list').hidden) 부모.detail = 'list';
     const c = !how && !$('list').hidden && document.querySelectorAll('#cards .card')[i];
     if (c) {
-      const cv = c.querySelector('.cv'), bg = cv.style.backgroundImage, from = cv.getBoundingClientRect();
+      const cv = c.querySelector('.cv'), bg = cv.style.backgroundImage, from = cv.getBoundingClientRect(), 첫칸 = bg && $('detail').querySelector('#dj .lc, #dj .hbx');
       if (bg) cv.style.visibility = 'hidden';
-      return 펼침(c, $('detail'), 1120, () => { cv.style.visibility = ''; view('detail', { row: j.row }); }, () => {
-        const im = bg && $('detail').querySelector('.pages img');
-        if (im) 사진펼침(from, bg, im, 1120);
+      const 바꿈 = () => { cv.style.visibility = ''; view('detail', { row: j.row }); };
+      if (첫칸) return 짝펼침(c, 첫칸, from, bg, 바꿈);
+      return 펼침(c, $('detail'), 1120, 바꿈, () => {
+        if (bg && 제작본칸()) 사진펼침(from, bg, 1120);
         타자([$('detail')], 320);
       });
     }
     how === 'pop' ? show('detail') : view('detail', { row: j.row });
   }
-  async function 사진펼침(b, bg, im, T) {
-    const p = document.createElement('div'), t0 = performance.now(), E = t => t < .5 ? 4 * t ** 3 : 1 - (2 - 2 * t) ** 3 / 2;
-    p.style.cssText = 'position:fixed;z-index:10;pointer-events:none;background:var(--bar) center/cover;border-radius:12px';
+  const 제작본칸 = () => $('detail').querySelector('#dj .pp2 button:last-child img, .pages img');
+  const 끝살짝넘음 = t => { const x = t ** 1.35; return 1 - Math.exp(-6.5 * x) * Math.cos(5 * x) * (1 - x); };
+  const 멈춤곡선 = 'cubic-bezier(.22,1,.36,1)';
+  const 올라옴 = (e, 지연, 거리, 시간) => e.animate([{ opacity: 0, transform: `translateY(${거리}px)` }, { opacity: 1, transform: 'none' }], { duration: 시간, delay: 지연, easing: 멈춤곡선, fill: 'backwards' });
+  async function 사진펼침(b, bg, T) {
+    const p = document.createElement('div'), t0 = performance.now();
+    p.style.cssText = `position:fixed;z-index:10;pointer-events:none;background:var(--bar) center/cover;border-radius:12px;left:${b.left}px;top:${b.top}px;width:${b.width}px;height:${b.height}px`;
     p.style.backgroundImage = bg;
     document.body.append(p);
-    치는중.add(im); im.style.opacity = 0; im.loading = 'eager';
-    let 받음 = false;
-    Promise.race([im.decode().catch(() => {}), new Promise(ok => setTimeout(ok, T + 1500))]).then(() => 받음 = true);
+    let 받음 = false, im = null;
+    const 맡음 = 새 => {
+      if (im) { im.style.opacity = ''; 치는중.delete(im); }
+      im = 새; 치는중.add(im); im.style.opacity = 0; im.loading = 'eager';
+      받음 = false;
+      Promise.race([im.decode().catch(() => {}), new Promise(ok => setTimeout(ok, T + 1500))]).then(() => { if (im === 새) 받음 = true; });
+    };
+    맡음(제작본칸());
     await new Promise(done => {
       const f = now => {
-        const t = Math.min(1, (now - t0) / T), e = E(t), a = im.getBoundingClientRect(), m = k => b[k] + (a[k] - b[k]) * e + 'px';
-        Object.assign(p.style, { left: m('left'), top: m('top'), width: m('width'), height: m('height') });
+        if ($('detail').hidden) return done();
+        const 칸 = 제작본칸();
+        if (칸 !== im) 맡음(칸);
+        const t = Math.min(1, (now - t0) / T), e = 끝살짝넘음(t), a = im.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top, 길이 = Math.hypot(dx, dy) || 1;
+        const 휨 = 34 * Math.sin(Math.PI * Math.min(1, e)), 뜸 = Math.sin(Math.PI * t), 쪽 = dx > 0 ? 1 : -1;
+        Object.assign(p.style, { left: b.left + dx * e + 쪽 * dy / 길이 * 휨 + 'px', top: b.top + dy * e - 쪽 * dx / 길이 * 휨 + 'px', width: b.width + (a.width - b.width) * e + 'px', height: b.height + (a.height - b.height) * e + 'px',
+          borderRadius: 12 - 6 * Math.min(1, e) + 'px', scale: 1 + .05 * 뜸, boxShadow: `0 ${24 * 뜸}px ${60 * 뜸}px rgba(0,0,0,${.55 * 뜸})` });
         t < 1 || !받음 ? requestAnimationFrame(f) : done();
       };
       requestAnimationFrame(f);
     });
     im.style.opacity = ''; 치는중.delete(im);
-    await p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' }).finished;
+    if (!$('detail').hidden) im.animate([{ boxShadow: '0 0 0 2px var(--navy2), 0 0 26px rgba(111,143,224,.6)' }, { boxShadow: '0 0 0 2px transparent, 0 0 26px transparent' }], { duration: 620, easing: 'ease-out' });
+    await p.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140, fill: 'forwards' }).finished;
     p.remove();
+    const 더 = $('detail').hidden ? 0 : im.getBoundingClientRect().bottom + 16 - innerHeight;
+    if (더 > 0) scrollBy({ top: 더, behavior: 'smooth' });
+  }
+  async function 짝펼침(c, 첫칸, b, bg, swap) {
+    const T = 900, 목록 = $('list'), 자리 = 목록.getBoundingClientRect(), 판 = 목록.cloneNode(true), 틀자리 = c.getBoundingClientRect(), 틀 = document.createElement('div');
+    판.removeAttribute('id'); 판.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
+    판.querySelector('.cards').children[[...c.parentNode.children].indexOf(c)].style.visibility = 'hidden';
+    const 글 = c.querySelector('p').cloneNode(true);
+    swap();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    Object.assign(판.style, { position: 'fixed', left: 자리.left + 'px', top: 자리.top + 'px', width: 자리.width + 'px', margin: 0, zIndex: 4, pointerEvents: 'none' });
+    $('make').append(판);
+    판.animate([{ opacity: 1, transform: 'none', filter: 'blur(0)' }, { opacity: 0, transform: 'scale(.985)', filter: 'blur(5px)' }], { duration: 300, easing: 'ease-out', fill: 'forwards' }).finished.then(() => 판.remove());
+    const cs = getComputedStyle(첫칸), R = cs.borderTopLeftRadius, W = cs.borderTopWidth, 위 = 첫칸.getBoundingClientRect().top;
+    첫칸.classList.add('대기');
+    const 뒤 = e => e.id === 'dj' ? [...e.children].flatMap(뒤) : e.classList.contains('ls') ? [...e.children] : e === 첫칸 && e.matches('.hbx') ? [...e.querySelectorAll('.tp, .film, .qs, .snd')] : e === 첫칸 ? [] : [e];
+    [...$('detail').children].flatMap(뒤).filter(e => e !== 첫칸 && e.getClientRects().length && e.getBoundingClientRect().top < innerHeight).forEach((e, k) => {
+      const 아래 = e.getBoundingClientRect().top > 위;
+      올라옴(e, 140 + k * 38 + (아래 ? 120 : 0), 아래 ? 28 : 12, 아래 ? 560 : 460);
+    });
+    const [ref, 내] = 첫칸.querySelector('.pp2').children;
+    ref.animate([{ opacity: 0, transform: `translateX(${내.offsetLeft - ref.offsetLeft}px) scale(.96)` }, { opacity: 1, transform: 'none' }], { duration: 620, delay: 560, easing: 멈춤곡선, fill: 'backwards' });
+    [내.querySelector('small'), 첫칸.querySelector('.ln')].forEach(e => 올라옴(e, 560, 4, 300));
+    [...첫칸.querySelector('.fds').children].forEach((e, k) => 올라옴(e, 640 + k * 50, 8, 420));
+    틀.style.cssText = `position:fixed;z-index:9;pointer-events:none;box-sizing:border-box;border:2px solid var(--line);overflow:hidden;left:${틀자리.left}px;top:${틀자리.top}px;width:${틀자리.width}px;height:${틀자리.height}px`;
+    글.style.cssText = 'position:absolute;left:0;right:0;bottom:0';
+    틀.append(글);
+    document.body.append(틀);
+    글.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' });
+    틀.animate([{ backgroundColor: getComputedStyle(c).backgroundColor, borderRadius: '14px', borderWidth: '2px' }, { backgroundColor: cs.backgroundColor, offset: .4 }, { backgroundColor: 'transparent', borderRadius: R, borderWidth: W, offset: .6 }, { backgroundColor: 'transparent', borderRadius: R, borderWidth: W }], { duration: T, fill: 'forwards' });
+    const t0 = performance.now(), 틀끝 = new Promise(done => {
+      const f = now => {
+        if ($('detail').hidden) return done();
+        const t = Math.min(1, (now - t0) / T), e = 끝살짝넘음(t), a = 첫칸.getBoundingClientRect(), m = k => 틀자리[k] + (a[k] - 틀자리[k]) * e + 'px';
+        Object.assign(틀.style, { left: m('left'), top: m('top'), width: m('width'), height: m('height') });
+        t < 1 ? requestAnimationFrame(f) : done();
+      };
+      requestAnimationFrame(f);
+    }).then(() => { 첫칸.classList.remove('대기'); 틀.remove(); });
+    사진펼침(b, bg, T);
+    await 틀끝;
   }
   function cancel(b) { b.closest('.rev').querySelector('textarea').value = ''; }
   function 모음() {
