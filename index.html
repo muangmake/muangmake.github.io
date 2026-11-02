@@ -1138,7 +1138,7 @@
     const ims = 장.map(x => Object.assign(new Image(), { src: x.s, alt: '' }));
     Promise.all(ims.map(im => im.decode().catch(() => {}))).then(() => {
       if (zm.dataset.u !== u) return;
-      zm.innerHTML = `<div class="zz">${장.map(x => `<figure><figcaption>${x.n}</figcaption></figure>`).join('')}</div>`;
+      zm.innerHTML = `<div class="zz">${장.map(x => `<figure><figcaption>${esc(x.n)}</figcaption></figure>`).join('')}</div>`;
       zm.querySelectorAll('figure').forEach((f, i) => f.append(ims[i]));
       zm.style.cssText = 'left:0;top:0';
       const r = el.getBoundingClientRect(), W = zm.offsetWidth, H = zm.offsetHeight;
