@@ -1207,7 +1207,8 @@
     const u = j.up || {}, 링크 = (u.links || []).map((l, i) => `<a href="${esc(주소(l))}" target="_blank" rel="noopener">게시물${u.links.length > 1 ? ' ' + (i + 1) : ''} ↗</a>`).join(' · ');
     const 넣기 = `<div class="row"><input id="upl" placeholder="올린 게시물 링크 (instagram.com/p/…)"><button onclick="postGo(this, ${j.row})">링크 넣기</button></div>`;
     return u.s === '확인' ? `<div class="upc ok">✓ ${esc(j.channel)} 계정 업로드 확인 · ${링크}</div>`
-      : u.s === '링크확인중' ? `<div class="upc">넣은 링크를 확인하고 있어요 — 다음 확인(10시 · 20시)에 반영돼요.</div>`
+      : u.s === '링크확인중' ? `<div class="upc">넣은 링크를 확인하고 있어요 — 몇 분 안에 반영돼요.</div>`
+      : u.s === '다른계정' && u.계정 === '못 찾음' ? `<div class="upc bad">⚠ 넣은 링크의 게시물을 못 찾았어요(비공개 · 지운 게시물 · 틀린 링크). ${esc(j.channel)} 계정에 올린 링크를 다시 넣어 주세요.${넣기}</div>`
       : u.s === '미확인' ? `<div class="upc bad">⚠ ${esc(j.channel)} 계정에서 이 게시물을 못 찾았어요. 올렸다면 게시물 링크를 넣어 주세요.${넣기}</div>`
       : u.s === '다른계정' ? `<div class="upc bad">⚠ 넣은 링크가 ${esc(j.channel)} 계정 게시물이 아니에요. ${esc(j.channel)} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
       : `<div class="upc">올리면 하루 두 번(10시 · 20시) ${esc(j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
