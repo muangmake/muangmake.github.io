@@ -1521,11 +1521,11 @@
   const 쇠그림 = '<svg viewBox="0 0 34 34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M10 15v-4.5a7 7 0 0 1 14 0V15"/><rect x="6.5" y="15" width="21" height="15" rx="3.5" fill="currentColor" stroke="none"/></svg>';
   function 확막대() {
     const 잠 = 확.잠금, 끝 = 확.장.filter(a => 확찍힘(a.k)).length, 전 = 확.장.length, m = 확.장.map(a => 확찍힘(a.k)).find(Boolean);
-    return `<div class="lockb ${잠.열림 ? 'open' : ''}" data-re="lockb">${쇠그림}<div class="lt"><b>${잠.열림 ? (잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(m ? m.n : '')} 확인 완료`) : 잠.표기 ? '확인 전' : 'PSD 잠김'}</b><small>${잠.열림 ? esc(잠.강제 || `전 장 ${전}장 · PSD가 열렸어요`) : `담당자 확인 ${끝} / ${전}장`}</small>${잠.열림 ? '' : `<u><i style="width:${끝 / 전 * 100}%"></i></u>`}</div>`
+    return `<div class="lockb ${잠.열림 && !확.바쁨 ? 'open' : ''}" data-re="lockb">${쇠그림}<div class="lt"><b>${확.바쁨 ? '수정 중 · 받기 잠김' : 잠.열림 ? (잠.강제 ? '관리자 강제 열기' : `담당자 ${esc(m ? m.n : '')} 확인 완료`) : 잠.표기 ? '확인 전' : 'PSD 잠김'}</b><small>${확.바쁨 ? '수정이 끝나면 받을 수 있어요' : 잠.열림 ? esc(잠.강제 || `전 장 ${전}장 · PSD가 열렸어요`) : `담당자 확인 ${끝} / ${전}장`}</small>${잠.열림 ? '' : `<u><i style="width:${끝 / 전 * 100}%"></i></u>`}</div>`
       + `<div class="fs">${확파일()}${who.admin && !잠.열림 ? `<button onclick="확강제()">강제 열기</button>` : ''}</div></div>`;
   }
   function 확파일() {
-    const 잠 = 확.잠금, 칸 = (t, u) => 잠.열림 || 잠.표기 ? `<a href="${esc(u)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
+    const 잠 = 확.잠금, 칸 = (t, u) => !확.바쁨 && (잠.열림 || 잠.표기) ? `<a href="${esc(u)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
     return 칸('PSD 받기', 잠.psd ? `${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view` : 주소(확.폴더)) + 칸('드라이브 폴더', 주소(확.폴더));
   }
   function 확끝칸() {
@@ -1575,7 +1575,7 @@
     if (openRow !== row) return;
     if (r.열림) card(mine.indexOf(j), 'refresh'); else if (확.row === row) 확.잠금 = r;
   }
-  function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); $('err3').textContent = `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
+  function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); if (b) { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); } $('err3').textContent = 확.바쁨 ? '수정 중에는 받을 수 없어요. 끝나면 새 결과를 받아 주세요.' : `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
   function 확강제() {
     const 사유 = (prompt('강제로 여는 사유를 적어 주세요. 기록에 남아요.') || '').trim(), row = 확.row;
     if (!사유) return;
@@ -1720,7 +1720,7 @@
       + `<textarea data-p="${esc(p)}" ${all ? '' : 'oninput="모음()" '}placeholder="${all ? '문구 · 구성 · 정보까지 바꿀 점 — 게시물을 다시 기획해요' : '깨진 제품 이미지 복원해주고, 배경은 유려하게 바꿔줘'}"></textarea>`
       + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '')
       + `<div class="sent">${j.reqs.filter(q => q.part === p || q.part === p2).map(mark).join('')}</div></div>`;
-    const 장 = f => `<a href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank"><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
+    const 장 = f => `<a${j.state === '수정중' ? '' : ` href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank"`}><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
     const 장들 = 짝(j.files), 쌍잡 = 장들.some(x => x.t), 끝 = n => n.replace(/\.(png|jpg)$/, '');
     const 다 = 다시표_(j), 고침중 = f => 다 && (다.전체 || 다.장.includes(parseInt(f.name)));
     const busy = 다 ? (다.전체 ? ' 지금 보이는 장은 지난 결과예요. 끝나면 새 결과로 바뀌어요.' : ' 표시된 장만 새 결과로 바뀌어요.') + ' 수정 요청은 지금 보내도 끝난 뒤 이어서 고쳐요.' : j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
