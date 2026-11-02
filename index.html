@@ -277,7 +277,6 @@
   .dots i, .gauge li::before { animation:숨점 3.36s cubic-bezier(.45,0,.55,1) infinite; } .dots i { color:var(--navy2); } .dots i:nth-child(2) { animation-delay:-1.12s; } .dots i:nth-child(3) { animation-delay:-2.24s; } #dj .dots i { animation:none; }
   .gauge li:nth-child(2)::before { animation-delay:-.84s; } .gauge li:nth-child(3)::before { animation-delay:-1.68s; } .gauge li:nth-child(4)::before { animation-delay:-2.52s; }
   .gauge li.now::before { animation:breathe 3.36s cubic-bezier(.45,0,.55,1) infinite; }
-  .rsl.on .rp { --c:var(--navy2); animation:glow 3.36s cubic-bezier(.45,0,.55,1) infinite; } 
   @keyframes 숨빛 { 0%, 100% { opacity:.14; transform:scale(1); } 50% { opacity:.78; transform:scale(1.02, 1.3); } }
   @keyframes 숨점 { 0%, 100% { box-shadow:0 0 2px 0 color-mix(in srgb, currentColor 30%, transparent); } 50% { box-shadow:0 0 9px 2px color-mix(in srgb, currentColor 75%, transparent); } }
   @media (prefers-reduced-motion:reduce) { *::after, *::before, .dots i, .s7 i.now, .rr.now .track i, .pr button.ask, .rsl.on .rp { animation-play-state:paused !important; } }
@@ -321,65 +320,7 @@
   .add { background:transparent; border:2px dashed var(--line); color:var(--text); margin-top:16px; font-size:15px; padding:14px; }
   .add:hover:not(:disabled) { border-color:var(--navy2); }
   .add:disabled { background:transparent; }
-  
-  
   .rec { margin-top:16px; padding-top:14px; border-top:1.5px solid var(--line); }
-  .rhd { display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--dim); margin-bottom:10px; }
-  .rhd b { color:var(--text); white-space:nowrap; font-variant-numeric:tabular-nums; }
-  .rst { display:flex; flex-wrap:wrap; gap:8px; }
-  .rsl { --k:0; min-width:0; }
-  .rp { position:relative; border-radius:4px; overflow:hidden; background:var(--bar); }
-  .rcov { position:absolute; inset:0; z-index:2; background:var(--navy); opacity:0; transform:scale(.6); transition:transform .2s cubic-bezier(.22,1,.36,1), opacity .16s; }
-  .rsl.on .rcov { opacity:1; transform:none; }
-  .rcap { font-size:11px; color:var(--dim); text-align:center; margin-top:4px; }
-  .rthm { position:absolute; inset:0; background:#3A4152; }
-  .rthm i { position:absolute; left:10%; background:#fff; }
-  .rthm i:first-child { top:60%; right:14%; height:8%; }
-  .rthm i:last-child { top:73%; right:34%; height:6%; }
-  .rst.go .rp .pg > *, .rst.go .rthm { animation:recRise .496s cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 64ms + var(--k) * 72ms + 88ms) both; }
-  .rst.go .rp .pg > .b0, .rst.go .rthm { animation-name:recFade; animation-duration:.24s; animation-timing-function:ease; }
-  .rst.go .rthm i { animation:recGrow .336s cubic-bezier(.22,1,.36,1) calc(var(--i) * 64ms + 216ms) both; transform-origin:left; }
-  @keyframes recFade { from { opacity:0; } }
-  @keyframes recRise { from { opacity:0; translate:0 90px; scale:.92; } }
-  @keyframes recGrow { from { transform:scaleX(0); } }
-  
-  @property --r { syntax:'<length>'; inherits:false; initial-value:0px; }
-  .rst.wave .rcov, #go.wave::before { -webkit-mask-image:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 26px), #000 calc(var(--r) + 26px)); mask-image:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 26px), #000 calc(var(--r) + 26px)); }
-  .rst.wave .rp::after, #go.wave::after { background:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 30px), #AFC2F4 var(--r), transparent calc(var(--r) + 30px)); mix-blend-mode:screen; }
-  .rst.wave .rp::after, #go.wave::before, #go.wave::after { content:""; position:absolute; inset:0; pointer-events:none; }
-  .rst.wave .rp::after { z-index:3; }
-  .rst.wave .rcov, .rst.wave .rp::after, #go.wave::before, #go.wave::after { animation:recWave 1s linear var(--w, 0ms) both; }
-  .rst.wave .rsl { animation:recLift .64s ease-in-out var(--d) both; }
-  #go.wave { position:relative; overflow:hidden; isolation:isolate; } 
-  #go.wave::before { z-index:-2; background:var(--line); } #go.wave::after { z-index:-1; }
-  
-  .rch.wave { position:relative; } .rch.wave .rcc[data-d] { position:relative; }
-  .rch.wave .rcc[data-d], .rwhy.wave { -webkit-mask-image:radial-gradient(circle at var(--ox) var(--oy), #000 calc(var(--r) - 26px), transparent calc(var(--r) + 26px)); mask-image:radial-gradient(circle at var(--ox) var(--oy), #000 calc(var(--r) - 26px), transparent calc(var(--r) + 26px)); }
-  .rwhy.wave { animation:recWave 1s linear both; }
-  .rch.wave .rcc[data-d] { animation:recWave 1s linear both, recLift .64s ease-in-out var(--d) both; }
-  .rch.wave .rcc.on { border-color:var(--line); box-shadow:none; }
-  .rch.wave .rcc[data-d]::after { content:""; position:absolute; inset:-2px; pointer-events:none; mix-blend-mode:screen; background:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 30px), #AFC2F4 var(--r), transparent calc(var(--r) + 30px)); animation:recWave 1s linear both; }
-  @keyframes recWave { to { --r:var(--R); } }
-  @keyframes recLift { 38% { translate:0 -9px; } 72% { translate:0 2px; } }
-  @media (prefers-reduced-motion:reduce) { .rst.wave .rcov, .rst.wave .rp::after, #go.wave::before, #go.wave::after, .rch.wave .rcc[data-d]::after, .rcb { display:none; } .rst.wave .rsl, .rce { animation:none; } .rch.wave .rcc[data-d], .rwhy.wave { -webkit-mask-image:none; mask-image:none; animation:none; } }
-  .rwhy { font-size:12px; color:var(--dim); margin-top:10px; line-height:1.5; }
-  .rwhy:empty { display:none; }
-  .rch { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
-  .rch:empty { display:none; }
-  
-  .rca { grid-column:1/-1; } 
-  .rcc.rce { background:none; border-style:dashed; pointer-events:none; animation:recEmpty 2.4s ease-in-out infinite; }
-  .rce:nth-child(2), .rce:nth-child(4) { animation-delay:-.8s; } .rce:nth-child(3) { animation-delay:-1.6s; }
-  @keyframes recEmpty { 50% { border-color:#44444B; } }
-  .rcb { position:absolute; inset:0; display:grid; grid-template-columns:inherit; grid-auto-rows:1fr; gap:8px; }
-  .rch.up { animation:recUp .36s cubic-bezier(.22,1,.36,1) both; }
-  @keyframes recUp { from { opacity:0; transform:translateY(6px); } }
-  .rcc { background:var(--field); border:2px solid var(--line); border-radius:10px; padding:8px 10px; font-size:12px; font-weight:700; line-height:1.35; cursor:pointer; min-width:0; transition:border-color .4s, box-shadow .4s; }
-  .rcc:hover { border-color:var(--navy2); }
-  .rcc.on { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.3); }
-  .rcc small { display:block; color:var(--dim); font-weight:500; font-size:11px; }
-  @media (max-width:640px) { .rch { grid-template-columns:minmax(0,1fr); } }
-  @media (prefers-reduced-motion:reduce) { .rst.go .rcov { display:none; } .rst *, .rch { animation:none !important; transition:none !important; } }
   #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .096s, transform .096s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
   #zoom.show { opacity:1; transform:none; }
   #zoom .zz { display:flex; gap:6px; padding:6px; } #zoom figure { margin:0; width:min(375px, calc(50vw - 18px)); } #zoom figcaption { font-size:12px; color:var(--dim); text-align:center; padding:0 0 4px; } #zoom figure img { display:block; width:100%; max-height:min(468px, calc(100vh - 60px)); object-fit:contain; }
@@ -398,16 +339,6 @@
   #sh2 .nv { display:flex; gap:6px; margin-top:10px; } #sh2 .nv button { flex:1.4; width:auto; min-width:0; margin:0; padding:14px 6px; font-size:15px; white-space:nowrap; } #sh2 .nv .ghost { flex:1; background:transparent; border:1.5px solid var(--line); color:var(--text); }
   #sh2 .pp { display:grid; grid-template-columns:1fr 1fr; gap:5px; } #sh2 figure { margin:0; min-width:0; } #sh2 figcaption { font-size:12px; color:var(--dim); text-align:center; padding-bottom:3px; } #sh2 img { display:block; width:100%; aspect-ratio:4/5; object-fit:contain; border-radius:7px; background:var(--bar); }
   @media (prefers-reduced-motion:reduce) { html.sh-on, html.sh-up { transition:none; } }
-  .mini { position:relative; overflow:hidden; border-radius:3px; flex:none; background:#fff; }
-  
-  .pg { position:absolute; left:0; top:0; width:1080px; transform-origin:0 0; overflow:hidden; font-family:Pretendard,sans-serif; letter-spacing:0; background:#fff; color:#111; }
-  .pg * { position:absolute; box-sizing:border-box; margin:0; }
-  .pg .f, .pg .f * { position:static; }
-  .pg .bg { left:0; top:0; width:1080px; height:100%; object-fit:cover; }
-  .pg .ph { display:flex; align-items:center; justify-content:center; text-align:center; font:700 44px Pretendard; color:#1E3A8A; background:repeating-linear-gradient(135deg,rgba(30,58,138,.2) 0 8px,rgba(30,58,138,.05) 8px 30px); border:5px dashed rgba(30,58,138,.55); }
-  .pg .ph.full { color:#fff; background:repeating-linear-gradient(135deg,#5B6B86 0 8px,#46546C 8px 30px); border:0; }
-  
-  #form.fast .rec { display:none !important; } 
   
   .cpt { width:100%; border-collapse:collapse; font-size:14px; }
   .cpt th { text-align:left; color:var(--dim); font-weight:700; font-size:12px; padding:0 8px 8px; border-bottom:2px solid var(--line); }
@@ -545,12 +476,6 @@
         <label>추가 요청사항 <small>선택 · 자료 · 참고 게시물을 어떻게 쓸지</small></label>
         <textarea class="cm" rows="3" placeholder="예: 첨부한 제품 사진 위주로 · 참고 게시물처럼 2×2 칸으로 · 가격 비교 중심으로"></textarea>
       </div>
-    </div>
-    <div class="rec" hidden>
-      <div class="rhd"><span class="rt"></span><b class="rl"></b></div>
-      <div class="rst"></div>
-      <p class="rwhy"></p>
-      <div class="rch" onclick="recPick(event)"></div>
     </div>
   </div></template>
   <div id="zoom"></div>
@@ -832,12 +757,6 @@
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').innerHTML = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
     if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 제작 티켓 1장(${c} 하루 ${ch.daily}장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).`;
-    its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; });
-    if (ch && !ch.types && !ch.ld) {
-      ch.ld = 1;
-      google.script.run.withSuccessHandler(t => { ch.types = t; ch.ld = 0; if (chan === c) check(); })
-        .withFailureHandler(() => { ch.ld = 0; check(); }).designs(code, c);
-    }
     check();
   }
   async function 펼침(from, to, T, swap, mid) {
@@ -949,156 +868,6 @@
     if (its().length > 1) { last.scrollIntoView({ behavior: 'smooth', block: 'center' }); last.querySelector('.ln').focus(); }
   }
   function delItem(a) { if (its().length > 1) a.closest('.item').remove(); else reset(); check(); }
-  const types = () => ((who.channels || []).find(x => x.name === chan) || {}).types || { H: 1350, list: [] };
-  const tkey = x => x.key + '|' + x.add;
-  const 틀기억 = new Map();
-  const 안전틀 = s => {
-    if (틀기억.has(s)) return 틀기억.get(s);
-    const d = new DOMParser().parseFromString('<body>' + s, 'text/html');
-    d.body.querySelectorAll('*').forEach(e => {
-      if (!/^(DIV|SPAN|P|B|I|S|U|BR|IMG|STYLE)$/.test(e.tagName)) return e.remove();
-      [...e.attributes].forEach(a => { if (!(a.name === 'style' || a.name === 'class' || a.name === 'src' && e.tagName === 'IMG' && a.value.startsWith('https:'))) e.removeAttribute(a.name); });
-    });
-    틀기억.set(s, d.body.innerHTML);
-    return 틀기억.get(s);
-  };
-  const mini = (x, H, h) => { H = Number(H) || 1350; const w = Math.round(h * 1080 / H); return `<div class="mini" style="width:${w}px;height:${h}px"><div class="pg" style="height:${H}px;transform:scale(${h / H})">${안전틀(String(x.html))}</div></div>`; };
-  const REC_N = 5, recH = () => matchMedia('(max-width:640px)').matches ? 76 : 112, REC_글 = ['게시물 가져오는 중', '유형 파악하는 중', '추천 고르는 중'], 추천기억 = {};
-  let recId = 0;
-  const recW = h => Math.round(h * 1080 / (Number(types().H) || 1350));
-  const rq = (el, c) => el.querySelector(c);
-  const recCap = i => i ? '내지 ' + i : '썸네일';
-  const 빈칩 = '<div class="rcc rce rca">&nbsp;<small>&nbsp;</small></div>' + '<div class="rcc rce">&nbsp;<small>&nbsp;</small></div>'.repeat(3);
-  const recSl = (i, t, cov, on) => `<div class="rsl${on ? ' on' : ''}" style="--i:${i}"><div class="rp" style="width:${recW(recH())}px;height:${recH()}px">${!t ? '' : i ? mini(t, types().H, recH()) : '<div class="rthm"><i></i><i></i></div>'}${cov ? '<div class="rcov"></div>' : ''}</div><div class="rcap">${recCap(i)}</div></div>`;
-  function recK(box) {
-    box.querySelectorAll('.rp .pg').forEach(pg => [...pg.children].filter(c => c.tagName !== 'STYLE').forEach((c, k) => {
-      c.style.setProperty('--k', k);
-      c.classList.toggle('b0', !k);
-    }));
-  }
-  function recOff(el) {
-    if (el.dataset.rk) { delete el.dataset.my; el.dataset.d = ''; }
-    el._rec = null;
-    el.dataset.rk = '';
-    rq(el, '.rec').hidden = true;
-  }
-  function recCheck(el, link) {
-    const same = link && (known[link] || []).find(x => x.channel === chan);
-    if (!link || !types().list.length || same && !/^실패/.test(same.state)) return recOff(el);
-    const key = link + '|' + chan;
-    if (el.dataset.rk === key) return;
-    if (el.dataset.rk) delete el.dataset.my;
-    el.dataset.rk = key;
-    recStart(el, link, key);
-  }
-  function recStart(el, link, key) {
-    const id = ++recId, box = rq(el, '.rst'), need = Number(types().wait) || 17000, t0 = Date.now();
-    el._rec = { id };
-    if (!el.dataset.my) el.dataset.d = '';
-    rq(el, '.rec').hidden = false;
-    rq(el, '.rwhy').textContent = ' ';
-    rq(el, '.rwhy').classList.remove('wave');
-    rq(el, '.rch').className = 'rch';
-    rq(el, '.rch').innerHTML = 빈칩;
-    box.className = 'rst';
-    box.innerHTML = Array.from({ length: REC_N + 1 }, (_, i) => recSl(i, null, true)).join('');
-    const sl = [...box.children];
-    const 틱 = () => {
-      if (!el.isConnected || !el._rec || el._rec.id !== id) return clearInterval(el._rec_t);
-      const e = Date.now() - t0, p = Math.min(.95, e / need);
-      sl.forEach((s, i) => s.classList.toggle('on', p >= (i + 1) / sl.length));
-      rq(el, '.rt').textContent = REC_글[Math.min(2, Math.floor(p * 3))];
-      rq(el, '.rl').textContent = e < need ? '약 ' + Math.ceil((need - e) / 1000) + '초' : '조금 더 걸려요';
-    };
-    clearInterval(el._rec_t);
-    el._rec_t = setInterval(틱, 200);
-    틱();
-    const 끝 = r => {
-      if (!el._rec || el._rec.id !== id) return;
-      clearInterval(el._rec_t);
-      if (r && r.ok) 추천기억[key] = r;
-      rq(el, '.rl').textContent = '';
-      const 남 = sl.filter(s => !s.classList.contains('on'));
-      남.forEach((s, i) => setTimeout(() => s.classList.add('on'), i * 56));
-      setTimeout(() => el._rec && el._rec.id === id && recFin(el, r), 남.length * 56 + 208);
-    };
-    if (추천기억[key]) return 끝(추천기억[key]);
-    setTimeout(() => 끝(null), 90000);
-    google.script.run.withSuccessHandler(끝).withFailureHandler(() => 끝(null)).추천(code, link, chan);
-  }
-  function recFin(el, r) {
-    const { list } = types(), f = r && r.ok && (r.forms || []).map(x => list.find(y => tkey(y) === x.key + '|' + (x.add || ''))).filter(Boolean);
-    if (!f || !f.length) {
-      el._rec = null;
-      rq(el, '.rec').hidden = false;
-      rq(el, '.rst').className = 'rst';
-      rq(el, '.rst').innerHTML = '';
-      rq(el, '.rwhy').textContent = '';
-      rq(el, '.rch').innerHTML = '';
-      rq(el, '.rt').textContent = '추천을 못 불러왔어요 · AI가 골라서 만들어요';
-      rq(el, '.rl').textContent = '';
-      check();
-      return;
-    }
-    el._rec = { forms: f, pages: Number(r.pages) || REC_N };
-    if (!el.dataset.my) el.dataset.d = '';
-    rq(el, '.rwhy').textContent = r.why || '';
-    recDraw(el);
-    check();
-  }
-  function recWave(el) {
-    const s = el._rec, box = rq(el, '.rst'), ch = rq(el, '.rch'), why = rq(el, '.rwhy'), go = $('go'), T = 1000, 첫 = box.querySelector('.rp').getBoundingClientRect();
-    const ox = 첫.left + 첫.width / 2, oy = 첫.top + 첫.height / 2, g = go.getBoundingClientRect(), R = Math.hypot(Math.max(ox - g.left, g.right - ox), g.bottom - oy) + 40;
-    const 자리 = (e, r) => { e.style.setProperty('--ox', ox - r.left + 'px'); e.style.setProperty('--oy', oy - r.top + 'px'); e.style.setProperty('--R', R + 'px'); };
-    [...[...box.children].map(c => [c, c.querySelector('.rp')]), ...[...ch.querySelectorAll('[data-d]'), why].map(c => [c, c])].forEach(([c, 잴것]) => {
-      const r = 잴것.getBoundingClientRect();
-      자리(c, r);
-      c.style.setProperty('--d', Math.round(Math.hypot(r.left + r.width / 2 - ox, r.top + r.height / 2 - oy) / R * T) + 'ms');
-    });
-    s.물 = 1;
-    [box, ch, why].forEach(e => e.classList.add('wave'));
-    const 닿음 = Math.max(0, Math.hypot(Math.max(g.left - ox, 0), g.top - oy) / R * T);
-    setTimeout(() => {
-      if (el._rec !== s) return;
-      s.물 = 0;
-      check();
-      if (go.disabled) return;
-      자리(go, g);
-      go.style.setProperty('--w', -닿음 + 'ms');
-      go.classList.add('wave');
-      setTimeout(() => go.classList.remove('wave'), T - 닿음 + 50);
-    }, 닿음);
-    setTimeout(() => {
-      if (el._rec !== s || !box.classList.contains('wave')) return;
-      [box, ch, why].forEach(e => e.classList.remove('wave'));
-      el.querySelectorAll('.rcov, .rcb').forEach(c => c.remove());
-      box.querySelectorAll('.rsl').forEach(c => c.classList.remove('on'));
-    }, T + 680);
-  }
-  function recDraw(el, sw) {
-    const s = el._rec;
-    if (!s || !s.forms) return;
-    const box = rq(el, '.rst'), ch = rq(el, '.rch'), d = el.dataset.d || '', t = types().list.find(x => tkey(x) === d);
-    rq(el, '.rt').textContent = t ? `이렇게 만들어요 · 썸네일 + 내지 ${s.pages}장 (예상)` : `AI가 골라서 만들어요 · 썸네일 + 내지 ${s.pages}장 (예상)`;
-    rq(el, '.rl').textContent = '완료';
-    box.className = 'rst';
-    box.innerHTML = Array.from({ length: s.pages + 1 }, (_, i) => recSl(i, t, !sw, !sw)).join('');
-    recK(box);
-    void box.offsetWidth;
-    if (sw && t) box.classList.add('go');
-    rq(el, '.rwhy').classList.remove('wave');
-    ch.className = 'rch';
-    ch.innerHTML = (!sw ? `<div class="rcb">${빈칩}</div>` : '') + `<div class="rcc rca${t ? '' : ' on'}" data-d="">자동<small>AI가 고르기 · 기본</small></div>` + s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('');
-    if (!sw) recWave(el);
-  }
-  function recPick(e) {
-    const c = e.target.closest('.rcc[data-d]');
-    if (!c) return;
-    const el = c.closest('.item');
-    el.dataset.d = c.dataset.d;
-    el.dataset.my = 1;
-    recDraw(el, true);
-  }
   const 큰그림칸 = t => t && t.closest('[data-z]');
   function 크게(e) {
     if (e.type === 'click' && (e.pointerType === 'touch' || !matchMedia('(hover:hover)').matches) && 큰그림칸(e.target)) return 시트열기(큰그림칸(e.target).dataset.k);
@@ -1175,12 +944,11 @@
       const rb = val(el, '.rf').split('\n').map(l => l.trim()).filter(Boolean).filter(l => !refLine(l)).length, rh = el.querySelector('.rfh');
       rh.textContent = rb ? `링크가 아닌 줄 ${rb}개` : ''; rh.className = 'hint rfh' + (rb ? ' bad' : '');
       if (!link || msg || rb) bad++;
-      if (날 !== 'fast') recCheck(el, link && !msg ? link : '');
     });
-    const n = its().length, over = n > left, 분석중 = 날 !== 'fast' && (its().some(el => el._rec && (!el._rec.forms || el._rec.물)) || !bad && ch && ch.ld);
+    const n = its().length, over = n > left;
     if (!$('go').dataset.sending) {
-      $('go').disabled = !ch || ch.demo || bad > 0 || over || !!분석중;
-      $('go').textContent = 분석중 ? '레이아웃 분석 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      $('go').disabled = !ch || ch.demo || bad > 0 || over;
+      $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
     }
     $('add').disabled = !ch || n >= left;
     $('add').textContent = ch && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
@@ -1199,7 +967,7 @@
     $('go').disabled = true; $('go').dataset.sending = 1;
     let items;
     try {
-      items = await Promise.all(its().map(async el => ({ link: norm(val(el, '.ln')), refs: val(el, '.rf'), comment: val(el, '.cm'), design: el.dataset.d || '', files: await Promise.all([...el.querySelector('.fl').files].map(read)) })));
+      items = await Promise.all(its().map(async el => ({ link: norm(val(el, '.ln')), refs: val(el, '.rf'), comment: val(el, '.cm'), files: await Promise.all([...el.querySelector('.fl').files].map(read)) })));
     } catch (e) {
       delete $('go').dataset.sending; $('err2').textContent = '참고 자료 파일을 못 읽었어요.'; check();
       return;
