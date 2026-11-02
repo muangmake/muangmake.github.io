@@ -588,6 +588,7 @@
     const pw = $('pw').value;
     if (!auto && !name) { $('err1').textContent = '이름을 넣어 주세요.'; return; }
     if (!auto && !pw) { $('err1').textContent = '비밀번호를 넣어 주세요.'; return; }
+    if (!auto && name === '시험' && pw === '시험') return 시험계정_();
     const w = auto && 화면기억_();
     if (w) {
       들어감_(saved(), w);
@@ -595,6 +596,17 @@
     }
     call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value], $('in'), 'err1', r => r.otp ? 코드칸() : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
     로그인중_(auto ? '이전 계정으로 로그인 중' : '로그인 중');
+  }
+  function 시험계정_() {
+    const 빈값 = { jobs: [], dups: [], logout: null };
+    const 부름 = (ok, no) => new Proxy({}, { get: (_, fn) =>
+      fn === 'withSuccessHandler' ? f => 부름(f, no) : fn === 'withFailureHandler' ? f => 부름(ok, f) : () => setTimeout(() =>
+        fn in 빈값 ? ok && ok(빈값[fn]) : no && no(new Error('시험 계정이라 작동하지 않아요.')))
+    });
+    window.google = { script: { run: 부름(), history: google.script.history } };
+    const 장 = c => 로고[c].t ? 6 : 3;
+    들어감_('시험', { name: '시험 계정', channels: Object.keys(로고).map(c => ({ name: c, coupon: 장(c), tomorrow: 장(c), daily: 장(c), fast: c === '주파인더' ? 2 : 0, fastDaily: c === '주파인더' ? 2 : 0, folder: '' })) });
+    store('');
   }
   function pwMode(on, msg) {
     $('pwbox').hidden = !on; $('err1').textContent = '';
@@ -683,6 +695,7 @@
   function saved() { try { return sessionStorage.getItem('pp_t') || localStorage.getItem('pp_t') || ''; } catch (e) { return ''; } }
   async function logout() {
     if (!code || document.body.dataset.out) return;
+    if (code === '시험') return location.reload();
     const t = code;
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
