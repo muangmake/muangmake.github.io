@@ -492,13 +492,13 @@
       <a id="t-ref" hidden onclick="view('ref')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></i><div><b>레퍼런스</b><span>찾기 · 골라 제작 · 채널 분석</span></div></a>
       <a id="t-list" onclick="view('list')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="M20 15l-5-5L5 20"/></svg></i><div><b>제작 현황<em id="busyN" hidden></em></b><span>결과 보기 · 수정 요청</span></div></a>
       <a id="t-cost" hidden onclick="view('cost')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M12 20V4M19 20v-7"/></svg></i><div><b>제작 예산</b><span>건별 비용 · 내역</span></div></a>
-      <a id="t-cp" hidden onclick="view('coup')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/></svg></i><div><b>계정 · 쿠폰</b><span>담당자 · 채널 · 쿠폰</span></div></a>
+      <a id="t-cp" hidden onclick="view('coup')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/></svg></i><div><b>계정 · 티켓</b><span>담당자 · 채널 · 제작 티켓</span></div></a>
     </div>
   </div>
   <div class="body" id="form">
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 새 제작</div>
     <h1>레퍼런스 넣기</h1><span class="cur"></span>
-    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(매일 오후 4시에 다시 채워져요).</span></p>
+    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 제작 티켓 1장(오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).</span></p>
     <div id="chpick" hidden><label>만들 채널</label><div class="chips" id="chs"></div></div>
     <div><label>올릴 날</label><div class="chips" id="days"></div></div>
     <div id="items"></div>
@@ -597,15 +597,15 @@
     <p class="err" id="err7"></p>
   </div>
   <div class="body" id="coup" hidden>
-    <div class="path">POWERPAGE.zip › 전체 › 계정 · 쿠폰 관리</div>
-    <h1>계정 · 쿠폰 관리</h1><span class="cur"></span>
+    <div class="path">POWERPAGE.zip › 전체 › 계정 · 티켓 관리</div>
+    <h1>계정 · 티켓 관리</h1><span class="cur"></span>
     <p class="sub"><b>담당자 · 채널 더하기</b> — 있는 사람이면 그 비밀번호 그대로 채널만 늘어요. 새 사람은 아래 표 '비밀번호' 칸에 뜨는 임시 비밀번호를 알려 주면 그걸로 들어와 새로 정해요. 아직 만들지 않는 채널은 '준비 중'으로 들어가요.</p>
     <div class="cpbar"><input id="an" placeholder="이름" style="width:110px"><input id="ac" list="acl" placeholder="채널" style="width:120px"><datalist id="acl"></datalist><input id="ae" type="email" placeholder="이메일(선택 · 폴더 공유)" style="width:190px"><button onclick="acAdd(this)">＋ 더하기</button></div>
     <div class="cpbar"><button class="ghost" onclick="이단계켜끄기(this)">관리자 2단계 로그인</button><button class="ghost" onclick="전체끊기(this)">모든 기기 로그아웃</button><span class="note" style="margin:0">계정이 샌 것 같을 때 — 자세한 기록은 시트 보안기록 탭</span></div>
-    <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 올리는 날마다 주는 장 수예요 — 오늘 올릴 건 · 내일 올릴 건 통이 따로고, 그날이 지나면 남은 장은 사라져요. 여기서 바꾸는 남은 쿠폰은 오늘 통이에요(오늘 자정까지). 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
+    <p class="sub">담당자 × 채널마다 남은 제작 티켓을 바로 더하고 빼요. <b>하루 제공</b>은 올리는 날마다 주는 장 수예요 — 오늘 제작 티켓(오늘 00:00 ~ 23:59) · 내일 제작 티켓이 따로고, 00:00 이 되면 내일 제작 티켓이 그대로 오늘 제작 티켓이 돼요(남은 오늘 제작 티켓은 사라짐). 여기서 바꾸는 건 오늘 제작 티켓이에요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
-    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰(오늘)</th><th class="dl">하루 제공</th><th></th><th>업로드</th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
+    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>오늘 제작 티켓</th><th class="dl">하루 제공</th><th></th><th>업로드</th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
     <p class="err" id="err4"></p>
   </div>
 </div>
@@ -697,7 +697,7 @@
     $('drive').hidden = true;
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
     $('lf').hidden = !r.admin;
-    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장 · 오늘 올릴 건과 내일 올릴 건 티켓이 따로예요(그날이 지나면 남은 티켓은 사라져요).';
+    $('tkn').textContent = r.admin ? '관리자는 제작 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 제작 티켓 1장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요.';
     if (r.admin) 거르기칸_(r);
     $('chpick').hidden = !(r.channels.length > 1);
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
@@ -816,7 +816,7 @@
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : c);
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').textContent = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
-    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 올리는 날마다 ${ch.daily}장 · 내일 올릴 건은 오늘 미리 넣어요 · 그날이 지나면 남은 티켓은 사라져요).`;
+    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 제작 티켓 1장(${c} 하루 ${ch.daily}장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).`;
     its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; drawD(el); });
     템플릿타자_();
     if (ch && !ch.types && !ch.ld) {
@@ -1227,8 +1227,8 @@
       $('go').textContent = 분석중 ? '레이아웃 분석 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
     }
     $('add').disabled = !ch || n >= left;
-    $('add').textContent = ch && n >= left ? `티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
-    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `티켓 ${n}장 씀 · ${날 === 'tomorrow' ? '내일' : '오늘'} 올릴 ${chan} 티켓 ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
+    $('add').textContent = ch && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
+    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 제작 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `제작 티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `제작 티켓 ${n}장 씀 · ${날 === 'tomorrow' ? '내일' : '오늘'} 제작 티켓(${chan}) ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
     $('left').style.color = over ? '#FF8A8A' : '';
   }
   const read = f => new Promise((ok, no) => {
@@ -1281,7 +1281,7 @@
   const tkCh = ch => who.admin ? '무제한' : `오늘 ${ch.coupon} · 내일 ${ch.tomorrow ?? ch.daily}`;
   function drawDays() {
     const ch = (who.channels || []).find(x => x.name === chan);
-    $('days').innerHTML = [['today', '오늘 올릴 건', ch && ch.coupon], ['tomorrow', '내일 올릴 건', ch && (ch.tomorrow ?? ch.daily)]]
+    $('days').innerHTML = [['today', '오늘 제작 티켓', ch && ch.coupon], ['tomorrow', '내일 제작 티켓', ch && (ch.tomorrow ?? ch.daily)]]
       .map(([k, l, n]) => `<span class="chip${k === 날 ? ' accent' : ''}" onclick="pickDay('${k}')">${l}${ch ? `<small>${who.admin ? '무제한' : esc(n) + '장'}</small>` : ''}</span>`).join('');
   }
   function pickDay(d) { 날 = d; drawDays(); check(); }
@@ -1305,7 +1305,7 @@
   }
   let cur = '', listY = 0;
   const home = () => who.admin ? 'list' : 'form';
-  const 제목 = { form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 쿠폰 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
+  const 제목 = { form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
   const 부모 = { done: 'form', detail: 'list', acc: 'ref' };
   function view(v, st) {
     if (v === cur && v !== 'detail') return scrollTo({ top: 0, behavior: 'smooth' });
@@ -2166,10 +2166,10 @@
     google.script.run.withSuccessHandler(cpDraw).withFailureHandler(e => $('err4').textContent = e.message.replace(/^Error:\s*/, '')).coupons(code);
   }
   function cpOp(el, row, op, n) { call('coupon', [code, row, op, n], el, 'err4', cpDraw); }
-  function cpAll(b) { if (confirm('모든 담당자 쿠폰을 하루 제공 장 수로 되돌릴까요?')) call('coupon', [code, 0, 'resetAll', 0], b, 'err4', cpDraw); }
+  function cpAll(b) { if (confirm('모든 담당자 오늘 제작 티켓을 하루 제공 장 수로 되돌릴까요?')) call('coupon', [code, 0, 'resetAll', 0], b, 'err4', cpDraw); }
   function cpEvery(b, sign) {
     const n = sign * (Number($('cpn').value) || 0);
-    if (n && confirm(`모든 담당자 쿠폰을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
+    if (n && confirm(`모든 담당자 오늘 제작 티켓을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
   }
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
   ['mouseover', 'mouseout', 'click'].forEach(t => $('detail').addEventListener(t, 크게));
