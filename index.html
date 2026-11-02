@@ -386,6 +386,7 @@
   .pg .ph { display:flex; align-items:center; justify-content:center; text-align:center; font:700 44px Pretendard; color:#1E3A8A; background:repeating-linear-gradient(135deg,rgba(30,58,138,.2) 0 8px,rgba(30,58,138,.05) 8px 30px); border:5px dashed rgba(30,58,138,.55); }
   .pg .ph.full { color:#fff; background:repeating-linear-gradient(135deg,#5B6B86 0 8px,#46546C 8px 30px); border:0; }
   
+  #form.fast .rec, #form.fast .allt, #form.fast .dz { display:none !important; } 
   
   .cpt { width:100%; border-collapse:collapse; font-size:14px; }
   .cpt th { text-align:left; color:var(--dim); font-weight:700; font-size:12px; padding:0 8px 8px; border-bottom:2px solid var(--line); }
@@ -1204,8 +1205,9 @@
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
   function check() {
-    const ch = (who.channels || []).find(x => x.name === chan), left = !ch ? 0 : 날 === 'tomorrow' ? ch.tomorrow ?? ch.daily : ch.coupon, seen = {};
+    const ch = (who.channels || []).find(x => x.name === chan), left = !ch ? 0 : 날 === 'fast' ? ch.fast || 0 : 날 === 'tomorrow' ? ch.tomorrow ?? ch.daily : ch.coupon, seen = {};
     drawDays();
+    $('form').classList.toggle('fast', 날 === 'fast');
     let bad = 0;
     its().forEach((el, i) => {
       el.querySelector('.ihead b').textContent = '제작 건 ' + (i + 1);
@@ -1219,16 +1221,16 @@
       const rb = val(el, '.rf').split('\n').map(l => l.trim()).filter(Boolean).filter(l => !refLine(l)).length, rh = el.querySelector('.rfh');
       rh.textContent = rb ? `링크가 아닌 줄 ${rb}개` : ''; rh.className = 'hint rfh' + (rb ? ' bad' : '');
       if (!link || msg || rb) bad++;
-      recCheck(el, link && !msg ? link : '');
+      if (날 !== 'fast') recCheck(el, link && !msg ? link : '');
     });
-    const n = its().length, over = n > left, 분석중 = its().some(el => el._rec && (!el._rec.forms || el._rec.물)) || !bad && ch && ch.ld;
+    const n = its().length, over = n > left, 분석중 = 날 !== 'fast' && (its().some(el => el._rec && (!el._rec.forms || el._rec.물)) || !bad && ch && ch.ld);
     if (!$('go').dataset.sending) {
       $('go').disabled = !ch || ch.demo || bad > 0 || over || !!분석중;
       $('go').textContent = 분석중 ? '레이아웃 분석 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
     }
     $('add').disabled = !ch || n >= left;
     $('add').textContent = ch && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
-    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 제작 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `제작 티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `제작 티켓 ${n}장 씀 · ${날 === 'tomorrow' ? '내일' : '오늘'} 제작 티켓(${chan}) ${left}장 남음 · 완성 파일은 내 드라이브 폴더에 올라가요`);
+    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 제작 티켓 안 씀 · 완성 파일은 ${chan} 담당자 폴더에 올라가요` : (over ? `제작 티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `${날 === 'fast' ? '빠른 제작 티켓' : '제작 티켓'} ${n}장 씀 · ${날 === 'fast' ? '빠른 제작' : 날 === 'tomorrow' ? '내일 제작' : '오늘 제작'} 티켓(${chan}) ${left}장 남음${날 === 'fast' ? ' · 소식 한 장 + 캡션으로 다른 건보다 먼저 만들어요' : ''} · 완성 파일은 내 드라이브 폴더에 올라가요`);
     $('left').style.color = over ? '#FF8A8A' : '';
   }
   const read = f => new Promise((ok, no) => {
@@ -1250,10 +1252,10 @@
     }
     call('make', [code, items, chan, 날], $('go'), 'err2', r => {
       const ch = who.channels.find(x => x.name === chan);
-      Object.assign(ch, { coupon: r.coupon, tomorrow: r.tomorrow });
+      Object.assign(ch, { coupon: r.coupon, tomorrow: r.tomorrow, fast: r.fast });
       $('cp').textContent = tkCh(ch);
       load(true);
-      $('job').textContent = [chan, 날 === 'tomorrow' ? '내일 올릴 건' : '', r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
+      $('job').textContent = [chan, 날 === 'tomorrow' ? '내일 올릴 건' : 날 === 'fast' ? '⚡ 빠른 제작' : '', r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
       reset();
       view('done');
     });
@@ -1278,10 +1280,11 @@
   const 주소 = u => String(u).startsWith('https:') ? u : '#';
   const esc = s => String(s).replace(/[&<>"']/g, c => '&#' + c.charCodeAt(0) + ';');
   const tk = c => who.admin ? '무제한' : c;
-  const tkCh = ch => who.admin ? '무제한' : `오늘 ${ch.coupon} · 내일 ${ch.tomorrow ?? ch.daily}`;
+  const tkCh = ch => who.admin ? '무제한' : `오늘 ${ch.coupon} · 내일 ${ch.tomorrow ?? ch.daily}` + (ch.fastDaily ? ` · ⚡ ${ch.fast ?? ch.fastDaily}` : '');
   function drawDays() {
     const ch = (who.channels || []).find(x => x.name === chan);
-    $('days').innerHTML = [['today', '오늘 제작 티켓', ch && ch.coupon], ['tomorrow', '내일 제작 티켓', ch && (ch.tomorrow ?? ch.daily)]]
+    if (날 === 'fast' && !(ch && ch.fastDaily)) 날 = 'today';
+    $('days').innerHTML = [['today', '오늘 제작 티켓', ch && ch.coupon], ['tomorrow', '내일 제작 티켓', ch && (ch.tomorrow ?? ch.daily)]].concat(ch && ch.fastDaily ? [['fast', '⚡ 빠른 제작', ch.fast ?? ch.fastDaily]] : [])
       .map(([k, l, n]) => `<span class="chip${k === 날 ? ' accent' : ''}" onclick="pickDay('${k}')">${l}${ch ? `<small>${who.admin ? '무제한' : esc(n) + '장'}</small>` : ''}</span>`).join('');
   }
   function pickDay(d) { 날 = d; drawDays(); check(); }
