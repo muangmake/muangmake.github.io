@@ -307,7 +307,7 @@
   @media (prefers-reduced-motion:reduce) { .rst.go .rcov { display:none; } .rst *, .rch { animation:none !important; transition:none !important; } }
   #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .096s, transform .096s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
   #zoom.show { opacity:1; transform:none; }
-  #zoom .zz { display:flex; gap:6px; padding:6px; } #zoom figure { margin:0; width:min(250px, calc(50vw - 18px)); } #zoom figcaption { font-size:12px; color:var(--dim); text-align:center; padding:0 0 4px; } #zoom figure img { display:block; width:100%; max-height:min(312px, calc(100vh - 60px)); object-fit:contain; }
+  #zoom .zz { display:flex; gap:6px; padding:6px; } #zoom figure { margin:0; width:min(375px, calc(50vw - 18px)); } #zoom figcaption { font-size:12px; color:var(--dim); text-align:center; padding:0 0 4px; } #zoom figure img { display:block; width:100%; max-height:min(468px, calc(100vh - 60px)); object-fit:contain; }
   #zoom .stage { padding:12px; display:grid; place-items:center; }
   #zoom p { padding:10px 14px; font-size:13px; color:var(--dim); background:var(--field); }
   #zoom p b { color:var(--text); }
@@ -1381,7 +1381,7 @@
     return `<div class="pl"><span class="hd">이름</span><span class="hd">가격 · 정보</span>${a.템.map(i => `<span class="${i.이름말 ? 'w' : ''}">${확입력(i, '이름', 'in')}</span><span class="${i.값말 ? 'w' : ''}">${확입력(i, '정보', 'in')}</span>${i.이름말 || i.값말 || i.사진말 ? `<em>${esc([i.이름말, i.값말, i.사진말].filter(Boolean).join(' · '))}</em>` : ''}`).join('')}</div>`;
   }
   const 확추가 = k => { const 보임 = 확손댐(k) || 확.상.열림[k]; return `<button class="ad" onclick="확열기(${k})" data-re="adb" ${보임 ? 'hidden' : ''}>＋ 수정 사항 적기</button><label class="fd" data-re="add" ${보임 ? '' : 'hidden'}><span>추가 수정 사항</span><textarea data-add="${k}" rows="2" placeholder="예: 깨진 제품 이미지 복원, 배경 밝게">${esc(확.상.추가[k] || '')}</textarea></label>`; };
-  const 확버튼 = k => { const p = 확판(k); return `<div data-re="vb">` + (p === 'draft' ? `<button class="vb hot" onclick="확담기(${k})">수정하기</button>` : p === 'fix' ? '<button class="vb fix" disabled>✓ 수정 담김</button>' : `<button class="vb ${p}" onclick="확체크(${k})">${p === 'ok' ? '✓ 확인' : '맞아요'}</button>`) + '</div>'; };
+  const 확버튼 = k => { const p = 확판(k); return `<div data-re="vb">` + (p === 'draft' ? `<button class="vb hot" onclick="확담기(${k})">수정하기</button>` : p === 'fix' ? '<button class="vb fix" disabled>✓ 수정 담김</button>' : `<button class="vb ${p}" onclick="확체크(${k})">${p === 'ok' ? '✓ 확인' : '내지 및 디자인 확인'}</button>`) + '</div>'; };
   const 확필름 = () => `<div class="film" data-re="film">${확.장.map(a => { const p = 확판(a.k); return `<button class="${a.k === 확.고름 ? 'on' : ''} ${a.볼 && !확됨(a.k) ? 'w' : ''}" onclick="대조골라(${확.row},${+a.k})">${확.판그림(a.k)}${p ? `<i class="mk ${p}">${{ ok: '✓', fix: '✎', draft: '•' }[p]}</i>` : ''}<small>${a.k === 1 ? '표지' : `${a.r0 ? +a.r0 : '-'} → ${+a.번째}`}</small></button>`; }).join('')}</div>`;
   function 확상자() {
     const k = 확.고름, c = 확합(), 요청 = 확.요청(k);
@@ -1461,7 +1461,7 @@
     const 파일 = {}; 짝(j.files).forEach(({ f }) => 파일[parseInt(f.name)] = f.id);
     const 상 = 확상태(j.row); 확그림맞춤(상, 파일);
     const 새글 = 템.filter(i => i.이름체크 === '없음').length * 2 > 템.length;
-    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length), 고름 = 대조고름.get(j.row) || (볼.find(i => !상.판[i.쪽] && !상.담[i.쪽]) || 볼[0] || {}).쪽 || (d.쪽[0] || { k: 1 }).k;
+    const 짝있 = 템.filter(i => i.r), 볼 = 템.filter(i => 체크글(i, 새글).length), 고름 = 대조고름.get(j.row) || 1;
     const 쪽들 = [{ k: 1, n: '썸네일', r: [[1, 0]] }].concat(d.쪽), 쓴 = new Set(쪽들.flatMap(p => p.r.map(x => x[0])));
     const 안쓴 = Object.keys(d.참조).map(Number).sort((a, b) => a - b).filter(r => !쓴.has(r));
     const 주소 = id => id ? img(id) : '', 그림 = id => id ? `<img src="${img(id)}" alt="" loading="lazy">` : '<i class="cr"></i>';
