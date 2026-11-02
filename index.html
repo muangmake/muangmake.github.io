@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+<meta name="referrer" content="same-origin">
 <style id="틀막이">html { display:none; }</style>
 <title>파워페이지 제작기</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" integrity="sha384-ei/b2Mz3F5J8nqTvpKS89CkzDCuD7Cc+/F+OsaPUKItzHgLNKnGq3rjtYq/B7RnO" crossorigin="anonymous">
@@ -453,7 +454,7 @@
   <span class="chips" id="me" hidden>
     <span class="chip" id="ch" onclick="logout()" title="로그아웃"></span>
     <span class="chip accent" id="cpc">🎟 <span id="cp"></span></span>
-    <a class="chip" id="drive" href="#" target="_blank">드라이브 ↗</a>
+    <a class="chip" id="drive" href="#" target="_blank" rel="noopener">드라이브 ↗</a>
   </span>
 </div>
 
@@ -679,7 +680,7 @@
     $('code').value = $('pw').value = $('otp').value = '';
     $('otp').hidden = true;
     if (r.device) 기기(r.device);
-    store(code); 화면기억_(r);
+    store(code, r.admin); 화면기억_(r);
     채움_(r);
     warp();
     google.script.history.replace({ v: home() });
@@ -728,7 +729,7 @@
     let k = 0;
     const id = setInterval(() => b.classList.contains('busy') ? b.dataset.dots = '.'.repeat(++k % 4) : clearInterval(id), 400);
   }
-  function store(t) { try { localStorage.removeItem('pp_name'); t ? localStorage.setItem('pp_t', t) : ['pp_t', 'pp_w', 'pp_j', 'pp_확'].forEach(k => localStorage.removeItem(k)); } catch (e) {} }
+  function store(t, admin) { try { localStorage.removeItem('pp_name'); if (t) { (admin ? sessionStorage : localStorage).setItem('pp_t', t); (admin ? localStorage : sessionStorage).removeItem('pp_t'); } else { sessionStorage.removeItem('pp_t'); ['pp_t', 'pp_w', 'pp_j', 'pp_확'].forEach(k => localStorage.removeItem(k)); } } catch (e) {} }
   function 화면기억_(r) {
     try {
       if (r) return localStorage.setItem('pp_w', JSON.stringify(Object.assign({}, r, { name: '', token: '', device: '' })));
@@ -736,7 +737,7 @@
       return w && w.channels ? w : null;
     } catch (e) { return null; }
   }
-  function saved() { try { return localStorage.getItem('pp_t') || ''; } catch (e) { return ''; } }
+  function saved() { try { return sessionStorage.getItem('pp_t') || localStorage.getItem('pp_t') || ''; } catch (e) { return ''; } }
   async function logout() {
     if (!code || document.body.dataset.out) return;
     const t = code;
@@ -1537,7 +1538,7 @@
       + `<div class="fs">${확파일()}${who.admin && !잠.열림 ? `<button onclick="확강제()">강제 열기</button>` : ''}</div></div>`;
   }
   function 확파일() {
-    const 잠 = 확.잠금, 칸 = (t, u) => !확.바쁨 && (잠.열림 || 잠.표기) ? `<a href="${esc(u)}" target="_blank">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
+    const 잠 = 확.잠금, 칸 = (t, u) => !확.바쁨 && (잠.열림 || 잠.표기) ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
     return 칸('PSD 받기', 잠.psd ? `${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view` : 주소(확.폴더)) + 칸('드라이브 폴더', 주소(확.폴더));
   }
   function 확끝칸() {
@@ -1736,7 +1737,7 @@
       + `<textarea data-p="${esc(p)}" ${all ? '' : 'oninput="모음()" '}placeholder="${all ? '문구 · 구성 · 정보까지 바꿀 점 — 게시물을 다시 기획해요' : '깨진 제품 이미지 복원해주고, 배경은 유려하게 바꿔줘'}"></textarea>`
       + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '')
       + `<div class="sent">${j.reqs.filter(q => q.part === p || q.part === p2).map(mark).join('')}</div></div>`;
-    const 장 = f => `<a${j.state === '수정중' ? '' : ` href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank"`}><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
+    const 장 = f => `<a${j.state === '수정중' ? '' : ` href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank" rel="noopener"`}><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
     const 장들 = 짝(j.files), 쌍잡 = 장들.some(x => x.t), 끝 = n => n.replace(/\.(png|jpg)$/, '');
     const 다 = 다시표_(j), 고침중 = f => 다 && (다.전체 || 다.장.includes(parseInt(f.name)));
     const busy = 다 ? (다.전체 ? ' 지금 보이는 장은 지난 결과예요. 끝나면 새 결과로 바뀌어요.' : ' 표시된 장만 새 결과로 바뀌어요.') + ' 수정 요청은 지금 보내도 끝난 뒤 이어서 고쳐요.' : j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
@@ -1745,7 +1746,7 @@
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작${j.post ? ` · ${esc(j.post)} 게시` : ''}</p>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(j.channel)}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
-      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
+      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
       + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
@@ -1913,7 +1914,7 @@
     $('rcards').innerHTML = !l.length ? '<p class="note">후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.</p>' : l.map(j => {
       const i = refs.indexOf(j), on = j.link in sel;
       return `<div class="card${on ? ' on' : ''}"><div class="cv" onclick="refPick(${i})">${j.img ? `<img src="${esc(j.img)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.remove()">` : '미리보기 없음'}<span class="ck">${on ? '✓' : ''}</span>${j.kind ? `<span class="kd">${esc(j.kind)}</span>` : ''}</div>
-        <div class="in"><b><a href="${esc(j.link)}" target="_blank">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
+        <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
         ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${j.state ? `<div class="rs">${esc(j.state)}</div>` : ''}
         <select required onchange="refCh(${i}, this.value)"><option value="">채널 고르기</option>${chs.map(c => `<option${c === ch(j) ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></div></div>`;
     }).join('');
@@ -2079,7 +2080,7 @@
       <p style="margin-top:10px"><b>마지막 스캔</b> ${esc(a.scan || '–')} ${esc(a.result)} · <b>좋아요 중앙</b> ${a.likes ? 원_(a.likes) : '–'} · <b>고른 것</b> ${a.채택}/${a.수집}
         · <b>완료</b> ${a.완료} · <b>실패</b> ${a.실패} · <b>평균 비용</b> ${평균} · <b>평가</b> ${a.평가n ? (a.평가 / a.평가n).toFixed(1) + ` (${a.평가n}건)` : '–'}</p>
       <p><b>제작 유형</b> ${칩_(a.유형)}</p><p><b>꼴</b> ${칩_(a.꼴)}</p><p><b>우리 채널</b> ${칩_(a.채널)}</p>
-      ${a.posts.length ? `<table class="pl">${a.posts.map(x => `<tr><td><a href="${esc(x.link)}" target="_blank">${esc(x.title || '게시물')}</a></td><td>${esc(x.ch)}</td>
+      ${a.posts.length ? `<table class="pl">${a.posts.map(x => `<tr><td><a href="${esc(주소(x.link))}" target="_blank" rel="noopener">${esc(x.title || '게시물')}</a></td><td>${esc(x.ch)}</td>
         <td style="color:var(--dim)">${esc(x.type)}${x.꼴 ? ' · ' + esc(x.꼴) + (x.by === 'AI' ? '(AI)' : '') : ''}</td><td>${x.won ? 원_(x.won) + '원' : ''}</td>
         <td style="color:var(${x.st === '완료' ? '--ok' : x.st === '실패' ? '--bad' : '--run'})">${x.st}</td></tr>`).join('')}</table>` : '<p>이 계정으로 만든 게시물이 아직 없어요.</p>'}
     </td></tr>`;
