@@ -283,14 +283,25 @@
   .rthm i { position:absolute; left:10%; background:#fff; }
   .rthm i:first-child { top:60%; right:14%; height:8%; }
   .rthm i:last-child { top:73%; right:34%; height:6%; }
-  .rst.go .rcov { animation:recOut .272s ease calc(var(--i) * 64ms) both; }
   .rst.go .rp .pg > *, .rst.go .rthm { animation:recRise .496s cubic-bezier(.34,1.56,.64,1) calc(var(--i) * 64ms + var(--k) * 72ms + 88ms) both; }
   .rst.go .rp .pg > .b0, .rst.go .rthm { animation-name:recFade; animation-duration:.24s; animation-timing-function:ease; }
   .rst.go .rthm i { animation:recGrow .336s cubic-bezier(.22,1,.36,1) calc(var(--i) * 64ms + 216ms) both; transform-origin:left; }
-  @keyframes recOut { to { opacity:0; transform:scale(1.1); } }
   @keyframes recFade { from { opacity:0; } }
   @keyframes recRise { from { opacity:0; translate:0 90px; scale:.92; } }
   @keyframes recGrow { from { transform:scaleX(0); } }
+  
+  @property --r { syntax:'<length>'; inherits:false; initial-value:0px; }
+  .rst.wave .rcov, #go.wave::before { -webkit-mask-image:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 26px), #000 calc(var(--r) + 26px)); mask-image:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 26px), #000 calc(var(--r) + 26px)); }
+  .rst.wave .rp::after, #go.wave::after { background:radial-gradient(circle at var(--ox) var(--oy), transparent calc(var(--r) - 30px), #AFC2F4 var(--r), transparent calc(var(--r) + 30px)); mix-blend-mode:screen; }
+  .rst.wave .rp::after, #go.wave::before, #go.wave::after { content:""; position:absolute; inset:0; pointer-events:none; }
+  .rst.wave .rp::after { z-index:3; }
+  .rst.wave .rcov, .rst.wave .rp::after, #go.wave::before, #go.wave::after { animation:recWave 1s linear var(--w, 0ms) both; }
+  .rst.wave .rsl { animation:recLift .64s ease-in-out var(--d) both; }
+  #go.wave { position:relative; overflow:hidden; isolation:isolate; } 
+  #go.wave::before { z-index:-2; background:var(--line); } #go.wave::after { z-index:-1; }
+  @keyframes recWave { to { --r:var(--R); } }
+  @keyframes recLift { 38% { translate:0 -9px; } 72% { translate:0 2px; } }
+  @media (prefers-reduced-motion:reduce) { .rst.wave .rcov, .rst.wave .rp::after, #go.wave::before, #go.wave::after { display:none; } .rst.wave .rsl { animation:none; } }
   .rwhy { font-size:12px; color:var(--dim); margin-top:10px; line-height:1.5; }
   .rwhy:empty { display:none; }
   .rch { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
@@ -1011,6 +1022,35 @@
     recDraw(el);
     check();
   }
+  function recWave(el) {
+    const s = el._rec, box = rq(el, '.rst'), go = $('go'), T = 1000, 첫 = box.querySelector('.rp').getBoundingClientRect();
+    const ox = 첫.left + 첫.width / 2, oy = 첫.top + 첫.height / 2, g = go.getBoundingClientRect(), R = Math.hypot(Math.max(ox - g.left, g.right - ox), g.bottom - oy) + 40;
+    const 자리 = (e, r) => { e.style.setProperty('--ox', ox - r.left + 'px'); e.style.setProperty('--oy', oy - r.top + 'px'); e.style.setProperty('--R', R + 'px'); };
+    [...box.children].forEach(c => {
+      const r = c.querySelector('.rp').getBoundingClientRect();
+      자리(c, r);
+      c.style.setProperty('--d', Math.round(Math.hypot(r.left + r.width / 2 - ox, r.top + r.height / 2 - oy) / R * T) + 'ms');
+    });
+    s.물 = 1;
+    box.classList.add('wave');
+    const 닿음 = Math.max(0, Math.hypot(Math.max(g.left - ox, 0), g.top - oy) / R * T);
+    setTimeout(() => {
+      if (el._rec !== s) return;
+      s.물 = 0;
+      check();
+      if (go.disabled) return;
+      자리(go, g);
+      go.style.setProperty('--w', -닿음 + 'ms');
+      go.classList.add('wave');
+      setTimeout(() => go.classList.remove('wave'), T - 닿음 + 50);
+    }, 닿음);
+    setTimeout(() => {
+      if (el._rec !== s || !box.classList.contains('wave')) return;
+      box.classList.remove('wave');
+      box.querySelectorAll('.rcov').forEach(c => c.remove());
+      box.querySelectorAll('.rsl').forEach(c => c.classList.remove('on'));
+    }, T + 680);
+  }
   function recDraw(el, sw) {
     const s = el._rec;
     if (!s || !s.forms) return;
@@ -1021,10 +1061,11 @@
     box.innerHTML = Array.from({ length: s.pages + 1 }, (_, i) => recSl(i, t, !sw, !sw)).join('');
     recK(box);
     void box.offsetWidth;
-    if (t) box.classList.add('go');
+    if (sw && t) box.classList.add('go');
     ch.className = 'rch' + (sw ? '' : ' up');
-    ch.style.animationDelay = sw ? '' : (s.pages + 1) * 64 + 400 + 'ms';
+    ch.style.animationDelay = sw ? '' : '760ms';
     ch.innerHTML = s.forms.map((x, i) => `<div class="rcc${x === t ? ' on' : ''}" data-d="${esc(tkey(x))}">${esc(x.name)}<small>${i ? esc(x.sub) : '추천 · ' + esc(x.sub)}</small></div>`).join('');
+    if (!sw && t) recWave(el);
   }
   function recPick(e) {
     const c = e.target.closest('.rcc');
@@ -1130,7 +1171,7 @@
       if (!link || msg || rb) bad++;
       recCheck(el, link && !msg ? link : '');
     });
-    const n = its().length, over = n > left, 분석중 = its().some(el => el._rec && !el._rec.forms) || !bad && ch && ch.ld;
+    const n = its().length, over = n > left, 분석중 = its().some(el => el._rec && (!el._rec.forms || el._rec.물)) || !bad && ch && ch.ld;
     if (!$('go').dataset.sending) {
       $('go').disabled = !ch || ch.demo || bad > 0 || over || !!분석중;
       $('go').textContent = 분석중 ? '레이아웃 분석 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
