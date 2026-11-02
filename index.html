@@ -641,7 +641,7 @@
     $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 제작 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 제작 티켓 1장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요.';
     if (r.admin) 거르기칸_(r);
-    $('chpick').hidden = !(r.channels.length > 1);
+    $('chpick').hidden = !r.channels.length;
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
   }
   function 거르기칸_(r) {
@@ -657,9 +657,7 @@
     if (r.admin) 거르기칸_(r);
     if (mine.length && !목록나감) 현황그림_(mine, true);
     $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
-    const ch = who.channels.find(x => x.name === chan);
-    if (ch) { $('cp').innerHTML = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
-    check();
+    pickCh(chan);
   }
   async function 쫓겨남_(e) {
     const m = String(e && e.message || e).replace(/^Error:\s*/, '');
