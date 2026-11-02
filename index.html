@@ -674,7 +674,7 @@
     let k = 0;
     const id = setInterval(() => b.classList.contains('busy') ? b.dataset.dots = '.'.repeat(++k % 4) : clearInterval(id), 400);
   }
-  function store(t, admin) { try { localStorage.removeItem('pp_name'); if (t) { (admin ? sessionStorage : localStorage).setItem('pp_t', t); (admin ? localStorage : sessionStorage).removeItem('pp_t'); } else { sessionStorage.removeItem('pp_t'); ['pp_t', 'pp_w', 'pp_j', 'pp_확'].forEach(k => localStorage.removeItem(k)); } } catch (e) {} }
+  function store(t, admin) { try { localStorage.removeItem('pp_name'); sessionStorage.removeItem('pp_t'); if (t) localStorage.setItem('pp_t', t); else ['pp_t', 'pp_w', 'pp_j', 'pp_확'].forEach(k => localStorage.removeItem(k)); } catch (e) {} }
   function 화면기억_(r) {
     try {
       if (r) return localStorage.setItem('pp_w', JSON.stringify(Object.assign({}, r, { name: '', token: '', device: '' })));
