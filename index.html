@@ -492,7 +492,7 @@
   <div class="body" id="form">
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 새 제작</div>
     <h1>레퍼런스 넣기</h1><span class="cur"></span>
-    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(매일 00:00 에 다시 채워져요).</span></p>
+    <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 티켓 1장(매일 오후 4시에 다시 채워져요).</span></p>
     <div id="chpick" hidden><label>만들 채널</label><div class="chips" id="chs"></div></div>
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
@@ -595,7 +595,7 @@
     <p class="sub"><b>담당자 · 채널 더하기</b> — 있는 사람이면 그 비밀번호 그대로 채널만 늘어요. 새 사람은 아래 표 '비밀번호' 칸에 뜨는 임시 비밀번호를 알려 주면 그걸로 들어와 새로 정해요. 아직 만들지 않는 채널은 '준비 중'으로 들어가요.</p>
     <div class="cpbar"><input id="an" placeholder="이름" style="width:110px"><input id="ac" list="acl" placeholder="채널" style="width:120px"><datalist id="acl"></datalist><input id="ae" type="email" placeholder="이메일(선택 · 폴더 공유)" style="width:190px"><button onclick="acAdd(this)">＋ 더하기</button></div>
     <div class="cpbar"><button class="ghost" onclick="이단계켜끄기(this)">관리자 2단계 로그인</button><button class="ghost" onclick="전체끊기(this)">모든 기기 로그아웃</button><span class="note" style="margin:0">계정이 샌 것 같을 때 — 자세한 기록은 시트 보안기록 탭</span></div>
-    <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 매일 00:00 에 다시 채워지는 장 수예요. 바꾼 남은 쿠폰은 오늘 자정까지 그대로예요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
+    <p class="sub">담당자 × 채널마다 남은 쿠폰을 바로 더하고 빼요. <b>하루 제공</b>은 매일 오후 4시에 다시 채워지는 장 수예요. 바꾼 남은 쿠폰은 오늘 자정까지 그대로예요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
     <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자</th><th>채널</th><th>남은 쿠폰</th><th class="dl">하루 제공</th><th></th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
@@ -690,7 +690,7 @@
     $('drive').hidden = true;
     $('t-cp').hidden = $('t-ref').hidden = $('t-cost').hidden = !r.admin;
     $('lf').hidden = !r.admin;
-    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(매일 00:00 에 다시 채워져요).';
+    $('tkn').textContent = r.admin ? '관리자는 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 티켓 1장(매일 오후 4시에 다시 채워져요).';
     if (r.admin) 거르기칸_(r);
     $('chpick').hidden = !(r.channels.length > 1);
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
@@ -809,7 +809,7 @@
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : c);
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = c;
     if (ch) { $('cp').textContent = tk(ch.coupon); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
-    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 하루 ${ch.daily}장 · 매일 00:00 에 다시 채워져요).`;
+    if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 티켓 1장(${c} 하루 ${ch.daily}장 · 매일 오후 4시에 다시 채워져요).`;
     its().forEach(el => { el.dataset.d = ''; delete el.dataset.my; drawD(el); });
     템플릿타자_();
     if (ch && !ch.types && !ch.ld) {
