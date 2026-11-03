@@ -670,9 +670,9 @@
   }
   function 채움_(r) {
     who = r;
-    $('ch').innerHTML = esc(r.admin ? '관리자 · 마스터' : r.name || '내 계정') + '<small>로그아웃</small>';
+    $('ch').innerHTML = esc(r.admin ? (r.mid ? '중간관리자' : '관리자 · 마스터') : r.name || '내 계정') + '<small>로그아웃</small>';
     $('drive').hidden = true;
-    $('t-cp').hidden = $('t-cost').hidden = !r.admin;
+    $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid;
     $('t-ref').hidden = !r.admin && !r.channels.some(c => !c.demo);
     $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '내 채널 후보 · 골라 제작';
     $('rbox').hidden = !r.admin;
@@ -698,7 +698,7 @@
     who.name = r.name; who.folder = r.folder;
     if (r.admin) 거르기칸_(r);
     if (mine.length && !목록나감) 현황그림_(mine, true);
-    $('ch').innerHTML = r.test ? '시험 계정 · 보기 전용<small>로그아웃</small>' : esc(r.admin ? '관리자 · 마스터' : r.name) + '<small>로그아웃</small>';
+    $('ch').innerHTML = r.test ? '시험 계정 · 보기 전용<small>로그아웃</small>' : esc(r.admin ? (r.mid ? '중간관리자' : '관리자 · 마스터') : r.name) + '<small>로그아웃</small>';
     pickCh(chan);
   }
   async function 쫓겨남_(e) {
@@ -1148,7 +1148,7 @@
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : !who.admin && /^(coup|cost|acc)$/.test(s.v) ? home() : s.v || home());
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : (!who.admin && /^(coup|cost|acc)$/.test(s.v) || who.mid && /^(coup|cost)$/.test(s.v)) ? home() : s.v || home());
   });
   let timer = 0, openRow = 0;
   const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
@@ -2136,7 +2136,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793694123043';
+  const 빌드 = '1793698540778';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
