@@ -784,7 +784,7 @@
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : 표시_());
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = 표시_();
     $('cp').innerHTML = 머리티켓();
-    if (ch) { $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
+    if (ch) { $('drive').hidden = !ch.folder; $('drive').href = 주소(ch.folder); }
     if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 제작 티켓 1장(${표시_()} 하루 ${ch.daily}장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).`;
     check();
     refSum();
@@ -2052,7 +2052,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793675274776';
+  const 빌드 = '1793683487344';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
