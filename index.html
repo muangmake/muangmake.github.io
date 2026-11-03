@@ -1062,7 +1062,7 @@
       : u.s === '미확인' ? `<div class="upc bad">⚠ ${esc(j.acc || j.channel)} 계정에서 이 게시물을 못 찾았어요. 올렸다면 게시물 링크를 넣어 주세요.${넣기}</div>`
       : u.s === '다른계정' && 쌍 ? `<div class="upc bad">⚠ 넣은 링크는 쌍둥이 계정 ${쌍} 게시물이에요. ${내} 티켓 건이라 ${내} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
       : u.s === '다른계정' ? `<div class="upc bad">⚠ 넣은 링크가 ${esc(j.acc || j.channel)} 계정 게시물이 아니에요. ${esc(j.acc || j.channel)} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
-      : `<div class="upc">올리면 하루 두 번(10시 · 20시) ${esc(j.acc || j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
+      : `<div class="upc">올리면 하루 세 번(8시 · 13시 · 21시) ${esc(j.acc || j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
   }
   function postGo(btn, row) {
     call('postlink', [code, row, $('upl').value.trim()], btn, 'err3', r => {
@@ -2186,7 +2186,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793723416003';
+  const 빌드 = '1793725865194';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
