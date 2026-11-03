@@ -398,7 +398,7 @@
   #ref .in b small { flex:none; color:var(--dim); font-weight:500; font-size:11px; }
   #ref .cap { color:var(--dim); line-height:1.45; margin-top:4px; height:34px; overflow:hidden; }
   #ref .num { margin-top:5px; font-weight:600; }
-  #ref .rs { margin-top:5px; font-size:11.5px; font-weight:700; color:var(--run); }
+  #ref .rs { margin-top:5px; font-size:11.5px; font-weight:700; color:var(--run); } #ref .rs.ok { color:var(--ok); } #ref .rs.bad { color:var(--bad); }
   #ref .in select { width:100%; margin-top:8px; background:var(--bar); border:1.5px solid var(--line); border-radius:8px; color:var(--text); padding:6px; font:inherit; font-size:12.5px; }
   #ref .in select:invalid { color:var(--dim); border-style:dashed; }
   #ref .scan { color:var(--run); font-weight:700; }
@@ -536,7 +536,7 @@
     <div><label>사용할 티켓</label><div class="chips" id="rdays"></div></div>
     <div id="rbox" hidden><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span class="ri"><span id="rstate" class="scan"></span><span id="rlast"></span></span>
       <span style="flex:1"></span><button id="racc" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button></div>
-    <div class="cpbar rhd"><b id="rcnt"></b><small id="rsel"></small><span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> 안 만든 것만</label></div>
+    <div class="cpbar rhd"><b id="rcnt"></b><small id="rsel"></small><span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> <span id="rnewt">안 만든 것만</span></label></div>
     <div class="cards" id="rcards"></div>
     <p class="err" id="err5"></p>
     <div class="sendbar" id="rbar"><span id="rsum">만들 후보를 체크하세요</span><button id="rgo" onclick="refGo(this)">제작하기 ▸</button></div>
@@ -685,7 +685,8 @@
     $('drive').hidden = true;
     $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid || !탭펼침;
     $('t-ref').hidden = !r.admin && !r.channels.some(c => !c.demo);
-    $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '내 채널 후보 · 골라 제작';
+    $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '모든 채널 후보 · 골라 제작';
+    $('rnewt').textContent = r.admin ? '안 만든 것만' : '내 채널에 안 만든 것만';
     $('rbox').hidden = !r.admin;
     $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 제작 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 제작 티켓 1장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요.';
@@ -741,7 +742,7 @@
     store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; 탭펼침 = false; mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true);
-    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
+    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
@@ -1853,39 +1854,44 @@
       clearTimeout(timer); timer = setTimeout(() => !$('detail').hidden && load(true), 60000);
     });
   }
-  let refs = [], sel = {}, refT = 0, made = {}, refMsg = '';
-  const 안만든_ = j => !j.state || /^실패/.test(j.state);
+  let refs = [], sel = {}, refT = 0, made = {}, refMsg = '', refJ = '';
+  const 안만든_ = j => {
+    const 산 = s => s && !/^실패/.test(s), 내 = 후보채널_();
+    return who.admin ? !산(j.state) && !j.by.some(b => 산(b.s))
+      : !made[j.link] && !j.by.some(b => 산(b.s) && 내.includes(b.ch)) && !(산(j.state) && 내.includes(j.ch));
+  };
   function refLoad(quiet) {
     clearTimeout(refT);
     if (!quiet && !refs.length) $('rcards').innerHTML = '<p class="note">불러오는 중…</p>';
     google.script.run.withSuccessHandler(refShow).withFailureHandler(e => $('err5').textContent = e.message.replace(/^Error:\s*/, '')).refs(code);
   }
   function refShow(r) {
+    const 같음 = refJ === (refJ = JSON.stringify(r.items));
     refs = r.items;
-    refs.forEach(j => { if (!j.state && made[j.link]) j.state = '제작 요청함'; });
+    refs.forEach(j => { j.by = j.by || []; if (!j.state && made[j.link]) j.state = '제작 요청함'; });
     $('rlast').textContent = r.last ? `마지막으로 찾음 ${r.last} · 레퍼런스 채널 ${r.accs}개` : '';
-    $('rmeta').textContent = r.last && !who.admin ? `마지막으로 찾음 ${r.last} · 내 채널 레퍼런스 채널 ${r.accs}개.` : '';
+    $('rmeta').textContent = r.last && !who.admin ? `마지막으로 찾음 ${r.last} · 레퍼런스 채널 ${r.accs}개.` : '';
     const s = r.scan;
     $('rstate').textContent = !s ? '' : s.phase === 'wait' ? '작업 맥에 보내는 중 · 1분 안에 시작해요'
       : s.phase === 'nomac' ? '작업 맥이 꺼져 있나 봐요 — 켜지면 시작해요' : `훑는 중 · ${s.min}분째 (보통 1~3분)`;
     $('rscan').disabled = !!s;
-    if (s && cur === 'ref') refT = setTimeout(() => refLoad(true), 20000);
-    const chs = 후보채널_(), v = $('rch').value;
+    if (cur === 'ref') refT = setTimeout(() => refLoad(true), s ? 20000 : 30000);
+    if (같음) return;
+    const chs = [...new Set(refs.map(j => j.ch).filter(Boolean))], v = $('rch').value;
     $('rch').innerHTML = '<option value="">모든 채널</option>' + chs.map(c => `<option>${esc(c)}</option>`).join('') + '<option value="-">채널 못 고름</option>';
     $('rch').value = v;
     refGrid();
   }
   const 후보채널_ = () => [...new Set(who.channels.filter(c => !c.demo).map(c => c.channel))];
   function refGrid() {
-    const chs = 후보채널_(), f = $('rch').value;
-    const ch = j => chs.includes(j.ch) ? j.ch : '';
-    const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !ch(j) : ch(j) === f)));
+    const f = $('rch').value;
+    const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !j.ch : j.ch === f)));
     $('rcnt').textContent = `후보 ${l.length}개`;
     $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 2일 후보가 없어요 — 새 후보는 하루 두어 번 들어와요.'}</p>` : l.map(j => {
       const i = refs.indexOf(j), on = j.link in sel;
       return `<div class="card${on ? ' on' : ''}"><div class="cv" onclick="refPick(${i})">${j.img ? `<img src="${esc(j.img)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.remove()">` : '미리보기 없음'}<span class="ck">${on ? '✓' : ''}</span>${j.kind ? `<span class="kd">${esc(j.kind)}</span>` : ''}</div>
         <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
-        ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${j.state ? `<div class="rs">${esc(j.state)}</div>` : ''}</div></div>`;
+        ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${j.by.length ? j.by.map(b => `<div class="rs ${{ 완료: 'ok', 실패: 'bad' }[b.s] || ''}">${esc(b.n)} · ${esc(b.c)} ${esc(b.s)}</div>`).join('') : j.state ? `<div class="rs">${esc(j.state)}</div>` : ''}</div></div>`;
     }).join('');
     refSum();
   }
@@ -2160,7 +2166,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793703290590';
+  const 빌드 = '1793705506159';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
