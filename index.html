@@ -162,7 +162,7 @@
   .done a { color:var(--navy2); font-weight:700; }
   .done .two { display:flex; gap:8px; margin-top:8px; } .done .two button { margin:0; flex:1; padding:16px 6px; white-space:nowrap; }
   .done .two .more { background:transparent; border:2px solid var(--navy2); color:var(--navy2); }
-  .err { color:#FF8A8A; font-size:13px; text-align:center; margin-top:10px; min-height:1em; }
+  .err { color:#FF8A8A; font-size:13px; text-align:center; margin-top:10px; min-height:1em; } #err0:empty { display:none; }
   .sub a { color:var(--navy2); font-weight:700; cursor:pointer; }
   
   .tabs { display:flex; gap:10px; padding:12px 14px; border-bottom:2px solid var(--line); }
@@ -435,11 +435,13 @@
   <span class="chip home" onclick="goHome()" title="처음 화면">📁 POWERPAGE.zip</span>
   <span class="chips" id="me" hidden>
     <span class="chip" id="ch" onclick="logout()" title="로그아웃"></span>
+    <span class="chip" id="otpc" hidden onclick="이단계켜끄기(this, 'err0')" title="2단계 로그인(선택)">2단계</span>
     <select class="chip" id="tsel" hidden onchange="시험보기_(this)" title="볼 담당자"></select>
     <span class="chip tkb" id="cpc"><span id="cp" style="display:contents"></span></span>
     <a class="chip" id="drive" href="#" target="_blank" rel="noopener">드라이브 ↗</a>
   </span>
 </div>
+<p class="err" id="err0"></p>
 
 
 <div class="win" id="login">
@@ -656,7 +658,7 @@
   function 기기(새) { try { if (새) localStorage.setItem('pp_d', 새); return localStorage.getItem('pp_d') || ''; } catch (e) { return ''; } }
   function 코드칸(키) {
     $('otp').hidden = false; $('otp').value = ''; $('otp').focus();
-    $('err1').textContent = 키 ? `관리자는 2단계 로그인이 꼭 필요해요. 인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 넣어 다시 눌러 주세요. 키: ${키}` : '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.';
+    $('err1').textContent = 키 ? `마스터 관리자는 2단계 로그인이 꼭 필요해요. 인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 넣어 다시 눌러 주세요. 키: ${키}` : '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.';
   }
   function pwFind(a) {
     const name = $('code').value.trim();
@@ -683,6 +685,7 @@
     who = r;
     $('ch').innerHTML = esc(r.admin ? '관리자' : r.name || '내 계정') + '<small>로그아웃</small>';
     $('drive').hidden = true;
+    $('otpc').hidden = !(r.admin && r.mid);
     $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid || !탭펼침;
     $('t-ref').hidden = !r.admin && !r.channels.some(c => !c.demo);
     $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '모든 채널 후보 · 골라 제작';
@@ -2132,8 +2135,21 @@
       + `<td><span class="step">${x.mid ? '' : `<button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button>`}<button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
   }
-  function 이단계켜끄기(b) {
-    call('이단계', [code, '봄'], b, 'err4', r => alert(r.on ? '2단계 로그인이 켜져 있어요. 관리자는 끌 수 없어요.\n휴대폰을 바꾸면 마스터 관리자가 비밀번호를 초기화해 줘요(다음 로그인 때 새로 연결).' : '2단계 로그인이 꺼져 있어요. 다시 로그인하면 연결 화면이 떠요.'));
+  function 이단계켜끄기(b, e = 'err4') {
+    const 코드 = 글 => (prompt(글) || '').replace(/\s/g, '');
+    call('이단계', [code, '봄'], b, e, r => {
+      if (r.must) return alert('2단계 로그인이 켜져 있어요. 마스터 관리자는 끌 수 없어요.');
+      if (r.on) {
+        if (!confirm('2단계 로그인이 켜져 있어요. 끌까요?')) return;
+        const c = 코드('인증 앱에 지금 뜬 6자리 숫자'); if (!c) return;
+        return call('이단계', [code, '끄기', c], b, e, () => alert('2단계 로그인을 껐어요.'));
+      }
+      if (!confirm('2단계 로그인이 꺼져 있어요(선택). 켤까요?')) return;
+      call('이단계', [code, '켜기'], b, e, k => {
+        const c = 코드(`인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 적어 주세요.\n키: ${k.setup}`); if (!c) return;
+        call('이단계', [code, '켜기', c], b, e, () => alert('2단계 로그인을 켰어요. 다음 로그인부터 인증 앱 숫자가 필요해요.\n휴대폰을 바꾸면 끄고 다시 켜거나, 마스터 관리자가 비밀번호를 초기화해 줘요.'));
+      });
+    });
   }
   function 전체끊기(b) {
     if (!confirm('관리자를 포함해 모든 담당자가 로그아웃돼요. 계속할까요?')) return;
@@ -2166,7 +2182,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793705859641';
+  const 빌드 = '1793708004511';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
