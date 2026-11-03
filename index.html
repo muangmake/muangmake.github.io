@@ -74,9 +74,9 @@
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .cpt small.tmr { display:block; font-size:11px; color:var(--dim); margin-top:3px; }
   
-  #chs.chips, #days.chips { gap:10px; }
+  #chs.chips, #days.chips, #rchs.chips, #rdays.chips { gap:10px; }
   
-  #chs .pair { flex-basis:100%; position:relative; border:1.5px dashed var(--line); border-radius:14px; padding:18px 10px 10px; margin-top:6px; } #chs .pair .ptag { position:absolute; top:-9px; left:12px; background:var(--win); padding:0 6px; font-size:12px; font-weight:800; color:var(--dim); }
+  :is(#chs,#rchs) .pair { flex-basis:100%; position:relative; border:1.5px dashed var(--line); border-radius:14px; padding:18px 10px 10px; margin-top:6px; } :is(#chs,#rchs) .pair .ptag { position:absolute; top:-9px; left:12px; background:var(--win); padding:0 6px; font-size:12px; font-weight:800; color:var(--dim); }
   .tkt { --s:64px; display:grid; grid-template-columns:var(--s) minmax(0,1fr) auto; align-items:center; width:min(300px,100%); min-height:64px; border-radius:12px; background:#FAFAF7; color:#15161A; cursor:pointer; filter:grayscale(1) brightness(.55); transition:filter .15s, transform .096s;
     -webkit-mask:radial-gradient(circle 9px at var(--s) 0,#0000 97%,#000) top / 100% 51% no-repeat, radial-gradient(circle 9px at var(--s) 100%,#0000 97%,#000) bottom / 100% 51% no-repeat;
             mask:radial-gradient(circle 9px at var(--s) 0,#0000 97%,#000) top / 100% 51% no-repeat, radial-gradient(circle 9px at var(--s) 100%,#0000 97%,#000) bottom / 100% 51% no-repeat; }
@@ -92,6 +92,13 @@
   .lgs i { display:grid; place-items:center; background:#2B2B2F; color:#fff; font-style:normal; font-size:13px; font-weight:800; }
   .tkb { display:inline-flex; align-items:center; gap:8px; background:#FAFAF7; color:#15161A; border-color:#FAFAF7; border-radius:10px; padding:4px 12px 4px 5px; }
   .tkb .lgs { padding-right:8px; border-right:1.5px dashed #C5C7CF; } .tkb .lgs img, .tkb .lgs i { width:24px; height:24px; font-size:11px; } .tkb .lgs img + img { margin-left:-7px; }
+  
+  .tkb:has(.hs) { gap:0; padding:3px; cursor:default; }
+  .tkb .hs { position:relative; display:inline-flex; align-items:center; gap:7px; padding:3px 10px 3px 3px; border-radius:7px; cursor:pointer; font-size:13px; font-weight:800; color:#6B6D76; white-space:nowrap; }
+  .tkb .hs + .hs { margin-left:9px; } .tkb .hs + .hs::before { content:''; position:absolute; left:-6px; top:5px; bottom:5px; border-left:1.5px dashed #C5C7CF; }
+  .tkb .hs.on { background:#E3E8F6; color:#15161A; } .tkb .hs.off { cursor:default; opacity:.55; }
+  .tkb .hs .lgs { padding:0; border:0; } .tkb .hs b { font-size:15px; font-weight:900; color:#15161A; font-variant-numeric:tabular-nums; }
+  @media (max-width:640px) { .tkb .hs .hn { display:none; } .tkb .hs { padding-right:8px; gap:5px; } }
   
   .ck { display:inline-flex; align-items:center; gap:8px; min-height:40px; padding:0 14px 0 11px; border:1.5px solid var(--line); border-radius:10px; background:var(--chip); font-weight:700; font-size:14px; cursor:pointer; white-space:nowrap; }
   .ck i { width:18px; height:18px; border-radius:5px; border:2px solid #55555C; display:grid; place-items:center; font-style:normal; font-size:12px; font-weight:900; line-height:1; color:#0B0B0C; }
@@ -368,8 +375,8 @@
   #ref .card.on { border-color:var(--navy2); box-shadow:0 0 0 3px rgba(111,143,224,.28); }
   #ref .cv { position:relative; overflow:hidden; cursor:pointer; }
   #ref .cv img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  #ref .ck { position:absolute; left:8px; top:8px; width:24px; height:24px; border-radius:7px; border:2px solid #fff; background:rgba(0,0,0,.4); display:grid; place-items:center; font-weight:800; font-size:14px; }
-  #ref .on .ck { background:var(--navy2); border-color:var(--navy2); color:#000; }
+  #ref .cv .ck { position:absolute; left:8px; top:8px; width:24px; height:24px; border-radius:7px; border:2px solid #fff; background:rgba(0,0,0,.4); display:grid; place-items:center; font-weight:800; font-size:14px; }
+  #ref .on .cv .ck { background:var(--navy2); border-color:var(--navy2); color:#000; }
   #ref .kd { position:absolute; right:8px; top:8px; background:rgba(0,0,0,.65); border-radius:6px; padding:2px 6px; font-size:11px; font-weight:700; color:#fff; }
   #ref .in { padding:9px 10px 11px; font-size:12px; }
   #ref .in b { display:flex; justify-content:space-between; gap:6px; font-size:13px; } #ref .in b a { color:inherit; text-decoration:none; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -457,7 +464,7 @@
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 새 제작</div>
     <h1>레퍼런스 넣기</h1><span class="cur"></span>
     <p class="sub">제작 건마다 레퍼런스 게시물 링크 하나를 넣어요. 주소 뒤 꼬리(utm · 장 번호 등)는 알아서 잘라요. 오른쪽에 참고 자료 · 레이아웃 참고 게시물 · 추가 요청사항을 적으면 그대로 제작 요청사항이 돼요. <span id="tkn">한 건에 제작 티켓 1장(오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).</span></p>
-    <div id="chpick" hidden><label id="chlab">만들 채널</label><div class="chips" id="chs"></div></div>
+    <div id="chpick" hidden><label class="chlab">만들 채널</label><div class="chips" id="chs"></div></div>
     <div><label>사용할 티켓</label><div class="chips" id="days"></div></div>
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
@@ -508,7 +515,9 @@
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
     <h1>제작 후보</h1><span class="cur"></span>
-    <p class="sub">레퍼런스 채널들의 최근 2일 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 걸 체크하고 채널을 확인한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
+    <p class="sub">레퍼런스 채널들의 최근 2일 피드예요(릴스 · 광고 뺌 · 반응 큰 순). 만들 계정 · 사용할 티켓을 고르고 후보를 체크한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
+    <div id="rpick"><label class="chlab">만들 채널</label><div class="chips" id="rchs"></div></div>
+    <div><label>사용할 티켓</label><div class="chips" id="rdays"></div></div>
     <div class="cpbar"><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span id="rstate" class="scan"></span>
       <button class="ghost" id="racc" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button>
       <span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> 안 만든 것만</label></div>
@@ -770,13 +779,15 @@
       const t = 티켓(그림_(x), '제작 티켓', x.demo ? null : x.coupon, x.daily, x.name === c, `pickCh(who.channels[${i}].name)`, 이름_(x)), g = 나뉨_(x) && 묶음.find(m => m.ch === x.channel);
       g ? g.l.push(t) : 묶음.push({ ch: 나뉨_(x) && x.channel, l: [t] });
     });
-    $('chs').innerHTML = 묶음.map(m => m.ch ? `<div class="pair"><span class="ptag">${esc(m.ch)} · 쌍둥이</span><div class="chips">${m.l.join('')}</div></div>` : m.l[0]).join('');
-    $('chlab').textContent = who.channels.some(나뉨_) ? '만들 계정' : '만들 채널';
+    $('chs').innerHTML = $('rchs').innerHTML = 묶음.map(m => m.ch ? `<div class="pair"><span class="ptag">${esc(m.ch)} · 쌍둥이</span><div class="chips">${m.l.join('')}</div></div>` : m.l[0]).join('');
+    document.querySelectorAll('.chlab').forEach(e => e.textContent = who.channels.some(나뉨_) ? '만들 계정' : '만들 채널');
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : 표시_());
     if (cur && !부모[cur] && !(who.admin && cur !== 'form')) $('ttl').textContent = 표시_();
-    if (ch) { $('cp').innerHTML = tkCh(ch); $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
+    $('cp').innerHTML = 머리티켓();
+    if (ch) { $('drive').hidden = !ch.folder; $('drive').href = ch.folder; }
     if (ch && ch.daily && !who.admin) $('tkn').textContent = `한 건에 제작 티켓 1장(${표시_()} 하루 ${ch.daily}장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요).`;
     check();
+    refSum();
   }
   async function 펼침(from, to, T, swap, mid) {
     const b = from.getBoundingClientRect(), g = from.cloneNode(true);
@@ -994,7 +1005,7 @@
     call('make', [code, items, chan, 날], $('go'), 'err2', r => {
       const ch = who.channels.find(x => x.name === chan);
       Object.assign(ch, { coupon: r.coupon, tomorrow: r.tomorrow, fast: r.fast });
-      $('cp').innerHTML = tkCh(ch);
+      $('cp').innerHTML = 머리티켓();
       load(true);
       $('job').textContent = [표시_(), 날 === 'tomorrow' ? '내일 올릴 건' : 날 === 'fast' ? '⚡ 빠른 제작' : '', r.jobs.length > 1 && r.jobs.length + '건', r.eta].filter(Boolean).join(' · ');
       reset();
@@ -1043,17 +1054,18 @@
   const 티켓 = (c, 이름표, n, 전체, on, 누름, 표시) => `<span class="tkt${on ? ' on' : ''}${n == null ? ' off' : ''}"${누름 && n != null ? ` onclick="${누름}"` : ''} style="--c:${(로고[c] || {}).c || '#5D6070'}">`
     + `<span class="st">${로고칸(c)}</span><span class="bd"><small>${이름표}</small><b>${esc(표시 || c)}</b></span>`
     + `<span class="ct">${n == null ? '<b class="mu">준비 중</b>' : who.admin ? '<b class="mu">무제한</b>' : `<b>${esc(n)}</b>${전체 ? `<small>/ ${esc(전체)}장</small>` : ''}`}</span></span>`;
-  const tkCh = ch => 로고칸(그림_(ch)) + (who.admin ? '무제한' : ch.demo ? '준비 중' : `${나뉨_(ch) ? esc(이름_(ch)) + ' ' : ''}티켓 ${esc(ch.coupon)}`);
+  const 머리티켓 = () => who.admin ? (고른_() ? 로고칸(그림_(고른_())) + '무제한' : '') : who.channels.map((x, i) => `<span class="hs${x.name === chan ? ' on' : ''}${x.demo ? ' off' : ''}"${x.demo ? '' : ` onclick="pickCh(who.channels[${i}].name)"`} title="${esc(이름_(x))} 오늘 제작 티켓">`
+    + `${로고칸(그림_(x))}<span class="hn">${esc(이름_(x))}</span><b>${x.demo ? '준비 중' : esc(x.coupon)}</b></span>`).join('');
   function drawDays() {
     const ch = (who.channels || []).find(x => x.name === chan);
-    $('days').parentElement.hidden = !ch || ch.demo;
+    $('days').parentElement.hidden = $('rdays').parentElement.hidden = !ch || ch.demo;
     if (날 === 'fast' && !(ch && ch.fastDaily)) 날 = 'today';
     const 통 = !ch ? [] : [['today', '오늘', ch.coupon, ch.daily], ['tomorrow', '내일', ch.tomorrow ?? ch.daily, ch.daily]]
       .concat(ch.fastDaily ? [['fast', '⚡ 빠른 제작', ch.fast ?? ch.fastDaily, ch.fastDaily]] : []);
-    $('days').innerHTML = 통.map(([k, l]) => `<span class="ck${k === 날 ? ' on' : ''}" onclick="pickDay(${esc(JSON.stringify(k))})"><i></i>${l} 티켓 사용</span>`).join('')
+    $('days').innerHTML = $('rdays').innerHTML = 통.map(([k, l]) => `<span class="ck${k === 날 ? ' on' : ''}" onclick="pickDay(${esc(JSON.stringify(k))})"><i></i>${l} 티켓 사용</span>`).join('')
       + (통.length ? `<div class="tkl">${통.map(([k, l, n, 전체]) => `<span class="tm${k === 날 ? ' on' : ''}"><b>${l}</b>${who.admin ? '무제한' : esc(n) + (전체 ? ' / ' + esc(전체) : '') + '장'}</span>`).join('')}</div>` : '');
   }
-  function pickDay(d) { 날 = d; drawDays(); check(); }
+  function pickDay(d) { 날 = d; drawDays(); check(); refSum(); }
   const 의뢰자 = j => j.name && (who.admin || who.name && j.name !== who.name) ? esc(String(j.name).replace(/^관리자\d*$/, '관리자')) : '';
   const DRIVE = 'https://drive.google.com';
   const img = id => DRIVE + '/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
@@ -1782,45 +1794,43 @@
       : s.phase === 'nomac' ? '작업 맥이 꺼져 있나 봐요 — 켜지면 시작해요' : `훑는 중 · ${s.min}분째 (보통 1~3분)`;
     $('rscan').disabled = !!s;
     if (s && cur === 'ref') refT = setTimeout(() => refLoad(true), 20000);
-    const chs = who.channels.filter(c => !c.demo).map(c => c.name), v = $('rch').value;
+    const chs = 후보채널_(), v = $('rch').value;
     $('rch').innerHTML = '<option value="">모든 채널</option>' + chs.map(c => `<option>${esc(c)}</option>`).join('') + '<option value="-">채널 못 고름</option>';
     $('rch').value = v;
     refGrid();
   }
+  const 후보채널_ = () => [...new Set(who.channels.filter(c => !c.demo).map(c => c.channel))];
   function refGrid() {
-    const chs = who.channels.filter(c => !c.demo).map(c => c.name), f = $('rch').value;
-    const ch = j => sel[j.link] || (chs.includes(j.ch) ? j.ch : '');
+    const chs = 후보채널_(), f = $('rch').value;
+    const ch = j => chs.includes(j.ch) ? j.ch : '';
     const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !ch(j) : ch(j) === f)));
     $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 2일 후보가 없어요 — 새 후보는 하루 두어 번 들어와요.'}</p>` : l.map(j => {
       const i = refs.indexOf(j), on = j.link in sel;
       return `<div class="card${on ? ' on' : ''}"><div class="cv" onclick="refPick(${i})">${j.img ? `<img src="${esc(j.img)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.remove()">` : '미리보기 없음'}<span class="ck">${on ? '✓' : ''}</span>${j.kind ? `<span class="kd">${esc(j.kind)}</span>` : ''}</div>
         <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
-        ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${j.state ? `<div class="rs">${esc(j.state)}</div>` : ''}
-        <select required onchange="refCh(${i}, this.value)"><option value="">채널 고르기</option>${chs.map(c => `<option${c === ch(j) ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></div></div>`;
+        ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${j.state ? `<div class="rs">${esc(j.state)}</div>` : ''}</div></div>`;
     }).join('');
     refSum();
   }
   function refPick(i) {
-    const j = refs[i], chs = who.channels.filter(c => !c.demo).map(c => c.name);
-    if (j.link in sel) delete sel[j.link]; else sel[j.link] = chs.includes(j.ch) ? j.ch : '';
+    const j = refs[i];
+    if (j.link in sel) delete sel[j.link]; else sel[j.link] = 1;
     refMsg = '';
     refGrid();
   }
-  function refCh(i, v) { const j = refs[i]; sel[j.link] = v; refGrid(); }
+  const 날글_ = () => 날 === 'tomorrow' ? '내일 제작 티켓' : 날 === 'fast' ? '⚡ 빠른 제작 티켓' : '오늘 제작 티켓';
   function refSum() {
-    const l = Object.entries(sel), n = {};
-    l.forEach(([, c]) => n[c || '채널 없음'] = (n[c || '채널 없음'] || 0) + 1);
-    $('rsum').textContent = l.length ? `${l.length}개 · ` + Object.entries(n).map(([c, k]) => c + ' ' + k).join(' · ') + (who.admin ? ' · 티켓 안 씀' : ` · 오늘 제작 티켓 ${l.length}장`) : refMsg || '만들 후보를 체크하세요';
-    $('rbar').classList.toggle('has', l.length > 0 && l.every(([, c]) => c));
+    const n = Object.keys(sel).length, ch = 고른_();
+    $('rsum').textContent = n ? `${n}개 → ${표시_()} · ` + (who.admin ? '티켓 안 씀' : `${날글_()} ${n}장`) : refMsg || '만들 후보를 체크하세요';
+    $('rbar').classList.toggle('has', n > 0 && !!ch && !ch.demo);
   }
   function refScan(btn) { call('refscan', [code], btn, 'err5', refShow); }
   function refGo(btn) {
-    const items = Object.entries(sel).map(([link, ch]) => ({ link, ch }));
-    if (!confirm(`${items.length}개를 만들까요?${who.admin ? '' : ` 오늘 제작 티켓 ${items.length}장을 써요.`} 끝나면 제작 현황에 떠요.`)) return;
-    call('refmake', [code, items], btn, 'err5', r => {
+    const items = Object.keys(sel).map(link => ({ link, ch: chan }));
+    if (!confirm(`${items.length}개를 ${표시_()} 계정으로 만들까요?${who.admin ? '' : ` ${날글_()} ${items.length}장을 써요.`} 끝나면 제작 현황에 떠요.`)) return;
+    call('refmake', [code, items, 날], btn, 'err5', r => {
       Object.entries(r.티켓 || {}).forEach(([c, t]) => { const ch = who.channels.find(x => x.name === c); if (ch) Object.assign(ch, t); });
-      const ch = who.channels.find(x => x.name === chan);
-      if (ch && !who.admin) $('cp').innerHTML = tkCh(ch);
+      pickCh(chan);
       sel = {};
       items.forEach(x => made[x.link] = 1);
       refs.forEach(j => { if (made[j.link]) j.state = '제작 요청함'; });
@@ -2042,7 +2052,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793672646644';
+  const 빌드 = '1793675274776';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
