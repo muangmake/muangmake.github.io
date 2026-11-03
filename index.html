@@ -2020,11 +2020,11 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793666213178';
+  const 빌드 = '1793666281139';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
-      .some(e => e.type === 'file' ? e.files.length : !/^(checkbox|radio|hidden)$/.test(e.type) && e.value.trim());
+      .some(e => e.type === 'file' ? e.files.length : !/^(checkbox|radio|hidden)$/.test(e.type) && e.value.trim() && e.value !== e.defaultValue);
     const 봄 = async () => {
       if (!새판) try {
         const m = (await (await fetch(location.pathname + '?b=' + Date.now(), { cache: 'no-store' })).text()).match(/const 빌드 = '(\d+)'/);
