@@ -666,6 +666,7 @@
     const j = 현황기억_();
     if (j) 현황그림_(j, true);
     if (!who.admin) load(true);
+    else costLoad();
   }
   function 채움_(r) {
     who = r;
@@ -729,7 +730,7 @@
     store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; mine = []; 보일 = 30; 목록나감 = null; $('more').hidden = true; $('cards').innerHTML = '';
-    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
+    cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
@@ -1889,7 +1890,8 @@
   const 게이지칸 = (n, 한) => `<span class="gg ${n >= 한 ? 'bad' : n >= 한 * .8 ? 'warn' : ''}"><i style="width:${Math.min(n / 한, 1) * 100}%"></i></span>`;
   function costLoad() {
     if (!cD) $('csub').textContent = '불러오는 중…';
-    google.script.run.withSuccessHandler(r => { cD = r; $('csub').textContent = ''; costDraw(); })
+    const c = code;
+    google.script.run.withSuccessHandler(r => { if (c !== code) return; cD = r; $('csub').textContent = ''; costDraw(); })
       .withFailureHandler(e => $('err7').textContent = e.message.replace(/^Error:\s*/, '')).budget(code);
   }
   const 더날 = (d, k) => new Date(Date.parse(d + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10);
@@ -2134,7 +2136,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793692933718';
+  const 빌드 = '1793694123043';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
