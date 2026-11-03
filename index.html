@@ -674,7 +674,8 @@
   }
   function 거르기칸_(r) {
     const o = (id, l, all) => { const e = $(id), v = e.value; e.innerHTML = `<option value="">${all}</option>` + l.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join(''); e.value = l.includes(v) ? v : ''; };
-    o('fch', r.channels.map(c => c.name), '모든 채널'); o('fwho', r.people || [], '모든 담당자');
+    const 쌍 = c => r.channels.some(y => y !== c && y.channel === c.channel);
+    o('fch', [...new Set(r.channels.flatMap(c => 쌍(c) ? [c.channel, c.계정 || 첫계정[c.channel] || c.channel] : [c.channel]))], '모든 채널'); o('fwho', r.people || [], '모든 담당자');
   }
   function 새로_(r) {
     화면기억_(r);
@@ -2074,7 +2075,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793689042372';
+  const 빌드 = '1793689278713';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
