@@ -782,8 +782,9 @@
     const 묶음 = [];
     who.channels.forEach((x, i) => {
       const t = 티켓(그림_(x), '제작 티켓', x.demo ? null : x.coupon, x.daily, x.name === c, `pickCh(who.channels[${i}].name)`, 이름_(x)), g = 나뉨_(x) && 묶음.find(m => m.ch === x.channel);
-      g ? g.l.push(t) : 묶음.push({ ch: 나뉨_(x) && x.channel, l: [t] });
+      g ? g.l.push(t) : 묶음.push({ ch: 나뉨_(x) && x.channel, c: x.channel, l: [t] });
     });
+    묶음.sort((p, q) => 차례_(p.c) - 차례_(q.c));
     $('chs').innerHTML = $('rchs').innerHTML = 묶음.map(m => m.ch ? `<div class="pair"><span class="ptag">${esc(m.ch)} · 쌍둥이</span><div class="chips">${m.l.join('')}</div></div>` : m.l[0]).join('');
     document.querySelectorAll('.chlab').forEach(e => e.textContent = who.channels.some(나뉨_) ? '만들 계정' : '만들 채널');
     document.querySelectorAll('.chn').forEach(e => e.textContent = who.admin && e.closest('#list') ? '전체' : 표시_());
@@ -1053,6 +1054,7 @@
   Object.values(로고).filter(v => v.t).forEach(v => { 로고[v.t] = { c: v.c, i: [v.i[1]] }; });
   Object.keys(로고).filter(c => 로고[c].t).forEach(c => { 로고[c + '#1'] = { c: 로고[c].c, i: [로고[c].i[0]] }; });
   const 첫계정 = { 팁끌텅장: '텅장주의', 쉬시언시: '언니시간' };
+  const 차례_ = c => (i => i < 0 ? 4.5 : i)(['잡식주의', '팁끌텅장', '쉬시언시', '주파인더', '뉴페이지', '쀼언니'].indexOf(c));
   const 나뉨_ = x => !!x.channel && (who.channels || []).some(y => y !== x && y.channel === x.channel);
   const 이름_ = x => !x ? '' : x.계정 || (나뉨_(x) ? 첫계정[x.channel] || x.channel : x.name);
   const 그림_ = x => x.계정 || (나뉨_(x) ? x.channel + '#1' : x.name);
@@ -2082,7 +2084,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793691459876';
+  const 빌드 = '1793691485919';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
