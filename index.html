@@ -14,10 +14,10 @@
     --wait:#7CC4FF; --run:#FFC46B; --ok:#5EE6A8; --bad:#FF8A8A; --eta:#C3A6FF; } 
   #cost .kp { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; } #cost .kp div { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; min-width:0; } #cost .kp span { display:block; color:var(--dim); font-size:12px; } #cost .kp b { display:block; font-size:22px; font-weight:700; margin:2px 0; font-variant-numeric:tabular-nums; } #cost .kp small { color:var(--dim); font-size:11px; }
   #cost .cc { background:var(--field); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:12px; } #cost .lb { font-size:13px; color:var(--dim); margin-bottom:6px; }
-  #cost .bars { display:flex; gap:10px; align-items:flex-end; height:165px; } #cost .co { flex:1; min-width:0; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px; height:100%; } #cost .co small { font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; } #cost .co span { font-size:12px; color:var(--dim); border-top:1px solid var(--line); width:100%; text-align:center; padding-top:3px; white-space:nowrap; }
+  #cost .bars { display:flex; align-items:flex-end; height:165px; } #cost .co { flex:1; min-width:0; padding:0 5px; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:4px; height:100%; } #cost .co small { font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; } #cost .co span { font-size:12px; color:var(--dim); border-top:1px solid var(--line); width:100%; text-align:center; padding-top:3px; white-space:nowrap; }
   #cost .sb { width:min(44px,100%); display:flex; flex-direction:column; gap:2px; } #cost .sb i { display:block; } #cost .sb i:first-child { border-radius:4px 4px 0 0; }
   #cost .lg { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:12px; color:#C9C9CF; margin-top:10px; } #cost .lg i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:4px; }
-  #cost .fl { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; } #cost .fl .chip { padding:5px 11px; font-size:12px; cursor:pointer; } #cost .sels { display:flex; gap:6px; } #cost select { width:auto; padding:5px 8px; font-size:13px; border-radius:8px; }
+  #cost .fl { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; } #cost .fl .chip { padding:5px 11px; font-size:12px; cursor:pointer; } #cost .sels { display:flex; gap:6px; flex-wrap:wrap; align-items:center; } #cost #cpick:not([hidden]) { display:inline-flex; gap:4px; align-items:center; } #cost #cpick input { width:auto; padding:4px 6px; font-size:13px; } #cost #cpick .note { margin:0; } #cost select { width:auto; padding:5px 8px; font-size:13px; border-radius:8px; }
   #cost .rw { display:grid; grid-template-columns:44px minmax(0,1fr) 120px 112px 14px; gap:12px; align-items:center; padding:8px 6px; border-bottom:1px solid var(--line); cursor:pointer; } #cost .rw.op { border-bottom:0; background:var(--field); border-radius:10px 10px 0 0; } @media (hover:hover) { #cost .rw:hover { background:var(--field); } }
   #cost .th { width:44px; height:58px; border-radius:7px; background:var(--bar) center/cover; display:block; } #cost .tt { min-width:0; } #cost .tt b { display:block; font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } #cost .tt small { display:block; color:var(--dim); font-size:12px; margin-top:2px; } #cost .num { color:var(--navy2); }
   #cost .cs { text-align:right; } #cost .won { font-size:15px; font-weight:700; font-variant-numeric:tabular-nums; } #cost .ov, #cost .nr, #cost .sm { display:block; font-style:normal; font-size:11px; font-weight:700; } #cost .ov { color:var(--bad); } #cost .nr { color:var(--run); } #cost .sm { color:var(--dim); font-weight:500; } #cost .go { color:var(--dim); font-size:15px; }
@@ -27,7 +27,12 @@
   #cost .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; } #cost .two table { width:100%; border-collapse:collapse; font-size:13px; align-self:start; } #cost .two td { padding:4px 0; border-bottom:1px solid var(--line); } #cost .two td:nth-child(2) { color:var(--dim); font-size:11px; padding:4px 6px; } #cost .two td:last-child { text-align:right; font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums; } #cost .two td i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; }
   #cost .two ul { list-style:none; padding:0; margin:0; font-size:12px; } #cost .two li { display:grid; grid-template-columns:96px 1fr 66px; gap:6px; align-items:center; padding:3px 0; } #cost .two li u { display:block; height:6px; background:var(--bar); border-radius:3px; overflow:hidden; } #cost .two li u i { display:block; height:100%; background:var(--navy2); } #cost .two li b { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
   #cost .nt { color:var(--dim); font-size:11px; margin-top:8px; line-height:1.5; } #cost .box button { margin-top:10px; width:100%; } #cost .ft { color:var(--dim); font-size:12px; margin-top:10px; line-height:1.6; } #cost .ft a { color:var(--navy2); font-weight:700; cursor:pointer; }
-  @media (max-width:640px) { #cost .kp { grid-template-columns:repeat(2,1fr); gap:8px; } #cost .kp b { font-size:19px; } #cost .rw { grid-template-columns:40px minmax(0,1fr) 78px; gap:10px; } #cost .th { width:40px; height:53px; } #cost .tt b { font-size:13px; } #cost .tt small { font-size:11px; } #cost .rw .mix, #cost .rw .go { display:none; } #cost .won { font-size:14px; } #cost .two { grid-template-columns:1fr; gap:10px; } #cost .co small { font-size:10px; } #cost .bars { gap:6px; } }
+  #cost em.up, #cost em.dn { font-style:normal; font-weight:700; } #cost em.up { color:var(--bad); } #cost em.dn { color:var(--ok); }
+  #cost .lb { display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; } #cost .lb .fw { color:#C9C9CF; font-size:12px; } #cost .lb .fw b { color:var(--text); font-variant-numeric:tabular-nums; }
+  #cost .avg { position:relative; height:56px; margin-top:6px; border-top:1px dashed var(--line); } #cost .avg svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; } #cost .avg polyline { fill:none; stroke:var(--ok); stroke-width:2; vector-effect:non-scaling-stroke; } #cost .avg line { stroke:var(--bad); stroke-width:1; stroke-dasharray:4 4; vector-effect:non-scaling-stroke; }
+  #cost .avg i { position:absolute; width:7px; height:7px; border-radius:50%; background:var(--ok); transform:translate(-50%,50%); } #cost .avg small { position:absolute; transform:translate(-50%,-4px); font-size:11px; color:var(--ok); white-space:nowrap; font-variant-numeric:tabular-nums; } #cost .avg em { position:absolute; right:0; transform:translateY(50%); font-style:normal; font-size:10px; color:var(--bad); background:var(--field); padding:0 3px; }
+  #cost .lg .ln { height:2px; width:12px; vertical-align:middle; } #cost .stg li { grid-template-columns:96px 1fr 118px; }
+  @media (max-width:640px) { #cost .kp { grid-template-columns:repeat(2,1fr); gap:8px; } #cost .kp b { font-size:19px; } #cost .rw { grid-template-columns:40px minmax(0,1fr) 78px; gap:10px; } #cost .th { width:40px; height:53px; } #cost .tt b { font-size:13px; } #cost .tt small { font-size:11px; } #cost .rw .mix, #cost .rw .go { display:none; } #cost .won { font-size:14px; } #cost .two { grid-template-columns:1fr; gap:10px; } #cost .co small { font-size:10px; } #cost .co { padding:0 3px; } #cost .lb .fw { display:block; margin:4px 0 0; } }
   #dj { margin:6px 0 18px; min-width:0; } #dj h2 { font-size:17px; margin:0 0 10px; } #dj h3 { font-size:14px; margin:14px 0 8px; } #dj .ok { color:var(--ok); } #dj .warn { color:var(--run); } #dj .bad { color:var(--bad); } #dj .mut { color:var(--dim); }
   #dj .zs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); background:var(--field); border:1.5px solid var(--line); border-radius:12px; margin-bottom:12px; } #dj .zs > div { padding:10px 13px; border-left:1px solid var(--line); min-width:0; } #dj .zs > div:first-child { border-left:0; } #dj .zs span { display:block; color:var(--dim); font-size:12px; margin-bottom:2px; } #dj .zs b { display:block; font-size:18px; line-height:1.3; font-variant-numeric:tabular-nums; } #dj .zs b small { font-size:13px; color:var(--dim); font-weight:600; } #dj .zs p { margin:0; font-size:13px; line-height:1.5; font-weight:700; } #dj .zs p.warn, #dj .zs p.sub { font-size:12px; font-weight:600; margin-top:4px; } #dj .zs p.sub { color:var(--dim); }
   #dj .gu { position:relative; display:block; height:8px; background:var(--bar); border-radius:4px; margin-top:8px; } #dj .gu i { display:block; max-width:100%; height:100%; border-radius:4px; background:var(--ok); } #dj .gu i.hi { background:var(--bad); } #dj .gu s { position:absolute; left:50%; top:-3px; bottom:-3px; width:2px; background:var(--bad); } #dj .dots { display:flex; flex-wrap:wrap; gap:3px; margin-top:7px; } #dj .dots i { width:9px; height:9px; border:0; border-radius:50%; background:var(--ok); } #dj .dots i.w { background:var(--run); } #dj .dots i.n { background:#55555C; } #dj .gs { display:flex; align-items:center; gap:5px; margin-top:7px; } #dj .gs u { display:block; height:8px; min-width:4px; border-radius:4px; background:#55555C; } #dj .gs u.to { background:var(--navy2); } #dj .gs em { flex:none; font-style:normal; font-size:12px; line-height:1; color:var(--dim); }
@@ -550,7 +555,14 @@
     <p class="sub" id="csub"></p>
     <div class="kp" id="ckp"></div>
     <div class="cc" id="cchart"></div>
-    <div class="fl"><div class="chips" id="cch"></div><div class="sels"><select id="cdays" onchange="costDraw()"><option value="7">최근 7일</option><option value="30">최근 30일</option><option value="0">전체</option></select><select id="csort" onchange="costDraw()"><option value="new">최신순</option><option value="won">비싼 순</option></select></div></div>
+    <div class="cc" id="cstage" hidden></div>
+    <div class="fl"><div class="chips" id="cch"></div><div class="sels">
+      <select id="cdays" onchange="costDraw()"><optgroup label="기간"><option value="d7">최근 7일</option><option value="d30">최근 30일</option><option value="today">오늘</option><option value="yday">어제</option><option value="week">이번 주</option><option value="month">이번 달</option><option value="last">지난달</option><option value="pick">날짜 고르기</option><option value="all">전체</option></optgroup><optgroup label="개수"><option value="n10">최근 10건</option><option value="n20">최근 20건</option><option value="n50">최근 50건</option><option value="n100">최근 100건</option></optgroup></select>
+      <span id="cpick" hidden><input type="date" id="cfrom" onchange="costDraw()" aria-label="시작 날"><span class="note">~</span><input type="date" id="cto" onchange="costDraw()" aria-label="끝 날"></span>
+      <select id="cwho" onchange="costDraw()"><option value="">모든 담당자</option></select>
+      <select id="cst" onchange="costDraw()"><option value="">모든 상태</option><option value="ov">예산 넘음</option><option value="nr">예산 80% 이상</option><option value="rev">수정 요청 있음</option><option value="run">진행 중</option><option value="fail">실패</option></select>
+      <select id="csort" onchange="costDraw()"><option value="new">최신순</option><option value="won">비싼 순</option><option value="cheap">싼 순</option><option value="pct">예산 대비 % 순</option><option value="rev">수정 많은 순</option></select>
+    </div></div>
     <div id="crows"></div>
     <p class="ft" id="cft"></p>
     <p class="err" id="err7"></p>
@@ -1880,40 +1892,78 @@
     google.script.run.withSuccessHandler(r => { cD = r; $('csub').textContent = ''; costDraw(); })
       .withFailureHandler(e => $('err7').textContent = e.message.replace(/^Error:\s*/, '')).budget(code);
   }
+  const 더날 = (d, k) => new Date(Date.parse(d + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10);
+  function 기간칸() {
+    const v = $('cdays').value, 오 = cD.today;
+    $('cpick').hidden = v !== 'pick';
+    if (/^n\d+$/.test(v)) return { n: Number(v.slice(1)) };
+    if (v === 'pick') return { a: $('cfrom').value, b: $('cto').value };
+    if (v === 'last') { const 끝 = 더날(오.slice(0, 8) + '01', -1); return { a: 끝.slice(0, 8) + '01', b: 끝 }; }
+    return { d7: { a: 더날(오, -6), b: 오 }, d30: { a: 더날(오, -29), b: 오 }, today: { a: 오, b: 오 }, yday: { a: 더날(오, -1), b: 더날(오, -1) },
+      week: { a: 더날(오, -((new Date(오 + 'T12:00:00Z').getUTCDay() + 6) % 7)), b: 오 }, month: { a: 오.slice(0, 8) + '01', b: 오 } }[v] || {};
+  }
   function costDraw() {
     if (!cD) return;
-    const 한 = cD.예산, days = Number($('cdays').value);
-    const 앞날 = days ? new Date(Date.parse(cD.today + 'T12:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10) : '';
-    const 안 = d => (!앞날 || d >= 앞날) && d;
-    const 건들 = (cAll ? cD.jobs.concat(cD.sheet) : cD.jobs).filter(j => 안(j.d) || !days && !j.d);
-    const 채널들 = [...new Set(건들.map(j => j.ch))];
+    const 한 = cD.예산, 기 = 기간칸(), 들 = (a, b) => d => !!d && (!a || d >= a) && (!b || d <= b);
+    const 모두 = (cAll ? cD.jobs.concat(cD.sheet) : cD.jobs).slice().sort((p, q) => (q.d || '').localeCompare(p.d || '') || q.row - p.row);
+    const 안 = 기.n ? () => true : 들(기.a, 기.b), 기간건 = 기.n ? 모두 : 모두.filter(j => 안(j.d) || !기.a && !기.b);
+    const 채널들 = [...new Set(기간건.map(j => j.ch))];
     if (cCh && !채널들.includes(cCh)) cCh = '';
     $('cch').innerHTML = ['', ...채널들].map(c => `<span class="chip ${c === cCh ? 'accent' : ''}" onclick="costCh(${esc(JSON.stringify(c))})">${esc(c || '전체')}</span>`).join('');
-    const 보임 = 건들.filter(j => !cCh || j.ch === cCh), 돈건 = 보임.filter(j => !j.same && j.won), 공 = cD.common.filter(x => 안(x.d));
-    const 건합 = 돈건.reduce((a, j) => a + j.won, 0), 공합 = cCh ? 0 : 공.reduce((a, x) => a + x.won, 0);
-    const 오늘 = 돈건.filter(j => j.d === cD.today), 대기 = 보임.filter(j => j.d === cD.today && /^(대기|제작중)/.test(j.state) && !j.won).length;
-    const 한도 = j => j.limit || 한, 넘음 = 돈건.filter(j => j.won >= 한도(j)).length, 가까움 = 돈건.filter(j => j.won >= 한도(j) * .8 && j.won < 한도(j)).length;
-    $('ckp').innerHTML = `<div><span>이 기간 총 비용</span><b>${천(건합 + 공합)}원</b><small>${돈건.length}건${공합 ? ' + 공통비 ' + 천(공합) + '원' : ''}</small></div>`
-      + `<div><span>건당 평균</span><b>${천(돈건.length ? 건합 / 돈건.length : 0)}원</b><small>예산 ${천(한)}원의 ${돈건.length ? Math.round(건합 / 돈건.length / 한 * 100) : 0}%</small></div>`
-      + `<div><span>예산 넘은 건</span><b>${넘음}건</b><small>80% 이상 ${가까움}건 더</small></div>`
-      + `<div><span>오늘</span><b>${천(오늘.reduce((a, j) => a + j.won, 0))}원</b><small>${오늘.length}건${대기 ? ' · ' + 대기 + '건 진행 전' : ''}</small></div>`;
-    const 날 = {};
-    돈건.forEach(j => { const o = 날[j.d] = 날[j.d] || { c: 0, g: 0, k: 0, a: 0, e: 0 }; 'cgka'.split('').forEach(k => o[k] += j[k]); });
-    if (!cCh) 공.forEach(x => { (날[x.d] = 날[x.d] || { c: 0, g: 0, k: 0, a: 0, e: 0 }).e += x.won; });
-    const 날들 = Object.keys(날).filter(Boolean).sort().slice(-14), 합_ = o => o.c + o.g + o.k + o.a + o.e, top = Math.max(1, ...날들.map(d => 합_(날[d])));
-    $('cchart').innerHTML = `<p class="lb">날마다 쓴 돈</p><div class="bars">${날들.map(d => { const o = 날[d], 짧 = d.slice(5).replace('-', '/').replace(/^0/, '');
-      return `<div class="co" title="${짧} · ${천(합_(o))}원&#10;${'cgkae'.split('').filter(k => o[k]).map(k => esc(cD.말[k]) + ' ' + 천(o[k]) + '원').join('&#10;')}"><small>${천(합_(o))}</small><div class="sb">${'eakgc'.split('').filter(k => o[k] / top * 118 >= 1).map(k => `<i style="height:${o[k] / top * 118}px;background:${돈색[k]}"></i>`).join('')}</div><span>${짧}</span></div>`; }).join('')}</div>`
-      + `<div class="lg">${'cgkae'.split('').map(k => `<span><i style="background:${돈색[k]}"></i>${esc(cD.말[k])}</span>`).join('')}</div>`;
-    const 줄 = 보임.slice();
-    if ($('csort').value === 'won') 줄.sort((a, b) => (b.same ? 0 : b.won || 0) - (a.same ? 0 : a.won || 0));
+    const 고른이 = $('cwho').value, 사람들 = [...new Set(모두.map(j => j.who))].sort();
+    $('cwho').innerHTML = '<option value="">모든 담당자</option>' + 사람들.map(w => `<option${w === 고른이 ? ' selected' : ''}>${esc(w)}</option>`).join('');
+    const 누구 = $('cwho').value, 맞 = j => (!cCh || j.ch === cCh) && (!누구 || j.who === 누구);
+    let 보임 = 기간건.filter(맞), 앞건 = null, 앞말 = '', 앞안 = null;
+    if (기.n) { 앞건 = 보임.slice(기.n, 기.n * 2); 보임 = 보임.slice(0, 기.n); 앞말 = `앞 ${기.n}건보다`; }
+    else if (기.a && 기.b) { const L = Math.round((Date.parse(기.b) - Date.parse(기.a)) / 864e5) + 1; 앞안 = 들(더날(기.a, -L), 더날(기.a, -1)); 앞건 = 모두.filter(j => 맞(j) && 앞안(j.d)); 앞말 = L === 1 ? '전날보다' : `앞 ${L}일보다`; }
+    const 한도 = j => j.limit || 한, 돈값 = j => j.same ? 0 : j.won || 0;
+    const 상태맞 = { ov: j => 돈값(j) >= 한도(j), nr: j => 돈값(j) >= 한도(j) * .8 && 돈값(j) < 한도(j), rev: j => j.rev > 0, run: j => /^(대기|제작중|수정중)/.test(j.state), fail: j => /^실패/.test(j.state) }[$('cst').value];
+    if (상태맞) { 보임 = 보임.filter(상태맞); if (앞건) 앞건 = 앞건.filter(상태맞); }
+    const 공쓰나 = !cCh && !누구 && !상태맞 && !기.n, 공 = 공쓰나 ? cD.common.filter(x => 안(x.d)) : [], 앞공 = 공쓰나 && 앞안 ? cD.common.filter(x => 앞안(x.d)) : [];
+    const 통 = (건, 공들) => { const 돈 = 건.filter(돈값), 합 = 돈.reduce((a, j) => a + j.won, 0); return { 돈, 합, 공합: 공들.reduce((a, x) => a + x.won, 0), 평: 돈.length ? 합 / 돈.length : 0, 넘: 돈.filter(j => j.won >= 한도(j)).length }; };
+    const 지금 = 통(보임, 공), 앞 = 앞건 && 앞건.some(돈값) ? 통(앞건, 앞공) : null, 돈건 = 지금.돈;
+    const 증 = (n, p) => { if (!앞 || !p) return ''; const r = Math.round((n - p) / p * 100); return ` · ${앞말} <em class="${r > 0 ? 'up' : r < 0 ? 'dn' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : ''}${Math.abs(r)}%</em>`; };
+    const 오늘 = 모두.filter(j => 맞(j) && j.d === cD.today), 오늘돈 = 오늘.filter(돈값), 대기 = 오늘.filter(j => /^(대기|제작중)/.test(j.state) && !j.won).length;
+    $('ckp').innerHTML = `<div><span>${기.n ? `최근 ${기.n}건 비용` : '이 기간 총 비용'}</span><b>${천(지금.합 + 지금.공합)}원</b><small>${돈건.length}건${지금.공합 ? ' + 공통비 ' + 천(지금.공합) + '원' : ''}${앞 ? 증(지금.합 + 지금.공합, 앞.합 + 앞.공합) : ''}</small></div>`
+      + `<div><span>건당 평균</span><b>${천(지금.평)}원</b><small>예산 ${천(한)}원의 ${Math.round(지금.평 / 한 * 100)}%${앞 ? 증(지금.평, 앞.평) : ''}</small></div>`
+      + `<div><span>예산 넘은 건</span><b>${지금.넘}건</b><small>80% 이상 ${돈건.filter(j => j.won >= 한도(j) * .8 && j.won < 한도(j)).length}건 더${앞 ? ` · ${앞말.replace('보다', '')} ${앞.넘}건` : ''}</small></div>`
+      + `<div><span>오늘</span><b>${천(오늘돈.reduce((a, j) => a + j.won, 0))}원</b><small>${오늘돈.length}건${대기 ? ' · ' + 대기 + '건 진행 전' : ''}</small></div>`;
+    const 최근돈 = 모두.filter(j => 맞(j) && 돈값(j)), 몇 = Math.min(20, Math.floor(최근돈.length / 2)), 평_ = a => a.reduce((s, j) => s + j.won, 0) / a.length;
+    const 흐름 = 몇 ? (() => { const n = 평_(최근돈.slice(0, 몇)), p = 평_(최근돈.slice(몇, 몇 * 2)), r = Math.round((n - p) / p * 100);
+      return `<span class="fw">값 흐름 · 최근 ${몇}건 평균 <b>${천(n)}원</b> <em class="${r > 0 ? 'up' : r < 0 ? 'dn' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : ''}${Math.abs(r)}%</em> · 그 앞 ${몇}건 ${천(p)}원</span>`; })() : '';
+    const 날수 = new Set(돈건.map(j => j.d).concat(공.map(x => x.d)).filter(Boolean)).size, 주로 = 날수 > 31;
+    const 칸 = d => 주로 ? 더날(d, -((new Date(d + 'T12:00:00Z').getUTCDay() + 6) % 7)) : d, 날 = {}, 새 = () => ({ c: 0, g: 0, k: 0, a: 0, e: 0, n: 0 });
+    돈건.forEach(j => { if (!j.d) return; const o = 날[칸(j.d)] = 날[칸(j.d)] || 새(); 'cgka'.split('').forEach(k => o[k] += j[k]); o.n++; });
+    공.forEach(x => { (날[칸(x.d)] = 날[칸(x.d)] || 새()).e += x.won; });
+    const 날들 = Object.keys(날).sort(), 합_ = o => o.c + o.g + o.k + o.a + o.e, top = Math.max(1, ...날들.map(d => 합_(날[d]))), 많 = 날들.length > 14;
+    const 짧_ = d => d.slice(5).replace('-', '/').replace(/^0/, '') + (주로 ? '~' : '');
+    const 평점 = 날들.map((d, i) => 날[d].n ? [i, (합_(날[d]) - 날[d].e) / 날[d].n, d] : null).filter(Boolean), 위 = Math.max(한, ...평점.map(x => x[1])) * 1.15, N = 날들.length;
+    const 띔 = Math.ceil(N / (innerWidth < 640 ? 6 : 12));
+    $('cchart').innerHTML = `<p class="lb"><span>${주로 ? '주마다' : '날마다'} 쓴 돈</span>${흐름}</p><div class="bars">${날들.map((d, i) => { const o = 날[d], 짧 = 짧_(d);
+      return `<div class="co" title="${짧} · ${천(합_(o))}원 · ${o.n}건&#10;${'cgkae'.split('').filter(k => o[k]).map(k => esc(cD.말[k]) + ' ' + 천(o[k]) + '원').join('&#10;')}"><small>${많 ? '' : 천(합_(o))}</small><div class="sb">${'eakgc'.split('').filter(k => o[k] / top * 118 >= 1).map(k => `<i style="height:${o[k] / top * 118}px;background:${돈색[k]}"></i>`).join('')}</div><span>${(N - 1 - i) % 띔 ? '\u00a0' : 짧}</span></div>`; }).join('')}</div>`
+      + (평점.length ? `<div class="avg"><svg viewBox="0 0 ${N} 100" preserveAspectRatio="none"><line x1="0" x2="${N}" y1="${100 - 한 / 위 * 100}" y2="${100 - 한 / 위 * 100}"/><polyline points="${평점.map(x => `${x[0] + .5},${100 - x[1] / 위 * 100}`).join(' ')}"/></svg>`
+        + 평점.map(x => `<i style="left:${(x[0] + .5) / N * 100}%;bottom:${x[1] / 위 * 100}%" title="${짧_(x[2])} 건당 평균 ${천(x[1])}원 · ${날[x[2]].n}건"></i>${많 ? '' : `<small style="left:${(x[0] + .5) / N * 100}%;bottom:${x[1] / 위 * 100}%">${천(x[1])}</small>`}`).join('')
+        + `<em style="bottom:${한 / 위 * 100}%">예산 ${천(한)}</em></div>` : '')
+      + `<div class="lg">${'cgkae'.split('').map(k => `<span><i style="background:${돈색[k]}"></i>${esc(cD.말[k])}</span>`).join('')}<span><i class="ln" style="background:var(--ok)"></i>건당 평균(공통비 빼고)</span></div>`;
+    const 단 = {}, 약 = 돈건.some(j => !j.정확);
+    돈건.forEach(j => (j.단 || []).forEach(x => 단[x[0]] = (단[x[0]] || 0) + x[1]));
+    const 단들 = Object.entries(단).sort((p, q) => q[1] - p[1]), 단합 = 단들.reduce((a, x) => a + x[1], 0), 단큰 = 단들.length ? 단들[0][1] : 1, 반 = Math.ceil(단들.length / 2);
+    const 단줄 = a => `<ul>${a.map(x => `<li><span>${esc(x[0])}</span><u><i style="width:${x[1] / 단큰 * 100}%"></i></u><b>${약 ? '약 ' : ''}${천(x[1])}원 · ${Math.round(x[1] / 단합 * 100)}%</b></li>`).join('')}</ul>`;
+    $('cstage').hidden = !단들.length;
+    $('cstage').innerHTML = `<p class="lb"><span>단계별로 쓴 돈 · ${돈건.length}건</span><span class="fw">건당 약 ${천(단합 / Math.max(1, 돈건.length))}원</span></p><div class="two stg">${단줄(단들.slice(0, 반))}${단줄(단들.slice(반))}</div>${약 ? '<p class="nt">옛 건은 단계 금액을 토큰 비율로 나눈 값이라 약이에요.</p>' : ''}`;
+    const 줄 = 보임.slice(), 정 = $('csort').value;
+    if (정 === 'won') 줄.sort((a, b) => 돈값(b) - 돈값(a));
+    if (정 === 'cheap') 줄.sort((a, b) => (돈값(a) || 1e9) - (돈값(b) || 1e9));
+    if (정 === 'pct') 줄.sort((a, b) => 돈값(b) / 한도(b) - 돈값(a) / 한도(a));
+    if (정 === 'rev') 줄.sort((a, b) => b.rev - a.rev);
     $('crows').innerHTML = 줄.map(j => { const id = j.row || 's' + j.ch + j.title, on = cOpen === id, won = j.won || 0, 한 = j.limit || cD.예산;
       const 칸 = j.same ? `<b class="won">${천(won)}원</b><em class="sm">#${j.same} 과 같은 게시물</em>` : won ? `<b class="won">${천(won)}원</b>${won >= 한 ? '<em class="ov">⚠ 예산 넘음</em>' : won >= 한 * .8 ? '<em class="nr">예산 80%+</em>' : ''}` : `<em class="sm">${esc(j.state.split(' ')[0])}</em>`;
       return `<div class="rw${on ? ' op' : ''}" onclick="costOpen(${esc(JSON.stringify(id))})"><span class="th"${j.th ? ` style="background-image:url('${img(j.th)}')"` : ''}></span>`
         + `<div class="tt"><b>${j.row ? `<span class="num">#${j.row}</span> ` : ''}${esc(j.title || j.ch + ' 제작 건')}</b><small>${esc(j.ch)} · ${esc(j.who)} · ${esc(j.t)}${j.rev ? ' · 수정 ' + j.rev : ''}${j.pre ? ' · 이미 만든 게시물' : ''}</small></div>`
-        + `${won ? 띠(j) : '<span class="mix"></span>'}<div class="cs">${칸}</div><span class="go">${on ? '⌃' : '⌄'}</span></div>` + (on ? 내역칸(j, 한) : ''); }).join('') || '<p class="note">이 기간에 제작 건이 없어요.</p>';
-    const 빠짐 = cD.sheet.filter(j => 안(j.d) && (!cCh || j.ch === cCh));
+        + `${won ? 띠(j) : '<span class="mix"></span>'}<div class="cs">${칸}</div><span class="go">${on ? '⌃' : '⌄'}</span></div>` + (on ? 내역칸(j, 한) : ''); }).join('') || '<p class="note">이 조건에 맞는 제작 건이 없어요.</p>';
+    const 빠짐 = cAll || 기.n ? [] : cD.sheet.filter(j => 안(j.d) && 맞(j));
     $('cft').innerHTML = (cAll ? `시트 · 시험으로 만든 건까지 보는 중이에요 <a onclick="costAll()">웹앱 건만 보기</a>` : 빠짐.length ? `시트 · 시험으로 만든 ${빠짐.length}건 · ${천(빠짐.reduce((a, j) => a + j.won, 0))}원은 빠져 있어요 <a onclick="costAll()">포함해서 보기</a>` : '')
-      + ` · 금액은 시트 비용 칸 그대로(수정 · 다시 제작에 쓴 돈 포함 · 쓴 때 환율) · 공통비는 레퍼런스 찾기 · 채널 학습처럼 어느 건에도 안 붙는 돈이에요(10/31 부터 기록).`;
+      + ` · 금액은 시트 비용 칸 그대로(수정 · 다시 제작에 쓴 돈 포함 · 쓴 때 환율) · 공통비는 레퍼런스 찾기 · 채널 학습처럼 어느 건에도 안 붙는 돈이에요(10/31 부터 기록${공쓰나 ? '' : ' · 채널 · 담당자 · 상태 · 개수로 거를 땐 빠짐'}).`;
   }
   function 내역칸(j, 한) {
     if (!j.won) return `<div class="box"><p class="nt">아직 쓴 돈이 없어요.</p>${j.row ? `<button onclick="costGo(${j.row})">제작 현황 열기 ›</button>` : ''}</div>`;
@@ -2084,7 +2134,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793692632169';
+  const 빌드 = '1793692933718';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
