@@ -2090,13 +2090,13 @@
     r.forEach(x => (묶음[키(x)] = 묶음[키(x)] || []).push(x));
     $('cpb').innerHTML = Object.values(묶음).map(g => g.map((x, k) => `<tr class="${x.demo ? 'off' : ''}${k ? ' more' : ''}">`
       + (k ? '' : `<td rowspan="${g.length}" class="nm">${esc(x.name)}</td>`)
-      + `<td class="ch">${esc(x.channel)}${(l => l ? ' · ' + esc(l) : '')(x.계정 || (g.some(y => y !== x && y.channel === x.channel) ? 첫계정[x.channel] || x.channel : ''))}${x.demo ? '<small>준비 중</small>' : ''}</td>`
+      + (x.mid ? `<td class="ch">중간관리자</td><td colspan="4" class="ch">모든 채널 · 제작 티켓 안 씀(제작 예산 · 계정 티켓 탭 없음)</td>` : `<td class="ch">${esc(x.channel)}${(l => l ? ' · ' + esc(l) : '')(x.계정 || (g.some(y => y !== x && y.channel === x.channel) ? 첫계정[x.channel] || x.channel : ''))}${x.demo ? '<small>준비 중</small>' : ''}</td>`
       + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span><small class="tmr">내일 ${x.tomorrow ?? '-'}</small></td>`
       + `<td class="dl"><input type="number" min="0" value="${x.daily}" onchange="cpOp(this, ${x.row}, 'daily', this.value)"> 장</td>`
       + `<td><button class="ghost" onclick="cpOp(this, ${x.row}, 'reset', 0)">리셋</button></td>`
-      + `<td class="ch">${(u => [u.확인 && '확인 ' + u.확인, u.미확인 && `<b class="upbad">미확인 ${u.미확인}</b>`, u.다른계정 && `<b class="upbad">다른 계정 ${u.다른계정}</b>`, u.링크확인중 && '확인 중 ' + u.링크확인중].filter(Boolean).join(' · ') || '-')(x.up || {})}</td>`
+      + `<td class="ch">${(u => [u.확인 && '확인 ' + u.확인, u.미확인 && `<b class="upbad">미확인 ${u.미확인}</b>`, u.다른계정 && `<b class="upbad">다른 계정 ${u.다른계정}</b>`, u.링크확인중 && '확인 중 ' + u.링크확인중].filter(Boolean).join(' · ') || '-')(x.up || {})}</td>`)
       + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
-      + `<td><span class="step"><button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button><button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
+      + `<td><span class="step">${x.mid ? '' : `<button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button>`}<button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
   }
   function 이단계켜끄기(b) {
@@ -2142,7 +2142,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793699431676';
+  const 빌드 = '1793700186106';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
