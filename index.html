@@ -510,7 +510,7 @@
   <div class="body" id="list" hidden>
     <div class="path">POWERPAGE.zip › <span class="chn"></span> › 제작 현황</div>
     <h1>제작 현황</h1><span class="cur"></span>
-    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="거름()"></select><select id="fwho" onchange="거름()"></select></div>
+    <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="거름()"></select><select id="fwho" onchange="거름()"></select><span style="display:inline-flex;gap:6px;align-items:center"><input type="date" id="ffrom" onchange="거름()" style="width:auto;font-size:14px" aria-label="시작 날"><span class="note" style="margin:0">~</span><input type="date" id="fto" onchange="거름()" style="width:auto;font-size:14px" aria-label="끝 날"></span><button class="ghost" onclick="기간(오늘_())">오늘</button><button class="ghost" onclick="기간('')">전체 기간</button><button onclick="오늘이름복사(this)">오늘 제작본 이름 복사</button></div>
     <p class="sub" id="lsub"></p>
     <div class="cards" id="cards"></div>
     <button class="ghost" id="more" hidden onclick="더보기()">더 보기</button>
@@ -1173,7 +1173,22 @@
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
       현황그림_(r, quiet, 전환);
-    }).withFailureHandler(e => { if (차례 !== 현황차례) return; if (목록나감) 목록나감.then(() => { 목록나감 = null; mine = []; $('cards').innerHTML = ''; }); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, n: 보일 } : { n: 보일 });
+    }).withFailureHandler(e => { if (차례 !== 현황차례) return; if (목록나감) 목록나감.then(() => { 목록나감 = null; mine = []; $('cards').innerHTML = ''; }); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, who.admin ? { ch: $('fch').value, who: $('fwho').value, from: $('ffrom').value, to: $('fto').value, n: 보일 } : { n: 보일 });
+  }
+  const 오늘_ = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+  function 기간(d) { $('ffrom').value = $('fto').value = d; 거름(); }
+  async function 오늘이름복사(b) {
+    const 원 = b.textContent, 오늘 = 오늘_();
+    b.disabled = true; b.textContent = '불러오는 중…';
+    const 글 = new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(no).jobs(code, { ch: $('fch').value, who: $('fwho').value, from: 오늘, to: 오늘, n: 500 }))
+      .then(r => { const l = r.filter(j => j.files.length).map(j => j.title || `#${j.row} ${j.channel}`); if (!l.length) throw new Error('오늘 끝난 제작본이 없어요'); return l.join('\n'); });
+    let 말;
+    try {
+      try { await (window.ClipboardItem ? navigator.clipboard.write([new ClipboardItem({ 'text/plain': 글.then(t => new Blob([t], { type: 'text/plain' })) })]) : 글.then(t => navigator.clipboard.writeText(t))); }
+      catch (e) { const a = document.createElement('textarea'); a.value = await 글; document.body.append(a); a.select(); document.execCommand('copy'); a.remove(); }
+      말 = `✓ ${(await 글).split('\n').length}건 복사됨`;
+    } catch (e) { 말 = e.message.replace(/^Error:\s*/, ''); }
+    b.textContent = 말; setTimeout(() => { b.textContent = 원; b.disabled = false; }, 2000);
   }
   let 목록나감 = null;
   const 움직임끔 = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2059,7 +2074,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793686751037';
+  const 빌드 = '1793688416203';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
