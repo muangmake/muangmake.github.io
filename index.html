@@ -1021,12 +1021,12 @@
     if (!/^(완료|수정중)/.test(j.state)) return '';
     const u = j.up || {}, 링크 = (u.links || []).map((l, i) => `<a href="${esc(주소(l))}" target="_blank" rel="noopener">게시물${u.links.length > 1 ? ' ' + (i + 1) : ''} ↗</a>`).join(' · ');
     const 넣기 = `<div class="row"><input id="upl" placeholder="올린 게시물 링크 (instagram.com/p/…)"><button onclick="postGo(this, ${j.row})">링크 넣기</button></div>`;
-    return u.s === '확인' ? `<div class="upc ok">✓ ${esc(j.channel)} 계정 업로드 확인 · ${링크}</div>`
+    return u.s === '확인' ? `<div class="upc ok">✓ ${esc(j.acc || j.channel)} 계정 업로드 확인 · ${링크}</div>`
       : u.s === '링크확인중' ? `<div class="upc">넣은 링크를 확인하고 있어요 — 몇 분 안에 반영돼요.</div>`
-      : u.s === '다른계정' && u.계정 === '못 찾음' ? `<div class="upc bad">⚠ 넣은 링크의 게시물을 못 찾았어요(비공개 · 지운 게시물 · 틀린 링크). ${esc(j.channel)} 계정에 올린 링크를 다시 넣어 주세요.${넣기}</div>`
-      : u.s === '미확인' ? `<div class="upc bad">⚠ ${esc(j.channel)} 계정에서 이 게시물을 못 찾았어요. 올렸다면 게시물 링크를 넣어 주세요.${넣기}</div>`
-      : u.s === '다른계정' ? `<div class="upc bad">⚠ 넣은 링크가 ${esc(j.channel)} 계정 게시물이 아니에요. ${esc(j.channel)} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
-      : `<div class="upc">올리면 하루 두 번(10시 · 20시) ${esc(j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
+      : u.s === '다른계정' && u.계정 === '못 찾음' ? `<div class="upc bad">⚠ 넣은 링크의 게시물을 못 찾았어요(비공개 · 지운 게시물 · 틀린 링크). ${esc(j.acc || j.channel)} 계정에 올린 링크를 다시 넣어 주세요.${넣기}</div>`
+      : u.s === '미확인' ? `<div class="upc bad">⚠ ${esc(j.acc || j.channel)} 계정에서 이 게시물을 못 찾았어요. 올렸다면 게시물 링크를 넣어 주세요.${넣기}</div>`
+      : u.s === '다른계정' ? `<div class="upc bad">⚠ 넣은 링크가 ${esc(j.acc || j.channel)} 계정 게시물이 아니에요. ${esc(j.acc || j.channel)} 계정에 올린 링크를 넣어 주세요.${넣기}</div>`
+      : `<div class="upc">올리면 하루 두 번(10시 · 20시) ${esc(j.acc || j.channel)} 계정에서 자동으로 확인해요. 바로 확인하려면 링크를 넣어 주세요.${넣기}</div>`;
   }
   function postGo(btn, row) {
     call('postlink', [code, row, $('upl').value.trim()], btn, 'err3', r => {
@@ -1076,6 +1076,8 @@
   const img = id => DRIVE + '/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
   const part = n => n.replace(/^\d+_|\.(png|jpg)$/g, '');
   const 판 = n => n.replace(/\.(png|jpg)$/, '').replace(/ \(수정 \d+\)$/, '');
+  const 둘째건_ = j => !!j.acc && j.acc !== j.channel && j.acc !== 첫계정[j.channel];
+  const 둘째이름_ = (j, t) => 둘째건_(j) ? j.acc : ((who.channels || []).find(c => c.channel === j.channel && c.계정) || {}).계정 || t.ch;
   function 짝(files) {
     const by = new Map(files.map(f => [판(f.name), f])), tw = new Map();
     files.forEach(f => { const m = 판(f.name).match(/^(.+)_([^_\d][^_]*)$/); if (m && by.has(m[1])) tw.set(by.get(m[1]), { ch: m[2], f }); });
@@ -1085,9 +1087,10 @@
   const 쌍보기 = new Set();
   function 판바꿈(b, on) {
     const ph = b.closest('.ph');
+    if (ph.classList.contains('tw') === on) return;
     ph.classList.toggle('tw', on);
     b.parentNode.querySelectorAll('button').forEach((x, i) => x.classList.toggle('on', i === +on));
-    쌍보기[on ? 'add' : 'delete'](ph.dataset.k);
+    쌍보기[쌍보기.has(ph.dataset.k) ? 'delete' : 'add'](ph.dataset.k);
   }
   let cur = '', listY = 0;
   const home = () => who.admin ? 'list' : 'form';
@@ -1230,7 +1233,7 @@
     const 있던 = new Map([...c.children].map(e => [e.dataset.row, e]));
     let at = c.firstElementChild;
     r.forEach(j => {
-      const f = j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
+      const f = 둘째건_(j) && ((짝(j.files)[0] || {}).t || {}).f || j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
       const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : 미리표지(j)}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<p><span>${esc(j.acc || j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}${j.up && /^(미확인|다른계정)$/.test(j.up.s) ? '<br><b class="upbad">⚠ 업로드 미확인</b>' : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
@@ -1661,10 +1664,10 @@
       + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
       + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
-          const k = j.row + '|' + 판(f.name), on = !!t && 쌍보기.has(k);
+          const k = j.row + '|' + 판(f.name), on = !!t && 둘째건_(j) !== 쌍보기.has(k);
           return `<div><div class="ph${on ? ' tw' : ''}${고침중(f) ? ' 고침' : ''}" data-k="${esc(k)}">`
             + (다 ? `<span class="장말${고침중(f) ? '' : ' 그대로'}">${고침중(f) ? '⟳ 고치는 중' : '그대로'}</span>` : '')
-            + (t ? `<div class="seg"><button class="${on ? '' : 'on'}" onclick="판바꿈(this, false)">${esc(j.channel)}</button><button class="${on ? 'on' : ''}" onclick="판바꿈(this, true)">${esc(t.ch)}</button></div>` : 쌍잡 ? '<span class="same">두 채널 같음</span>' : '')
+            + (t ? `<div class="seg"><button class="${on ? '' : 'on'}" onclick="판바꿈(this, false)">${esc(첫계정[j.channel] || j.channel)}</button><button class="${on ? 'on' : ''}" onclick="판바꿈(this, true)">${esc(둘째이름_(j, t))}</button></div>` : 쌍잡 ? '<span class="same">두 채널 같음</span>' : '')
             + 장(f) + (t ? 장(t.f) : '') + '</div>'
             + (/팔로우/.test(f.name) ? `<div class="rev"><b>${esc(part(f.name))}</b><div class="sent">채널 고정 카드라 수정하지 않아요.</div></div>` : box(끝(f.name), false, t && 끝(t.f.name))) + '</div>';
         }).join('')}</div>`
@@ -2075,7 +2078,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793689278713';
+  const 빌드 = '1793689969034';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
