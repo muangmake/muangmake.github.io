@@ -81,7 +81,7 @@
   
   #chs.chips, #days.chips, #rchs.chips, #rdays.chips { gap:10px; }
   
-  :is(#chs,#rchs) .pair { flex-basis:100%; position:relative; border:1.5px dashed var(--line); border-radius:14px; padding:18px 10px 10px; margin-top:6px; } :is(#chs,#rchs) .pair .ptag { position:absolute; top:-9px; left:12px; background:var(--win); padding:0 6px; font-size:12px; font-weight:800; color:var(--dim); } :is(#chs,#rchs) .pair.solo { border-color:transparent; padding-top:10px; } :is(#chs,#rchs) .pair.solo .chips { max-width:606px; } 
+  :is(#chs,#rchs) .pair { flex-basis:100%; position:relative; border:1.5px dashed var(--line); border-radius:14px; padding:18px 10px 10px; margin-top:6px; } :is(#chs,#rchs) .pair .ptag { position:absolute; top:-9px; left:12px; background:var(--win); padding:0 6px; font-size:12px; font-weight:800; color:var(--dim); } :is(#chs,#rchs) .pair.solo { border-color:transparent; padding-top:10px; } :is(#chs,#rchs) .pair.solo .chips { max-width:640px; } 
   .tkt { --s:64px; display:grid; grid-template-columns:var(--s) minmax(0,1fr) auto; align-items:center; width:min(300px,100%); min-height:64px; border-radius:12px; background:#FAFAF7; color:#15161A; cursor:pointer; filter:grayscale(1) brightness(.55); transition:filter .15s, transform .096s;
     -webkit-mask:radial-gradient(circle 9px at var(--s) 0,#0000 97%,#000) top / 100% 51% no-repeat, radial-gradient(circle 9px at var(--s) 100%,#0000 97%,#000) bottom / 100% 51% no-repeat;
             mask:radial-gradient(circle 9px at var(--s) 0,#0000 97%,#000) top / 100% 51% no-repeat, radial-gradient(circle 9px at var(--s) 100%,#0000 97%,#000) bottom / 100% 51% no-repeat; }
@@ -2186,7 +2186,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793722182114';
+  const 빌드 = '1793722875637';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
