@@ -682,6 +682,8 @@
     else costLoad();
   }
   function 채움_(r) {
+    $('utab')[r.admin ? 'prepend' : 'append']($('utab').querySelector('[data-u=""]'));
+    if (!!r.admin !== !!who.admin) 업탭고름(r.admin ? '' : '예정', true);
     who = r;
     $('ch').innerHTML = esc(r.admin ? '관리자' : r.name || '내 계정') + '<small>로그아웃</small>';
     $('drive').hidden = true;
@@ -2183,7 +2185,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793713680932';
+  const 빌드 = '1793721964893';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
