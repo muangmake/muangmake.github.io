@@ -112,6 +112,10 @@
   .nb::before { content:"‹"; font-size:28px; font-weight:400; line-height:1; margin-top:-3px; }
   .home { cursor:pointer; }
   #ch { cursor:pointer; } #ch small { color:var(--dim); font-weight:500; font-size:12px; margin-left:6px; }
+  
+  #tsel { appearance:none; -webkit-appearance:none; field-sizing:content; cursor:pointer; padding-right:30px; font-family:inherit; letter-spacing:inherit;
+    background:var(--chip) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 13px center; }
+  #tsel:focus-visible { outline:none; border-color:var(--navy2); }
   html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; }
   .card, button, .chip, .tabs a { transition:transform .096s ease, border-color .12s; }
   .card:active, button:active:not(:disabled), .home:active, #ch:active { transform:scale(.97); }
@@ -653,7 +657,7 @@
     $('tsel').hidden = !r.test;
     if (r.test) $('tsel').innerHTML = r.people.map(n => `<option${n === r.name ? ' selected' : ''}>${esc(n)}</option>`).join('');
     if (r.test) $('ch').innerHTML = '시험 계정 · 보기 전용<small>로그아웃</small>';
-    pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || {}).name || '');
+    pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || r.channels[0] || {}).name || '');
   }
   function 거르기칸_(r) {
     const o = (id, l, all) => { const e = $(id), v = e.value; e.innerHTML = `<option value="">${all}</option>` + l.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join(''); e.value = l.includes(v) ? v : ''; };
@@ -965,9 +969,9 @@
       $('go').disabled = !ch || ch.demo || bad > 0 || over;
       $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
     }
-    $('add').disabled = !ch || n >= left;
-    $('add').textContent = ch && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
-    $('left').textContent = !ch ? '' : who.admin ? `관리자 제작 · 제작 티켓 안 씀 · 완성 파일은 ${채널_()} 담당자 폴더에 올라가요` : (over ? `제작 티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `${날 === 'fast' ? '빠른 제작 티켓' : '제작 티켓'} ${n}장 씀 · ${날 === 'fast' ? '빠른 제작' : 날 === 'tomorrow' ? '내일 제작' : '오늘 제작'} 티켓(${표시_()}) ${left}장 남음${날 === 'fast' ? ' · 소식 한 장 + 캡션으로 다른 건보다 먼저 만들어요' : ''} · 완성 파일은 내 드라이브 폴더에 올라가요`);
+    $('add').disabled = !ch || ch.demo || n >= left;
+    $('add').textContent = ch && !ch.demo && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
+    $('left').textContent = !ch ? '' : ch.demo ? `${표시_()} 채널은 준비 중이에요 · 포자에 연결되면 열려요` : who.admin ? `관리자 제작 · 제작 티켓 안 씀 · 완성 파일은 ${채널_()} 담당자 폴더에 올라가요` : (over ? `제작 티켓 ${left}장 남음 — 건을 ${n - left}개 빼 주세요` : `${날 === 'fast' ? '빠른 제작 티켓' : '제작 티켓'} ${n}장 씀 · ${날 === 'fast' ? '빠른 제작' : 날 === 'tomorrow' ? '내일 제작' : '오늘 제작'} 티켓(${표시_()}) ${left}장 남음${날 === 'fast' ? ' · 소식 한 장 + 캡션으로 다른 건보다 먼저 만들어요' : ''} · 완성 파일은 내 드라이브 폴더에 올라가요`);
     $('left').style.color = over ? '#FF8A8A' : '';
   }
   const read = f => new Promise((ok, no) => {
@@ -1039,9 +1043,10 @@
   const 티켓 = (c, 이름표, n, 전체, on, 누름, 표시) => `<span class="tkt${on ? ' on' : ''}${n == null ? ' off' : ''}"${누름 && n != null ? ` onclick="${누름}"` : ''} style="--c:${(로고[c] || {}).c || '#5D6070'}">`
     + `<span class="st">${로고칸(c)}</span><span class="bd"><small>${이름표}</small><b>${esc(표시 || c)}</b></span>`
     + `<span class="ct">${n == null ? '<b class="mu">준비 중</b>' : who.admin ? '<b class="mu">무제한</b>' : `<b>${esc(n)}</b>${전체 ? `<small>/ ${esc(전체)}장</small>` : ''}`}</span></span>`;
-  const tkCh = ch => 로고칸(그림_(ch)) + (who.admin ? '무제한' : `${나뉨_(ch) ? esc(이름_(ch)) + ' ' : ''}티켓 ${esc(ch.coupon)}`);
+  const tkCh = ch => 로고칸(그림_(ch)) + (who.admin ? '무제한' : ch.demo ? '준비 중' : `${나뉨_(ch) ? esc(이름_(ch)) + ' ' : ''}티켓 ${esc(ch.coupon)}`);
   function drawDays() {
     const ch = (who.channels || []).find(x => x.name === chan);
+    $('days').parentElement.hidden = !ch || ch.demo;
     if (날 === 'fast' && !(ch && ch.fastDaily)) 날 = 'today';
     const 통 = !ch ? [] : [['today', '오늘', ch.coupon, ch.daily], ['tomorrow', '내일', ch.tomorrow ?? ch.daily, ch.daily]]
       .concat(ch.fastDaily ? [['fast', '⚡ 빠른 제작', ch.fast ?? ch.fastDaily, ch.fastDaily]] : []);
@@ -2037,7 +2042,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793666788206';
+  const 빌드 = '1793668453038';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
