@@ -460,7 +460,7 @@
 
 <div class="win" id="make" hidden>
   <div class="head">
-    <div class="bar"><span class="dots" id="dots"><i></i><i></i><i></i></span><a class="nb" id="back" hidden onclick="goBack()"></a><b id="ttl"></b></div>
+    <div class="bar"><span class="dots" id="dots" onclick="탭펼침_()"><i></i><i></i><i></i></span><a class="nb" id="back" hidden onclick="goBack()"></a><b id="ttl"></b></div>
     <div class="tabs">
       <a id="t-form" class="on" onclick="view('form')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></i><div><b>새 제작</b><span>레퍼런스 링크 넣기</span></div></a>
       <a id="t-ref" hidden onclick="view('ref')"><i class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></i><div><b>레퍼런스</b><span>찾기 · 골라 제작 · 채널 분석</span></div></a>
@@ -606,6 +606,7 @@
   }
   const $ = id => document.getElementById(id);
   const MAX = 20 * 1024 * 1024;
+  let 탭펼침 = false;
   let code = '', who = {}, chan = '', 날 = 'today';
   function call(fn, args, btn, err, ok) {
     const label = btn.textContent;
@@ -670,9 +671,9 @@
   }
   function 채움_(r) {
     who = r;
-    $('ch').innerHTML = esc(r.admin ? (r.mid ? '중간관리자' : '관리자 · 마스터') : r.name || '내 계정') + '<small>로그아웃</small>';
+    $('ch').innerHTML = esc(r.admin ? '관리자' : r.name || '내 계정') + '<small>로그아웃</small>';
     $('drive').hidden = true;
-    $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid;
+    $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid || !탭펼침;
     $('t-ref').hidden = !r.admin && !r.channels.some(c => !c.demo);
     $('t-ref').querySelector('span').textContent = r.admin ? '찾기 · 골라 제작 · 채널 분석' : '내 채널 후보 · 골라 제작';
     $('rbox').hidden = !r.admin;
@@ -698,7 +699,7 @@
     who.name = r.name; who.folder = r.folder;
     if (r.admin) 거르기칸_(r);
     if (mine.length && !목록나감) 현황그림_(mine, true);
-    $('ch').innerHTML = r.test ? '시험 계정 · 보기 전용<small>로그아웃</small>' : esc(r.admin ? (r.mid ? '중간관리자' : '관리자 · 마스터') : r.name) + '<small>로그아웃</small>';
+    $('ch').innerHTML = r.test ? '시험 계정 · 보기 전용<small>로그아웃</small>' : esc(r.admin ? '관리자' : r.name) + '<small>로그아웃</small>';
     pickCh(chan);
   }
   async function 쫓겨남_(e) {
@@ -729,7 +730,7 @@
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
     await 터짐_();
-    who = {}; cur = ''; mine = []; 보일 = 30; 목록나감 = null; $('more').hidden = true; $('cards').innerHTML = '';
+    who = {}; cur = ''; 탭펼침 = false; mine = []; 보일 = 30; 목록나감 = null; $('more').hidden = true; $('cards').innerHTML = '';
     cD = accD = null; refs = []; sel = {}; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
@@ -1112,6 +1113,11 @@
     쌍보기[쌍보기.has(ph.dataset.k) ? 'delete' : 'add'](ph.dataset.k);
   }
   let cur = '', listY = 0;
+  function 탭펼침_() {
+    if (!who.admin || who.mid) return;
+    탭펼침 = !탭펼침; $('t-cp').hidden = $('t-cost').hidden = !탭펼침;
+    if (!탭펼침 && /^(coup|cost)$/.test(cur)) view(home());
+  }
   const home = () => who.admin ? 'list' : 'form';
   const 제목 = { form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
   const 부모 = { done: 'form', detail: 'list', acc: 'ref' };
@@ -1148,7 +1154,7 @@
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : (!who.admin && /^(coup|cost|acc)$/.test(s.v) || who.mid && /^(coup|cost)$/.test(s.v)) ? home() : s.v || home());
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : (!who.admin && /^(coup|cost|acc)$/.test(s.v) || (who.mid || !탭펼침) && /^(coup|cost)$/.test(s.v)) ? home() : s.v || home());
   });
   let timer = 0, openRow = 0;
   const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
@@ -2136,7 +2142,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793698540778';
+  const 빌드 = '1793699431676';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
