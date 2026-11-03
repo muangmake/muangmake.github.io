@@ -560,11 +560,11 @@
     정책.httpEquiv = 'Content-Security-Policy';
     정책.content = ['default-src \'none\'', 'script-src \'unsafe-inline\'', 'style-src \'unsafe-inline\' https://cdn.jsdelivr.net https://fonts.googleapis.com',
       'font-src https://cdn.jsdelivr.net https://fonts.gstatic.com', 'img-src data: https://drive.google.com https://*.googleusercontent.com https://*.cdninstagram.com https://*.fbcdn.net',
-      'connect-src ' + API, 'base-uri \'none\'', 'form-action \'none\''].join('; ');
+      'connect-src \'self\' ' + API, 'base-uri \'none\'', 'form-action \'none\''].join('; ');
     document.head.append(정책);
     const 부름 = (ok, no) => new Proxy({}, { get: (_, fn) =>
       fn === 'withSuccessHandler' ? f => 부름(f, no) : fn === 'withFailureHandler' ? f => 부름(ok, f) : (...args) => {
-        fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ fn, args }) })
+        fetch(API, { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ fn, args, pd: 기기() }) })
           .then(r => r.json()).catch(() => ({ msg: '잠시 문제가 생겼어요. 다시 해 주세요.' }))
           .then(r => r.ok ? ok && ok(r.r) : no && no(new Error(r.msg)));
       } });
@@ -1028,7 +1028,7 @@
     if (날 === 'fast' && !(ch && ch.fastDaily)) 날 = 'today';
     const 통 = !ch ? [] : [['today', '오늘', ch.coupon, ch.daily], ['tomorrow', '내일', ch.tomorrow ?? ch.daily, ch.daily]]
       .concat(ch.fastDaily ? [['fast', '⚡ 빠른 제작', ch.fast ?? ch.fastDaily, ch.fastDaily]] : []);
-    $('days').innerHTML = 통.map(([k, l]) => `<span class="ck${k === 날 ? ' on' : ''}" onclick="pickDay('${k}')"><i></i>${l} 티켓 사용</span>`).join('')
+    $('days').innerHTML = 통.map(([k, l]) => `<span class="ck${k === 날 ? ' on' : ''}" onclick="pickDay(${esc(JSON.stringify(k))})"><i></i>${l} 티켓 사용</span>`).join('')
       + (통.length ? `<div class="tkl">${통.map(([k, l, n, 전체]) => `<span class="tm${k === 날 ? ' on' : ''}"><b>${l}</b>${who.admin ? '무제한' : esc(n) + (전체 ? ' / ' + esc(전체) : '') + '장'}</span>`).join('')}</div>` : '');
   }
   function pickDay(d) { 날 = d; drawDays(); check(); }
@@ -1926,17 +1926,17 @@
     const rows = l.slice().sort((x, y) => y.listed - x.listed || y.제작 - x.제작 || y.수집 - x.수집);
     $('ab').innerHTML = rows.map(a => {
       const p = 률_(a);
-      return `<tr class="r${a.listed ? '' : ' off'}" onclick="accTog(event, '${a.u}')"><td><b>@${esc(a.u)}</b> ${a.auto ? '<span class="tg auto">자동</span>' : ''}${a.listed ? '' : '<span class="tg">목록에 없음</span>'}${a.memo ? `<small>${esc(a.memo)}</small>` : ''}</td>
-        <td>${a.listed ? `<select onchange="accSet(this, '${a.u}')">${채널옵션_(a.ch)}</select>` : esc(a.채널.map(x => x[0]).join(' · '))}</td>
+      return `<tr class="r${a.listed ? '' : ' off'}" onclick="accTog(event, ${esc(JSON.stringify(a.u))})"><td><b>@${esc(a.u)}</b> ${a.auto ? '<span class="tg auto">자동</span>' : ''}${a.listed ? '' : '<span class="tg">목록에 없음</span>'}${a.memo ? `<small>${esc(a.memo)}</small>` : ''}</td>
+        <td>${a.listed ? `<select onchange="accSet(this, ${esc(JSON.stringify(a.u))})">${채널옵션_(a.ch)}</select>` : esc(a.채널.map(x => x[0]).join(' · '))}</td>
         <td>${a.수집}</td><td style="min-width:110px">${p === null ? '–' : `<div class="rk" style="margin:0"><div class="bx"><i style="width:${p}%;background:var(--ok)"></i></div><span style="width:36px">${p}%</span></div>`}</td>
         <td>${a.제작}${a.실패 ? ` <small style="display:inline;color:var(--bad)">실패 ${a.실패}</small>` : ''}</td><td>${esc(a.last || '–')}</td>
-        <td>${a.listed ? `<button class="ghost" onclick="accDel(this, '${a.u}')">빼기</button>` : `<button class="ghost" onclick="accRun(this, 'add', { u: '${a.u}' })">＋ 더하기</button>`}</td></tr>` + (accOpen === a.u ? accX(a) : '');
+        <td>${a.listed ? `<button class="ghost" onclick="accDel(this, ${esc(JSON.stringify(a.u))})">빼기</button>` : `<button class="ghost" onclick="accRun(this, 'add', { u: ${esc(JSON.stringify(a.u))} })">＋ 더하기</button>`}</td></tr>` + (accOpen === a.u ? accX(a) : '');
     }).join('') || '<tr><td colspan="7" class="note">레퍼런스 채널이 없어요.</td></tr>';
   }
   function accX(a) {
     const 평균 = a.비용n ? 원_(Math.round(a.비용 / a.비용n)) + '원' : '–';
     return `<tr><td colspan="7" class="x">
-      ${a.listed ? `<p><b>메모</b></p><input value="${esc(a.memo)}" placeholder="이 계정 메모(분야 · 쓸 것 · 안 쓸 것)" onchange="accSet(this, '${a.u}')">` : ''}
+      ${a.listed ? `<p><b>메모</b></p><input value="${esc(a.memo)}" placeholder="이 계정 메모(분야 · 쓸 것 · 안 쓸 것)" onchange="accSet(this, ${esc(JSON.stringify(a.u))})">` : ''}
       ${a.note ? `<p style="margin-top:10px"><b>핵심</b> ${esc(a.note)}</p>` : ''}
       <p style="margin-top:10px"><b>마지막 스캔</b> ${esc(a.scan || '–')} ${esc(a.result)} · <b>좋아요 중앙</b> ${a.likes ? 원_(a.likes) : '–'} · <b>고른 것</b> ${a.채택}/${a.수집}
         · <b>완료</b> ${a.완료} · <b>실패</b> ${a.실패} · <b>평균 비용</b> ${평균} · <b>평가</b> ${a.평가n ? (a.평가 / a.평가n).toFixed(1) + ` (${a.평가n}건)` : '–'}</p>
@@ -2020,6 +2020,21 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
+  const 빌드 = '1793666101103';
+  if (공개판) {
+    let 새판 = false;
+    const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
+      .some(e => e.type === 'file' ? e.files.length : !/^(checkbox|radio|hidden)$/.test(e.type) && e.value.trim());
+    const 봄 = async () => {
+      if (!새판) try {
+        const m = (await (await fetch(location.pathname + '?b=' + Date.now(), { cache: 'no-store' })).text()).match(/const 빌드 = '(\d+)'/);
+        새판 = !!m && m[1] !== 빌드;
+      } catch (e) {}
+      if (새판 && !씀() && (document.hidden || !code || cur === home())) location.reload();
+    };
+    setInterval(봄, 12e4);
+    document.addEventListener('visibilitychange', 봄);
+  }
 </script>
 </body>
 </html>
