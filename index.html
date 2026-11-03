@@ -1616,7 +1616,7 @@
       + `<textarea data-p="${esc(p)}" ${all ? '' : 'oninput="모음()" '}placeholder="${all ? '문구 · 구성 · 정보까지 바꿀 점 — 게시물을 다시 기획해요' : '깨진 제품 이미지 복원해주고, 배경은 유려하게 바꿔줘'}"></textarea>`
       + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '')
       + `<div class="sent">${j.reqs.filter(q => q.part === p || q.part === p2).map(mark).join('')}</div></div>`;
-    const 장 = f => `<a${j.state === '수정중' ? '' : ` href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank" rel="noopener"`}><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
+    const 장 = f => `<a${!j.folder ? '' : ` href="${DRIVE}/file/d/${encodeURIComponent(f.id)}/view" target="_blank" rel="noopener"`}><img src="${img(f.id)}" alt="${esc(part(f.name))}" loading="lazy"></a>`;
     const 장들 = 짝(j.files), 쌍잡 = 장들.some(x => x.t), 끝 = n => n.replace(/\.(png|jpg)$/, '');
     const 다 = 다시표_(j), 고침중 = f => 다 && (다.전체 || 다.장.includes(parseInt(f.name)));
     const busy = 다 ? (다.전체 ? ' 지금 보이는 장은 지난 결과예요. 끝나면 새 결과로 바뀌어요.' : ' 표시된 장만 새 결과로 바뀌어요.') + ' 수정 요청은 지금 보내도 끝난 뒤 이어서 고쳐요.' : j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
@@ -2042,7 +2042,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793668777114';
+  const 빌드 = '1793669755456';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
