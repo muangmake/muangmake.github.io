@@ -626,7 +626,7 @@
       들어감_(saved(), w);
       return google.script.run.withSuccessHandler(새로_).withFailureHandler(쫓겨남_).나(code);
     }
-    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value], $('in'), 'err1', r => r.otp ? 코드칸() : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
+    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value], $('in'), 'err1', r => r.otp ? 코드칸(r.setup) : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
     로그인중_(auto ? '이전 계정으로 로그인 중' : '로그인 중');
   }
   function 시험보기_(el) {
@@ -644,10 +644,13 @@
     const 틀림 = !name || !cur ? '위에 이름과 지금 비밀번호(처음이면 임시 비밀번호)를 넣어 주세요.'
       : a.length < 8 ? '새 비밀번호는 8자 이상이에요.' : a !== $('pw2').value ? '새 비밀번호 두 칸이 달라요.' : '';
     if (틀림) return $('err1').textContent = 틀림;
-    call('비번변경', [name, cur, a, 기기(), $('otp').value], $('pwgo'), 'err1', r => { if (r.otp) return 코드칸(); $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
+    call('비번변경', [name, cur, a, 기기(), $('otp').value], $('pwgo'), 'err1', r => { if (r.otp) return 코드칸(r.setup); $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
   }
   function 기기(새) { try { if (새) localStorage.setItem('pp_d', 새); return localStorage.getItem('pp_d') || ''; } catch (e) { return ''; } }
-  function 코드칸() { $('otp').hidden = false; $('otp').value = ''; $('otp').focus(); $('err1').textContent = '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.'; }
+  function 코드칸(키) {
+    $('otp').hidden = false; $('otp').value = ''; $('otp').focus();
+    $('err1').textContent = 키 ? `관리자는 2단계 로그인이 꼭 필요해요. 인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 넣어 다시 눌러 주세요. 키: ${키}` : '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.';
+  }
   function pwFind(a) {
     const name = $('code').value.trim();
     if (!name) return $('err1').textContent = '위에 이름을 넣고 비밀번호 찾기를 눌러 주세요.';
@@ -2100,16 +2103,7 @@
     $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
   }
   function 이단계켜끄기(b) {
-    const 봄 = (op, v, ok) => call('이단계', [code, op, v], b, 'err4', ok);
-    봄('봄', '', r => {
-      if (r.on) { const c = prompt('2단계 로그인이 켜져 있어요. 끄려면 인증 앱의 6자리 숫자를 넣어 주세요.'); return c && 봄('끄기', c, () => alert('2단계 로그인을 껐어요.')); }
-      if (!confirm('켜면 로그인할 때마다 인증 앱(구글 Authenticator 등) 코드를 넣어요. 켤까요?')) return;
-      봄('새키', '', k => {
-        prompt('인증 앱에서 설정 키 입력을 골라 아래 키를 넣어 주세요(이름: 파워페이지 · 시간 기준).', k.key);
-        const c = prompt('인증 앱에 뜬 6자리 숫자를 넣어 주세요.');
-        if (c) 봄('켜기', c, () => alert('켰어요. 다음 로그인부터 코드를 넣어요.'));
-      });
-    });
+    call('이단계', [code, '봄'], b, 'err4', r => alert(r.on ? '2단계 로그인이 켜져 있어요. 관리자는 끌 수 없어요.\n휴대폰을 바꾸면 마스터 관리자가 비밀번호를 초기화해 줘요(다음 로그인 때 새로 연결).' : '2단계 로그인이 꺼져 있어요. 다시 로그인하면 연결 화면이 떠요.'));
   }
   function 전체끊기(b) {
     if (!confirm('관리자를 포함해 모든 담당자가 로그아웃돼요. 계속할까요?')) return;
@@ -2142,7 +2136,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793700186106';
+  const 빌드 = '1793702566684';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
