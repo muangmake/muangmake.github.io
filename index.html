@@ -211,6 +211,8 @@
   .pages img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:12px; border:2px solid var(--line); display:block; background:var(--bar); }
   
   .ph { position:relative; }
+  #detail img, #zoom img { -webkit-touch-callout:none; -webkit-user-select:none; user-select:none; -webkit-user-drag:none; } 
+  .pages .ph::after, #dj .pp2 button:last-child::after, #zoom figure.wm::after { content:''; position:absolute; inset:0; background:var(--wm, none); pointer-events:none; border-radius:inherit; } #zoom figure.wm { position:relative; } 
   .ph > a + a { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .2s; }
   .ph.tw > a + a { opacity:1; pointer-events:auto; }
   .ph .seg, .ph .same { position:absolute; left:10px; top:10px; z-index:2; display:flex; padding:3px; border-radius:99px; background:rgba(0,0,0,.72); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.14); }
@@ -1018,7 +1020,7 @@
     const ims = 장.map(x => Object.assign(new Image(), { src: x.s, alt: '' }));
     Promise.all(ims.map(im => im.decode().catch(() => {}))).then(() => {
       if (zm.dataset.u !== u) return;
-      zm.innerHTML = `<div class="zz">${장.map(x => `<figure><figcaption>${esc(x.n)}</figcaption></figure>`).join('')}</div>`;
+      zm.innerHTML = `<div class="zz">${장.map(x => `<figure${x.n === '제작본' ? ' class="wm"' : ''}><figcaption>${esc(x.n)}</figcaption></figure>`).join('')}</div>`;
       zm.querySelectorAll('figure').forEach((f, i) => f.append(ims[i]));
       zm.style.cssText = 'left:0;top:0';
       const r = el.getBoundingClientRect(), W = zm.offsetWidth, H = zm.offsetHeight;
@@ -1588,8 +1590,9 @@
       + `<div class="fs">${확파일()}${who.admin && !잠.열림 ? `<button onclick="확강제()">강제 열기</button>` : ''}</div></div>`;
   }
   function 확파일() {
-    const 잠 = 확.잠금, 칸 = (t, u) => !확.바쁨 && (잠.열림 || 잠.표기) ? `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>` : `<button onclick="확잠김()">${esc(t)}</button>`;
-    return 칸('PSD 받기', 잠.psd ? `${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view` : 주소(확.폴더)) + 칸('드라이브 폴더', 주소(확.폴더));
+    const 잠 = 확.잠금;
+    if (확.바쁨 || !(잠.열림 || 잠.표기)) return '<button onclick="확잠김()">PSD 받기</button>';
+    return 잠.psd ? `<a href="${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view" target="_blank" rel="noopener">PSD 받기</a>` : '<button disabled>PSD 준비 중</button>';
   }
   function 확끝칸() {
     const 잠 = 확.잠금, 찍 = 확.장.map(a => 확찍힘(a.k)).filter(Boolean), 초 = 찍.length ? Math.round((Math.max(...찍.map(m => m.t)) - Math.min(...찍.map(m => m.t))) / 1000) : 0;
@@ -1852,7 +1855,7 @@
       + `<div><span>제품 정보</span><b>${수}개 확인 완료</b><div class="dots">${템.map(i => `<i class="${남.includes(i) ? 'w' : 볼.includes(i) || 완료.includes(i) ? '' : 'n'}"></i>`).join('')}</div><p class="sub">이름 ${새글 ? '새로 씀' : `${템.filter(이름됨).length}/${템.length}`} · 가격 · 정보 ${값들.length ? `${값들.filter(i => i.값체크 === '맞음').length}/${값들.length}` : '없음'}</p>${남.length ? `<p class="warn">*${남.length}개는 추가 확인이 필요해요</p>` : ''}${못잼 ? `<p class="sub">*${못잼}개는 자동 대조가 안 돼 눈으로 확인해요</p>` : ''}</div>`
       + `<div><span>내지 · 제품 순서</span>${순서('내지 순서', new Set(대표).size, 대표.some((r, i) => i && r < 대표[i - 1]))}${순서('제품 순서', 짝있.length, 짝있.some(i => i.상태 !== '그대로'))}</div>`
       + `<div><span>내지 장 수</span><b>${레퍼장} → ${끝}</b><div class="gs"><u style="flex:${+레퍼장}"></u><em>→</em><u class="to" style="flex:${+끝}"></u></div></div></div>`; };
-    확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽: 잠금 ? 쪽들.map(p => p.k) : 볼쪽, 고름, 구도: +d.구도, 색: +d.색, 잠금, 파일이름, 빈자료, 폴더: j.folder, 바쁨: !/^완료/.test(j.state),
+    확 = { row: j.row, 상: 확상태(j.row), 띠, 파트, 볼쪽: 잠금 ? 쪽들.map(p => p.k) : 볼쪽, 고름, 구도: +d.구도, 색: +d.색, 잠금, 파일이름, 빈자료, 바쁨: !/^완료/.test(j.state),
       대기: k => j.reqs.some(q => parseInt(q.part) === k && /^(접수|반영중)/.test(q.state)),
       쌍: k => { const r = 확장(k).r0; return `<div class="pp2"><button ${나란히(r, k)}><small>레퍼런스</small>${그림(d.참조[r])}</button><button ${나란히(r, k)}><small>제작본</small>${그림(파일[k])}${확도장(k)}${확누끼표(k)}</button></div>`; },
       누끼: k => [].concat((j.nk || {})[k] || []),
@@ -1862,9 +1865,20 @@
         템: 템.filter(i => i.쪽 === p.k).map(i => ({ 키: i.쪽 + '|' + i.칸, 이름: i.이름, 정보: (i.글 || '').replace(/^출처:[^·]*·\s*/, '').replace(/\s*·\s*$/, ''), 이름말: 말들(i).filter(t => /^이름|같은 이름/.test(t)).join(' · '), 값말: 말들(i).filter(t => /^가격/.test(t)).join(' · '), 사진말: 말들(i).filter(t => /^사진(이|이 )/.test(t) && !/같은 이름/.test(t)).join(' · ') })) }; }) };
     return 띠() + 확상자() + (안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} " data-k="r${+r}">${그림(d.참조[r])}</span>`).join('')}</div>` : '');
   }
+  function 워터(row) {
+    const 글 = esc(`미리보기 · ${who.admin ? '관리자' : who.name || ''} · #${row}`);
+    const 겹 = ([x, y]) => `<g transform="rotate(-24 ${x} ${y})" font-family="sans-serif" font-size="15" font-weight="700" text-anchor="middle"><text x="${x + .8}" y="${y + .8}" fill="#000" fill-opacity=".12">${글}</text><text x="${x}" y="${y}" fill="#fff" fill-opacity=".19">${글}</text></g>`;
+    let 선 = '';
+    for (let i = 0; i < 10; i++) {
+      const y0 = i * 30 + 8, d = `M0 ${y0} ` + Array.from({ length: 51 }, (_, k) => `L${k * 6} ${(y0 + 7 * Math.sin(k * 6 / 75 * Math.PI + i * .7)).toFixed(1)}`).join(' ');
+      선 += `<path d="${d}" fill="none" stroke="#000" stroke-opacity=".08" stroke-width=".9" transform="translate(.7 .7)"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".9"/>`;
+    }
+    return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">${선}${[[150, 150], [0, 0], [300, 0], [0, 300], [300, 300]].map(겹).join('')}</svg>`)}")`;
+  }
   function card(i, how) {
     const j = mine[i];
     openRow = j.row;
+    document.documentElement.style.setProperty('--wm', 워터(j.row));
     const box = (p, all, p2) => `<div class="rev${all ? ' all' : ''}"><b>${esc(all ? '전체 수정 요청' : p.replace(/^\d+_/, '') + ' 수정 요청')}</b>${p2 ? '<small class="both">두 채널 판에 같이 반영</small>' : ''}`
       + `<textarea data-p="${esc(p)}" ${all ? '' : 'oninput="모음()" '}placeholder="${all ? '문구 · 구성 · 정보까지 바꿀 점 — 게시물을 다시 기획해요' : '깨진 제품 이미지 복원해주고, 배경은 유려하게 바꿔줘'}"></textarea>`
       + (all ? `<div class="acts"><button class="ghost" onclick="cancel(this)">취소</button><button onclick="send(this, ${j.row})">전체 수정</button></div>` : '')
@@ -2367,7 +2381,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793788077686';
+  const 빌드 = '1793788492252';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
@@ -2382,6 +2396,7 @@
     setInterval(봄, 12e4);
     document.addEventListener('visibilitychange', 봄);
   }
+  ['contextmenu', 'dragstart'].forEach(t => document.addEventListener(t, e => { if (e.target.tagName === 'IMG' && e.target.closest('#detail, #zoom')) e.preventDefault(); }));
 </script>
 </body>
 </html>
