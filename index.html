@@ -698,7 +698,7 @@
       들어감_(saved(), w);
       return google.script.run.withSuccessHandler(새로_).withFailureHandler(쫓겨남_).나(code);
     }
-    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value], $('in'), 'err1', r => r.otp ? 코드칸(r.setup) : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
+    call(auto ? '나' : 'login', auto ? [saved()] : [name, pw, 기기(), $('otp').value, 기기종류(), 끊기], $('in'), 'err1', r => r.otp ? 코드칸(r.setup) : r.busy ? 자리참(r) : r.change ? pwMode(true, '처음 비밀번호(또는 관리자가 초기화한 비밀번호)예요. 새 비밀번호를 정하면 바로 들어가요.') : 들어감_(auto ? saved() : r.token, r));
     로그인중_(auto ? '이전 계정으로 로그인 중' : '로그인 중');
   }
   function 시험보기_(el) {
@@ -716,9 +716,16 @@
     const 틀림 = !name || !cur ? '위에 이름과 지금 비밀번호(처음이면 임시 비밀번호)를 넣어 주세요.'
       : a.length < 8 ? '새 비밀번호는 8자 이상이에요.' : a !== $('pw2').value ? '새 비밀번호 두 칸이 달라요.' : '';
     if (틀림) return $('err1').textContent = 틀림;
-    call('비번변경', [name, cur, a, 기기(), $('otp').value], $('pwgo'), 'err1', r => { if (r.otp) return 코드칸(r.setup); $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
+    call('비번변경', [name, cur, a, 기기(), $('otp').value, 기기종류(), 끊기], $('pwgo'), 'err1', r => { if (r.otp) return 코드칸(r.setup); if (r.busy) return 자리참(r); $('pw1').value = $('pw2').value = ''; pwMode(false); 들어감_(r.token, r); });
   }
   function 기기(새) { try { if (새) localStorage.setItem('pp_d', 새); return localStorage.getItem('pp_d') || ''; } catch (e) { return ''; } }
+  const 기기종류 = () => matchMedia('(pointer: coarse)').matches ? '모바일' : 'PC';
+  let 끊기 = false;
+  function 자리참(r) {
+    $('code').disabled = false;
+    if (r.cut) { 끊기 = true; 코드칸(); $('err1').textContent = `이미 다른 ${r.busy}에서 로그인 중이에요. 그 기기를 끊고 여기로 들어가려면 인증 앱에 새로 뜬 6자리 숫자를 넣고 다시 눌러 주세요.`; return; }
+    $('err1').textContent = `이미 다른 ${r.busy}에서 로그인 중이에요. 관리자 계정은 PC 1대 · 모바일 1대에서만 들어갈 수 있어요(같은 기기의 다른 브라우저 · 시크릿 창도 다른 기기예요). 그 기기에서 로그아웃한 뒤 다시 해 주세요. 기기를 잃어버렸으면 마스터 관리자에게 비밀번호 초기화를 요청해 주세요.`;
+  }
   function 코드칸(키) {
     $('otp').hidden = false; $('otp').value = ''; $('otp').focus();
     $('err1').textContent = 키 ? `마스터 관리자는 2단계 로그인이 꼭 필요해요. 인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 넣어 다시 눌러 주세요. 키: ${키}` : '인증 앱의 6자리 숫자를 넣고 다시 눌러 주세요.';
@@ -2360,7 +2367,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793787206017';
+  const 빌드 = '1793788077686';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
