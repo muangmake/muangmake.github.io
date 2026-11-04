@@ -1872,14 +1872,9 @@
     return 띠() + 확상자() + (안쓴.length ? `<div class="un">안 쓴 레퍼런스 ${안쓴.length}장 ${안쓴.map(r => `<span data-z="${주소(d.참조[r])} " data-k="r${+r}">${그림(d.참조[r])}</span>`).join('')}</div>` : '');
   }
   function 워터(row) {
-    const 글 = esc(`미리보기 · ${who.admin ? '관리자' : who.name || ''} · #${row}`);
-    const 겹 = ([x, y]) => `<g transform="rotate(-24 ${x} ${y})" font-family="sans-serif" font-size="15" font-weight="700" text-anchor="middle"><text x="${x + .8}" y="${y + .8}" fill="#000" fill-opacity=".12">${글}</text><text x="${x}" y="${y}" fill="#fff" fill-opacity=".19">${글}</text></g>`;
-    let 선 = '';
-    for (let i = 0; i < 10; i++) {
-      const y0 = i * 30 + 8, d = `M0 ${y0} ` + Array.from({ length: 51 }, (_, k) => `L${k * 6} ${(y0 + 7 * Math.sin(k * 6 / 75 * Math.PI + i * .7)).toFixed(1)}`).join(' ');
-      선 += `<path d="${d}" fill="none" stroke="#000" stroke-opacity=".08" stroke-width=".9" transform="translate(.7 .7)"/><path d="${d}" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".9"/>`;
-    }
-    return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">${선}${[[150, 150], [0, 0], [300, 0], [0, 300], [300, 300]].map(겹).join('')}</svg>`)}")`;
+    const 글 = esc(`${who.admin ? '관리자' : who.name || ''} · #${row}`);
+    const 겹 = ([x, y]) => `<g transform="rotate(-24 ${x} ${y})" font-family="sans-serif" font-size="13" font-weight="700" text-anchor="middle"><text x="${x + .8}" y="${y + .8}" fill="#000" fill-opacity=".12">${글}</text><text x="${x}" y="${y}" fill="#fff" fill-opacity=".19">${글}</text></g>`;
+    return `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">${[[75, 225], [225, 75]].map(겹).join('')}</svg>`)}")`;
   }
   function card(i, how) {
     const j = mine[i];
@@ -2151,7 +2146,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793791091841';
+  const 빌드 = '1793791877954';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
