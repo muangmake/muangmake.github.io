@@ -335,9 +335,13 @@
   .dupfx path { fill:none; stroke:#E9FFF5; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; stroke-dashoffset:1; transition:stroke-dashoffset .55s cubic-bezier(.65,0,.25,1); }
   .dupfx svg.on path { stroke-dashoffset:0; }
   
-  #go { position:relative; overflow:hidden; }
-  #go.wait:disabled::after { content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 40%,rgba(200,215,255,.16) 50%,transparent 60%) 0 0/220% 100%; animation:dupsh 1.6s linear infinite; }
-  @keyframes dupsh { from { background-position:120% 0; } to { background-position:-120% 0; } }
+  #go { position:relative; overflow:hidden; isolation:isolate; }
+  #go.wait:disabled { background:radial-gradient(circle, #3C8CAA55 1.3px, transparent 1.8px) 0 0/12px 12px, #1A1C22; color:#9FB4C8; box-shadow:inset 0 0 0 1px #6EEBFF22; }
+  #go.wait:disabled::before, #go.wait:disabled::after { content:''; position:absolute; top:0; bottom:0; left:0; z-index:-1; pointer-events:none; animation:dupgo 3s cubic-bezier(.45,0,.25,1) infinite alternate; }
+  #go.wait:disabled::before { width:100%; background:radial-gradient(circle, #6EEBFF66 1.3px, transparent 1.8px) 0 0/12px 12px; animation-name:duptr; } 
+  #go.wait:disabled::after { width:90px; margin-left:-45px; background:linear-gradient(90deg, transparent, #A0F5FF40 40%, #fff 49%, #fff 51%, #A0F5FF40 60%, transparent); box-shadow:0 0 24px 4px #6EEBFF33; }
+  @keyframes dupgo { from { left:0; } to { left:100%; } }
+  @keyframes duptr { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0); } }
   #go.pop { animation:duppop .6s cubic-bezier(.3,1.6,.5,1); } @keyframes duppop { 40% { transform:scale(1.035); } }
   
   #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
@@ -347,7 +351,7 @@
   
   #blkDlg { border-color:var(--bad); } #blkDlg h2 { font-size:19px; margin-bottom:10px; color:var(--bad); }
   #blkDlg button { margin-top:18px; width:100%; }
-  #dupDlg .two { display:flex; gap:8px; margin-top:18px; } #dupDlg .two button { margin:0; flex:1; }
+  #dupDlg .two { display:flex; gap:8px; margin-top:18px; } #dupDlg .two button { margin:0; flex:1; padding:16px 6px; white-space:nowrap; }
   #dupDlg .two .ghost { background:transparent; border:2px solid var(--line); color:var(--text); }
   .st small.pre, p.pre b { color:#FFC46B; }
   .upc { font-size:13px; line-height:1.6; color:var(--dim); margin:8px 0 4px; } .upc.ok { color:#7FD99A; } .upc.bad { color:#FF8A8A; } .upc a { color:inherit; }
@@ -586,7 +590,7 @@
   </div></template>
   <div id="zoom"></div>
   <dialog id="dupDlg"><h2>이미 만든 게시물이에요</h2><p id="dupMsg"></p>
-    <div class="two"><button class="ghost" onclick="dupClear()">링크 지우기</button><button onclick="$('dupDlg').close()">그 결과 받기</button></div></dialog>
+    <div class="two"><button class="ghost" onclick="dupClear()">링크 지우기</button><button id="dupGo" onclick="dupGo()">제작현황 보기</button></div></dialog>
   <dialog id="blkDlg"><h2>제작할 수 없는 계정이에요</h2><p id="blkMsg"></p>
     <button onclick="$('blkDlg').close()">확인</button></dialog>
   <div class="body done" id="done" hidden>
@@ -1061,15 +1065,21 @@
     if (asked[link]) return;
     asked[link] = 1;
     const t = Date.now();
-    const done = r => setTimeout(() => { known[link] = r; check(); setTimeout(() => dupPop(link), 1100); }, Math.max(0, 1600 - (Date.now() - t)));
+    const done = r => setTimeout(() => { known[link] = r; check(); setTimeout(() => dupPop(link), 1800); }, Math.max(0, 3000 - (Date.now() - t)));
     google.script.run.withSuccessHandler(r => done(r[0] || [])).withFailureHandler(() => done([])).dups(code, [link]);
   }
   const 쌍이름_ = ch => { const l = [...new Set((who.channels || []).filter(c => c.channel === ch).map(이름_))]; return l.length > 1 ? `${ch}(${l.join(' · ')} 쌍둥이)` : ch; };
-  let dupLink = '';
+  let dupLink = '', dupRow = 0, 열건 = 0;
+  function dupGo() {
+    $('dupDlg').close();
+    if (!dupRow) return;
+    열건 = dupRow; $('lq').value = '#' + dupRow; view('list');
+  }
   function dupPop(link) {
     const same = (known[link] || []).find(x => x.channel === 채널_());
     if (!same || /^실패/.test(same.state) || !its().some(el => norm(val(el, '.ln')) === link)) return;
-    dupLink = link;
+    dupLink = link; dupRow = same.row || 0;
+    $('dupGo').textContent = dupRow ? '제작현황 보기' : '닫기';
     $('dupMsg').innerHTML = /^완료/.test(same.state)
       ? `이 게시물은 <b>${esc(쌍이름_(채널_()))}</b>에서 이미 만들었어요(${esc(same.state)}).\n제작하기를 누르면 <b>새로 만들지 않고</b> 그때 만든 결과를 바로 받아요. 새로 만들지 않으니 티켓은 돌려드려요. 추가 요청사항 · 템플릿은 반영되지 않아요.\n바꿀 점은 받은 뒤 제작 현황에서 수정 요청으로 보내 주세요.`
       : `이 게시물은 <b>${esc(쌍이름_(채널_()))}</b>에서 지금 만드는 중이에요(${esc(same.state)}).\n제작하기를 누르면 새로 만들지 않고, 끝나면 그 결과를 받아요.`;
@@ -1104,7 +1114,7 @@
     const 최대 = Math.max(...cells.map(k => k.d)), t0 = performance.now();
     let 답 = '', 답때 = 0, 답p = 0, 끝때 = 0, 목표 = null, 돎 = false;
     const 돌려 = () => { if (!돎) { 돎 = true; requestAnimationFrame(step); } };
-    const 진행 = now => !답 ? .92 * (1 - Math.exp(-(now - t0) / 1100)) : Math.min(1, 답p + (1 - 답p) * (now - 답때) / 350);
+    const 진행 = now => !답 ? .92 * (1 - Math.exp(-(now - t0) / 3000)) : Math.min(1, 답p + (1 - 답p) * (now - 답때) / 700);
     const step = now => {
       if (!box.isConnected || box.hidden || box.빛 !== step) return void (돎 = false);
       const t = (now - t0) / 1000, p = 진행(now), bx = p * 1.2 - .1;
@@ -1481,6 +1491,7 @@
       r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
       현황기억_(r);
       현황그림_(r, quiet, 전환);
+      if (열건) { const i = mine.findIndex(j => j.row === 열건); 열건 = 0; if (i >= 0) card(i); }
     }).withFailureHandler(e => { if (차례 !== 현황차례) return; if (목록나감) 목록나감.then(() => { 목록나감 = null; mine = []; $('cards').innerHTML = ''; }); $('lsub').textContent = e.message.replace(/^Error:\s*/, ''); $('more').textContent = '더 보기'; }).jobs(code, Object.assign(who.admin ? { ch: $('fch').value, who: $('fwho').value, from: $('ffrom').value, to: $('fto').value } : {}, { n: 보일, up: 업탭, cnt: 1, q: 찾는말 }));
   }
   const 오늘_ = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
@@ -2228,7 +2239,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793804474255';
+  const 빌드 = '1793805075921';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
