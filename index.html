@@ -340,7 +340,7 @@
   .utab em { font-style:normal; margin-left:6px; opacity:.75; font-variant-numeric:tabular-nums; } .utab em.hot { color:var(--run); opacity:1; }
   
   .탭검색 { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px; } .탭검색 .utab { margin:0; }
-  .찾기 { position:relative; flex:1; min-width:220px; } .찾기 svg { position:absolute; left:14px; top:50%; translate:0 -50%; color:var(--dim); pointer-events:none; }
+  .찾기 { position:relative; flex:1; min-width:220px; margin:0; font-weight:500; }  .찾기 svg { position:absolute; left:14px; top:50%; translate:0 -50%; color:var(--dim); pointer-events:none; }
   .찾기 input { width:100%; background:var(--field); border:2px solid var(--line); border-radius:12px; padding:9px 12px 9px 42px; color:var(--text); font:inherit; font-size:16px; outline:none; -webkit-appearance:none; appearance:none; }
   .찾기 input::-webkit-search-cancel-button { filter:invert(.6); }
   .card .제 { padding:10px 12px 0; font-size:13.5px; font-weight:700; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:calc(13.5px * 1.4 * 2 + 10px); word-break:keep-all; overflow-wrap:anywhere; }
@@ -534,7 +534,7 @@
     <h1>제작 현황</h1><span class="cur"></span>
     <div class="cpbar" id="lf" hidden style="margin-top:14px"><select id="fch" onchange="거름()"></select><select id="fwho" onchange="거름()"></select><span style="display:inline-flex;gap:6px;align-items:center"><input type="date" id="ffrom" onchange="거름()" style="width:auto;font-size:14px" aria-label="시작 날"><span class="note" style="margin:0">~</span><input type="date" id="fto" onchange="거름()" style="width:auto;font-size:14px" aria-label="끝 날"></span><button class="ghost" onclick="기간(오늘_())">오늘</button><button class="ghost" onclick="기간('')">전체 기간</button><button onclick="오늘이름복사(this)">오늘 제작본 이름 복사</button></div>
     <div class="탭검색"><div class="utab" id="utab" role="group" aria-label="업로드로 거르기"><button data-u="예정" aria-pressed="true" onclick="업탭고름(this.dataset.u)">업로드 예정<em></em></button><button data-u="완료" aria-pressed="false" onclick="업탭고름(this.dataset.u)">업로드 완료<em></em></button><button data-u="" aria-pressed="false" onclick="업탭고름(this.dataset.u)">전체<em></em></button></div>
-      <label class="찾기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="lq" placeholder="번호 · 주제로 찾기" aria-label="제작 찾기" autocomplete="off" enterkeyhint="search" maxlength="40" oninput="찾기()"></label></div>
+      <label class="찾기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="lq" placeholder="번호 · 주제로 찾기" aria-label="제작 찾기" autocomplete="off" enterkeyhint="search" maxlength="40" oninput="찾기()" onfocus="전부받기()"></label></div>
     <p class="sub" id="lsub"></p>
     <div class="cards" id="cards"></div>
     <button class="ghost" id="more" hidden onclick="더보기()">더 보기</button>
@@ -756,7 +756,7 @@
     google.script.run.withFailureHandler(() => google.script.run.logout(t)).logout(t);
     store(''); code = '';
     await 터짐_();
-    who = {}; cur = ''; 탭펼침 = false; clearTimeout(찾기틀); mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true); $('more').hidden = true; $('cards').innerHTML = '';
+    who = {}; cur = ''; 탭펼침 = false; clearTimeout(찾기틀); 전부 = null; mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true); $('more').hidden = true; $('cards').innerHTML = '';
     cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
@@ -1082,8 +1082,30 @@
   }
   let mine = [], 보일 = 30, 현황차례 = 0;
   let 업탭 = '예정', 현황수 = null;
-  let 찾는말 = '', 찾기틀;
-  function 찾기() { clearTimeout(찾기틀); 찾기틀 = setTimeout(거름, 350); }
+  let 찾는말 = '', 찾기틀, 전부 = null;
+  const 거르기값_ = () => who.admin ? { ch: $('fch').value, who: $('fwho').value, from: $('ffrom').value, to: $('fto').value } : {};
+  function 전부받기() {
+    const 키 = JSON.stringify(거르기값_());
+    if (!code || 전부 && 전부.키 === 키 && (전부.받는중 || Date.now() - 전부.t < 60000)) return;
+    const 나 = 전부 = { 키, t: Date.now(), 받는중: true, r: 전부 && 전부.키 === 키 ? 전부.r : null };
+    google.script.run.withSuccessHandler(r => {
+      if (전부 !== 나) return;
+      r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
+      Object.assign(나, { r, t: Date.now(), 받는중: false });
+    }).withFailureHandler(() => { if (전부 === 나) 나.받는중 = false; }).jobs(code, Object.assign(거르기값_(), { n: 500 }));
+  }
+  const 맞나_ = (j, m) => String(j.row) === m || [j.title, j.channel, j.acc, j.name, j.미리 && j.미리.t].some(v => String(v || '').toLowerCase().includes(m));
+  function 찾기() {
+    clearTimeout(찾기틀); 전부받기();
+    const q = $('lq').value.trim().replace(/^#/, '');
+    if (q && !목록나감 && 전부 && 전부.r && 전부.키 === JSON.stringify(거르기값_())) {
+      현황차례++; 찾는말 = q; 보일 = 30; 탭표_();
+      현황그림_(전부.r.filter(j => 맞나_(j, q.toLowerCase())).slice(0, 보일), true);
+      찾기틀 = setTimeout(() => load(true), 350);
+      return;
+    }
+    찾기틀 = setTimeout(거름, 350);
+  }
   const 칠_ = s => { s = String(s); const q = 찾는말.toLowerCase(), i = q ? s.toLowerCase().indexOf(q) : -1; return i < 0 ? esc(s) : esc(s.slice(0, i)) + '<mark>' + esc(s.slice(i, i + q.length)) + '</mark>' + esc(s.slice(i + q.length)); };
   const 카드제목_ = j => j.title || (j.미리 && j.미리.t || '').replace(/\s*\n\s*/g, ' ') || (busy(j) ? '만드는 중' : '');
   function 탭표_() {
@@ -2204,7 +2226,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793772730123';
+  const 빌드 = '1793773343451';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
