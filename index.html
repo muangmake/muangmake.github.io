@@ -682,12 +682,14 @@
   const MAX = 20 * 1024 * 1024;
   let 탭펼침 = false;
   let code = '', who = {}, chan = '', 날 = 'today';
+  const 재확인칸 = { pwreset: 2, coupon: 4, 계정: 3, refacc2: 3 };
+  const 코드물음 = () => (prompt('인증 앱에 지금 뜬 6자리 숫자를 넣어 주세요.') || '').replace(/\s/g, '');
   function call(fn, args, btn, err, ok) {
     const label = btn.textContent;
     btn.disabled = true; btn.dataset.sending = 1; btn.textContent = '잠시만요…'; $(err).textContent = '';
     google.script.run
       .withSuccessHandler(r => { delete btn.dataset.sending; btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; ok(r); })
-      .withFailureHandler(e => { delete btn.dataset.sending; btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; if (fn === 'login' || fn === '나') { store(''); code = ''; $('code').disabled = false; } $(err).textContent = e.message.replace(/^Error:\s*/, ''); check(); })[fn](...args);
+      .withFailureHandler(e => { delete btn.dataset.sending; btn.classList.remove('busy'); btn.textContent = label; btn.disabled = false; if (재확인칸[fn] && /6자리/.test(e.message)) { const c = 코드물음(); if (c) return call(fn, Object.assign(new Array(재확인칸[fn]).fill(null), args.slice(0, 재확인칸[fn])).concat(c), btn, err, ok); } if (fn === 'login' || fn === '나') { store(''); code = ''; $('code').disabled = false; } $(err).textContent = e.message.replace(/^Error:\s*/, ''); check(); })[fn](...args);
   }
   function enter(auto) {
     if ($('in').disabled || (!auto && code)) return;
@@ -2293,10 +2295,10 @@
     </td></tr>`;
   }
   function accTog(e, u) { if (e.target.closest('select,button,a')) return; accOpen = accOpen === u ? '' : u; accDraw(); }
-  function accRun(el, op, v, ok) {
+  function accRun(el, op, v, ok, otp) {
     el.disabled = true; $('err6').textContent = '';
     google.script.run.withSuccessHandler(r => { el.disabled = false; accShow(r); ok && ok(); })
-      .withFailureHandler(e => { el.disabled = false; $('err6').textContent = e.message.replace(/^Error:\s*/, ''); }).refacc2(code, op, v);
+      .withFailureHandler(e => { el.disabled = false; if (/6자리/.test(e.message)) { const c = 코드물음(); if (c) return accRun(el, op, v, ok, c); } $('err6').textContent = e.message.replace(/^Error:\s*/, ''); }).refacc2(code, op, v, otp);
   }
   function accSet(el, u) {
     const a = accD.accs.find(x => x.u === u), v = { u, memo: a.memo, ch: a.ch };
@@ -2381,7 +2383,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793788492252';
+  const 빌드 = '1793788932249';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
