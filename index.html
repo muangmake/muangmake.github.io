@@ -121,14 +121,17 @@
   .nb { position:relative; z-index:1; display:flex; align-items:center; gap:2px; min-height:44px; margin-left:-8px; padding:0 8px; color:var(--navy2); font-weight:700; font-size:15px; cursor:pointer; }
   .nb::before { content:"‹"; font-size:28px; font-weight:400; line-height:1; margin-top:-3px; }
   .home { cursor:pointer; }
-  #ch { cursor:pointer; } #ch small { color:var(--dim); font-weight:500; font-size:12px; margin-left:6px; }
+  
+  #ch.namebtn { display:inline-flex; padding:0; overflow:hidden; } #ch button { all:unset; box-sizing:border-box; cursor:pointer; display:inline-flex; align-items:center; gap:7px; padding:8px 14px; }
+  #chn { background:color-mix(in srgb, var(--me, var(--navy2)) 16%, var(--chip)); min-width:110px; } #chn i { width:9px; height:9px; border-radius:50%; background:var(--me, var(--navy2)); flex:none; } #chn b { color:var(--me, var(--navy2)); margin-left:auto; padding-left:6px; }
+  #ch .lo { border-left:1.5px solid var(--line); color:var(--dim); font-weight:500; font-size:12px; padding:8px 11px; } #ch button:active { transform:scale(.97); }
   
   #tsel { appearance:none; -webkit-appearance:none; field-sizing:content; cursor:pointer; padding-right:30px; font-family:inherit; letter-spacing:inherit;
     background:var(--chip) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 13px center; }
   #tsel:focus-visible { outline:none; border-color:var(--navy2); }
   html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; }
   .card, button, .chip, .tabs a { transition:transform .096s ease, border-color .12s; }
-  .card:active, button:active:not(:disabled), .home:active, #ch:active { transform:scale(.97); }
+  .card:active, button:active:not(:disabled), .home:active { transform:scale(.97); }
   .body { padding:22px 26px 28px; }
   .path { color:var(--dim); font-size:13px; margin-bottom:18px; }
   h1 { font-size:30px; font-weight:700; display:inline; border-bottom:3px solid var(--text); }
@@ -435,6 +438,22 @@
   @media (max-width:640px) { .cpt .dl { display:none; } } 
   @media (max-width:640px) { .cols { grid-template-columns:1fr; gap:0; } .body { padding:20px 18px 24px; } }
   @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpt button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt .step button { min-width:40px; } } 
+  
+  #dash #dacc { margin:16px 0 0; } #dash #dacc .chip { cursor:pointer; } #dash #dacc .chip[aria-pressed="true"] { background:var(--navy); border-color:var(--navy); color:#fff; }
+  #dash .d2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; } #dash .dk { background:var(--field); border:1.5px solid var(--line); border-radius:14px; padding:12px 14px; min-width:0; }
+  #dash .dk > span { color:var(--dim); font-size:13px; } #dash .dk b { display:block; font-size:30px; font-weight:800; margin:2px 0 8px; font-variant-numeric:tabular-nums; } #dash .dk b small { font-size:16px; color:var(--dim); font-weight:600; }
+  #dash .dk u { display:block; height:7px; border-radius:4px; background:var(--bar); overflow:hidden; } #dash .dk u i { display:block; height:100%; border-radius:4px; } #dash .dk em { display:block; font-style:normal; color:var(--dim); font-size:12.5px; margin-top:7px; }
+  #dash .dh { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:20px 0 8px; } #dash .dh b { font-size:15px; } #dash .dh select { width:auto; padding:5px 10px; font-size:13px; }
+  #dash .dg { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; } #dash .dc { position:relative; display:block; background:var(--win); border:1.5px solid var(--line); border-radius:12px; overflow:hidden; color:var(--text); text-decoration:none; min-width:0; }
+  #dash .dc .th { display:block; aspect-ratio:3 / 4; background:var(--bar) center / cover; } #dash .dc > div { padding:8px 10px 10px; } #dash .dc b { display:block; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } #dash .dc small { color:var(--dim); font-size:12px; }
+  #dash .bd { position:absolute; top:7px; left:7px; padding:3px 7px; border-radius:8px; background:rgba(11,11,12,.86); font-style:normal; font-weight:800; font-size:12px; color:#C9C9CF; } #dash .bd.ok { color:var(--ok); } #dash .bd.bad { color:var(--bad); }
+  #dash .sheet { margin-top:22px; background:var(--win); border:1.5px solid var(--line); border-radius:16px 16px 12px 12px; padding:8px 14px 6px; } #dash .sheet::before { content:''; display:block; width:36px; height:4px; border-radius:2px; background:var(--line); margin:0 auto 8px; }
+  #dash .sheet > b { display:block; font-size:15px; margin-bottom:2px; } #dash .df { display:grid; grid-template-columns:30px minmax(0,1fr) auto; gap:10px; align-items:center; padding:9px 0; border-top:1px solid var(--line); }
+  #dash .av { width:30px; height:30px; border-radius:50%; display:grid; place-items:center; color:#0B0B0C; font-weight:800; font-size:13px; } #dash .df .tx { min-width:0; font-size:13.5px; } #dash .df .tx span { display:block; color:var(--dim); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #dash .df .rt { display:flex; align-items:center; gap:8px; } #dash .df .mini { width:30px; height:40px; border-radius:5px; background:var(--bar) center / cover; }
+  #dash .cl { all:unset; box-sizing:border-box; cursor:pointer; min-width:44px; min-height:34px; padding:0 9px; border-radius:9px; background:var(--bar); border:1.5px solid var(--line); text-align:center; font-size:13px; font-weight:700; } #dash .cl.on { border-color:var(--run); color:var(--run); }
+  #dash .빈 { color:var(--dim); font-size:13.5px; padding:14px 0; }
+  @media (max-width:640px) { #dash .dg { grid-template-columns:1fr 1fr; } #dash .dk b { font-size:26px; } } 
   [hidden] { display:none !important; }
 </style>
 </head>
@@ -443,7 +462,7 @@
 <div class="top">
   <span class="chip home" onclick="goHome()" title="처음 화면">📁 POWERPAGE.zip</span>
   <span class="chips" id="me" hidden>
-    <span class="chip" id="ch" onclick="logout()" title="로그아웃"></span>
+    <span class="chip namebtn" id="ch"><button id="chn" onclick="view('dash')" title="내 대시보드"></button><button class="lo" onclick="logout()">로그아웃</button></span>
     <span class="chip" id="otpc" hidden onclick="이단계켜끄기(this, 'err0')" title="2단계 로그인(선택)">2단계</span>
     <select class="chip" id="tsel" hidden onchange="시험보기_(this)" title="볼 담당자"></select>
     <span class="chip tkb" id="cpc"><span id="cp" style="display:contents"></span></span>
@@ -540,6 +559,14 @@
     <button class="ghost" id="more" hidden onclick="더보기()">더 보기</button>
   </div>
   <div class="body" id="detail" hidden></div>
+  <div class="body" id="dash" hidden>
+    <div class="path">POWERPAGE.zip › <span class="chn"></span> › 내 대시보드</div>
+    <h1>내 대시보드</h1><span class="cur"></span>
+    <p class="sub">업로드 확인은 하루 세 번(8 · 13 · 21시)이에요. 좋아요 · 댓글은 확인된 게시물만, 올린 뒤 24 · 48시간에 다시 재요.</p>
+    <div class="chips" id="dacc"></div>
+    <div id="dbox"></div>
+    <div id="dfeed"></div>
+  </div>
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
     <h1>제작 후보</h1><span class="cur"></span>
@@ -695,7 +722,7 @@
     $('utab')[r.admin ? 'prepend' : 'append']($('utab').querySelector('[data-u=""]'));
     if (!!r.admin !== !!who.admin) 업탭고름(r.admin ? '' : '예정', true);
     who = r;
-    $('ch').innerHTML = esc(r.admin ? '관리자' : r.name || '내 계정') + '<small>로그아웃</small>';
+    이름칩_();
     $('drive').hidden = true;
     $('otpc').hidden = !(r.admin && r.mid);
     $('t-cp').hidden = $('t-cost').hidden = !r.admin || !!r.mid || !탭펼침;
@@ -709,7 +736,6 @@
     $('chpick').hidden = !r.channels.length;
     $('tsel').hidden = !r.test;
     if (r.test) $('tsel').innerHTML = r.people.map(n => `<option${n === r.name ? ' selected' : ''}>${esc(n)}</option>`).join('');
-    if (r.test) $('ch').innerHTML = '시험 계정 · 보기 전용<small>로그아웃</small>';
     pickCh((r.channels.find(c => c.name === chan && !c.demo) || r.channels.find(c => !c.demo) || r.channels[0] || {}).name || '');
   }
   function 거르기칸_(r) {
@@ -725,7 +751,7 @@
     who.name = r.name; who.folder = r.folder;
     if (r.admin) 거르기칸_(r);
     if (mine.length && !목록나감) 현황그림_(mine, true);
-    $('ch').innerHTML = r.test ? '시험 계정 · 보기 전용<small>로그아웃</small>' : esc(r.admin ? '관리자' : r.name) + '<small>로그아웃</small>';
+    이름칩_();
     pickCh(chan);
   }
   async function 쫓겨남_(e) {
@@ -757,7 +783,7 @@
     store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; 탭펼침 = false; clearTimeout(찾기틀); 전부 = null; mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true); $('more').hidden = true; $('cards').innerHTML = '';
-    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho'].forEach(k => $(k).innerHTML = '');
+    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho', 'dacc', 'dbox', 'dfeed'].forEach(k => $(k).innerHTML = ''); dD = null; 내색 = '';
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
@@ -1189,8 +1215,52 @@
     if (!탭펼침 && /^(coup|cost)$/.test(cur)) view(home());
   }
   const home = () => who.admin ? 'list' : 'form';
-  const 제목 = { form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
+  const 제목 = { dash: '내 대시보드', form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
   const 부모 = { done: 'form', detail: 'list', acc: 'ref' };
+  let dD = null, dAcc = '', d순 = 'l', 내색 = '';
+  function 이름칩_() {
+    $('ch').style.setProperty('--me', 내색 || 'var(--navy2)');
+    $('chn').innerHTML = '<i></i>' + (who.test ? '시험 계정 · 보기 전용' : esc(who.admin ? '관리자' : who.name || '내 계정')) + '<b>›</b>';
+  }
+  function dashLoad() {
+    const c = code;
+    if (!dD) $('dbox').innerHTML = '<p class="빈">불러오는 중…</p>';
+    google.script.run.withSuccessHandler(r => { if (c !== code) return; dD = r; 내색 = /^#[0-9A-F]{6}$/i.test(r.me.c) ? r.me.c : ''; 이름칩_(); dashDraw(); })
+      .withFailureHandler(e => { if (c === code) $('dbox').innerHTML = `<p class="err">${esc(e.message.replace(/^Error:\s*/, ''))}</p>`; }).dash(code);
+  }
+  const 수_ = n => n === '' || n == null ? '–' : +n >= 1e4 ? (+n / 1e4).toFixed(1).replace(/\.0$/, '') + '만' : +n >= 1e3 ? (+n / 1e3).toFixed(1).replace(/\.0$/, '') + 'k' : String(n);
+  const 전_ = t => { const m = Math.round((Date.now() - t) / 6e4); return m < 1 ? '방금' : m < 60 ? m + '분 전' : m < 1440 ? Math.floor(m / 60) + '시간 전' : Math.floor(m / 1440) + '일 전'; };
+  const 몫_ = (a, b) => b ? Math.min(100, Math.round(a / b * 100)) : 0;
+  function dashDraw() {
+    const accs = dD.accs;
+    if (!accs.some(a => a.acc === dAcc)) dAcc = (accs.find(a => a.acc === 표시_()) || accs[0] || {}).acc || '';
+    $('dacc').innerHTML = accs.length > 1 ? accs.map(a => `<span class="chip" role="button" aria-pressed="${a.acc === dAcc}" data-a="${esc(a.acc)}" onclick="dAcc = this.dataset.a; dashDraw()">${esc(a.acc)} ${a.today}/${a.daily}</span>`).join('') : '';
+    const a = accs.find(x => x.acc === dAcc);
+    if (!a) $('dbox').innerHTML = '<p class="빈">볼 계정이 아직 없어요.</p>';
+    else {
+      const 만듦 = a.tm.맡김 - a.tm.준비, 남 = Math.max(0, a.daily - a.tm.맡김);
+      const ps = a.posts.slice().sort((x, y) => d순 === 'l' ? (+y.l || 0) - (+x.l || 0) : y.at - x.at);
+      const 배 = p => p.x == null ? '' : `<em class="bd ${p.x >= 1.2 ? 'ok' : p.x < .8 ? 'bad' : ''}">${p.x >= .8 && p.x < 1.2 ? '평균' : p.x + '배'}</em>`;
+      const 카드 = p => `<a class="dc" href="${/^https:\/\/www\.instagram\.com\//.test(p.link) ? esc(p.link) : '#'}" target="_blank" rel="noopener"><span class="th"${p.img ? ` style="background-image:url('${img(p.img)}')"` : ''}></span>${배(p)}<div><b>${esc(p.title || '제목 없음')}</b><small>♥ ${수_(p.l)} · 💬 ${수_(p.c)}${+p.v ? ' · ▶ ' + 수_(p.v) : ''}</small></div></a>`;
+      $('dbox').innerHTML = `<div class="d2">
+        <div class="dk"><span>오늘</span><b>${a.today}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.today, a.daily)}%;background:var(--ok)"></i></u><em>${a.today >= a.daily ? '오늘 몫 다 올렸어요' : (a.daily - a.today) + '개 더'} · 올릴 준비 끝 ${a.ready}</em></div>
+        <div class="dk"><span>내일</span><b>${a.daily}</b><u><i style="width:${몫_(a.tm.준비, a.daily)}%;background:var(--run)"></i></u><em>준비 끝 ${a.tm.준비}${만듦 ? ' · 만드는 중 ' + 만듦 : ''} · 남은 ${남}</em></div></div>
+        <div class="dh"><b>최근 3일 · ${ps.length}개</b><select onchange="d순 = this.value; dashDraw()"><option value="l"${d순 === 'l' ? ' selected' : ''}>좋아요순</option><option value="t"${d순 === 't' ? ' selected' : ''}>최근순</option></select></div>
+        ${ps.length ? `<div class="dg">${ps.map(카드).join('')}</div>` : '<p class="빈">최근 3일 동안 확인된 게시물이 아직 없어요.</p>'}`;
+    }
+    const 말 = { 맡김: e => `#${e.row} 제작 맡김`, 완성: e => `#${e.row} 완성`, 올림: e => `업로드 · ♥ ${수_(e.l)}`, 목표: e => '' };
+    const 첫 = n => esc(String(n).length >= 3 ? String(n)[1] : String(n)[0] || '?');
+    $('dfeed').innerHTML = `<div class="sheet"><b>팀 피드</b>${dD.feed.length ? dD.feed.map(e => `<div class="df"><span class="av" style="background:${/^#[0-9A-F]{6}$/i.test(e.c) ? e.c : '#6E6E76'}">${첫(e.n)}</span>
+      <div class="tx"><b>${esc(e.n)}</b> · ${esc(e.acc)}<span>${[말[e.s](e), e.title].filter(Boolean).map(esc).join(' · ')} · ${전_(e.t)}</span></div>
+      <div class="rt">${e.img ? `<span class="mini" style="background-image:url('${img(e.img)}')"></span>` : ''}<button class="cl${e.me ? ' on' : ''}" data-k="${esc(e.k)}" onclick="박수(this)" aria-label="박수">👏${e.clap ? ' ' + e.clap : ''}</button></div></div>`).join('') : '<p class="빈">지난 48시간 동안 팀 소식이 없어요.</p>'}</div>`;
+  }
+  function 박수(b) {
+    const e = dD.feed.find(x => x.k === b.dataset.k);
+    if (!e || b.disabled) return;
+    b.disabled = true; e.me = !e.me; e.clap += e.me ? 1 : -1; dashDraw();
+    google.script.run.withSuccessHandler(r => { Object.assign(e, { clap: r.n, me: r.me }); dashDraw(); })
+      .withFailureHandler(x => { e.me = !e.me; e.clap += e.me ? 1 : -1; dashDraw(); alert(x.message.replace(/^Error:\s*/, '')); }).clap(code, e.k);
+  }
   function view(v, st) {
     if (v === cur && v !== 'detail') return scrollTo({ top: 0, behavior: 'smooth' });
     google.script.history.push(Object.assign({ v }, st));
@@ -1203,7 +1273,7 @@
     if (cur === 'list') listY = scrollY;
     타자끝 = 0;
     cur = v;
-    ['form', 'done', 'list', 'detail', 'coup', 'cost', 'ref', 'acc'].forEach(k => $(k).hidden = k !== v);
+    ['form', 'done', 'list', 'detail', 'coup', 'cost', 'ref', 'acc', 'dash'].forEach(k => $(k).hidden = k !== v);
     $('t-form').classList.toggle('on', v === 'form' || v === 'done');
     $('t-list').classList.toggle('on', v === 'list' || v === 'detail' && 부모.detail === 'list');
     $('t-cost').classList.toggle('on', v === 'cost' || v === 'detail' && 부모.detail === 'cost');
@@ -1219,6 +1289,7 @@
     if (v === 'cost') costLoad();
     if (v === 'ref') refLoad();
     if (v === 'acc') accLoad();
+    if (v === 'dash') dashLoad();
   }
   google.script.history.setChangeHandler(e => {
     const s = e.state || {};
@@ -2226,7 +2297,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793773343451';
+  const 빌드 = '1793782366834';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
