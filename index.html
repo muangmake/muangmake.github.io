@@ -1872,7 +1872,7 @@
       + `<div id="upc">${업로드칸(j)}</div>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(쌍이름_(j.channel))}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
-      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank">드라이브 폴더 ↗</a>` : ''}<br>`
+      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank" rel="noopener">드라이브 폴더 ↗</a>` : ''}<br>`
       + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 둘째건_(j) !== 쌍보기.has(k);
@@ -2360,7 +2360,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793786835031';
+  const 빌드 = '1793787206017';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
