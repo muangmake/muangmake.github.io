@@ -355,6 +355,7 @@
   p.pre { font-size:13px; line-height:1.6; color:#C9C9CF; border:1.5px solid color-mix(in srgb, #FFC46B 45%, transparent); background:color-mix(in srgb, #FFC46B 8%, transparent); border-radius:12px; padding:10px 14px; margin:12px 0 4px; }
   .add { background:transparent; border:2px dashed var(--line); color:var(--text); margin-top:16px; font-size:15px; padding:14px; }
   .add:hover:not(:disabled) { border-color:var(--navy2); }
+  button.lnk, a.lnk { background:none; border:0; padding:0; margin:0; color:inherit; font:inherit; text-decoration:underline; cursor:pointer; }
   .add:disabled { background:transparent; }
   .rec { margin-top:16px; padding-top:14px; border-top:1.5px solid var(--line); }
   #zoom { position:fixed; z-index:50; pointer-events:none; opacity:0; transform:scale(.96); transition:opacity .096s, transform .096s; border:2px solid var(--navy2); border-radius:14px; overflow:hidden; background:#060607; box-shadow:0 20px 60px rgba(0,0,0,.6); }
@@ -1356,7 +1357,7 @@
     if (!m || !m.ref && !m.t) return '만드는 중';
     const 판 = m.bg ? `<i class="미배 초안" style="background-image:url('${img(m.bg)}')"></i>`
       : m.ref ? `<i class="미배 흐림" style="background-image:url('${esc(m.ref.replace(/['"()\\\s]/g, ''))}')"></i>` : '';
-    const 표 = m.bg ? '초안' : m.t ? ['기획안', m.k, m.n ? '내지 ' + m.n + '장' : ''].filter(Boolean).join(' · ') : '레퍼런스';
+    const 표 = m.bg ? '초안' : m.t ? ['기획안', m.n ? '내지 ' + m.n + '장' : ''].filter(Boolean).join(' · ') : '레퍼런스';
     const 글 = m.t ? `<b class="미제">${m.s ? `<small>${esc(m.s)}</small>` : ''}${esc(m.t).replace(/\n/g, '<br>')}</b>` : `<span class="미말">${esc(j.step || '만드는 중')}</span>`;
     return 판 + `<span class="미표${m.bg || m.t ? ' y' : ''}">${esc(표)}</span>` + 글;
   }
@@ -1594,7 +1595,7 @@
   function 확파일() {
     const 잠 = 확.잠금;
     if (확.바쁨 || !(잠.열림 || 잠.표기)) return '<button onclick="확잠김()">PSD 받기</button>';
-    return 잠.psd ? `<a href="${DRIVE}/file/d/${encodeURIComponent(잠.psd)}/view" target="_blank" rel="noopener">PSD 받기</a>` : '<button disabled>PSD 준비 중</button>';
+    return 잠.psd ? '<button onclick="PSD받기(this)">PSD 받기</button>' : '<button disabled>PSD 준비 중</button>';
   }
   function 확끝칸() {
     const 잠 = 확.잠금, 찍 = 확.장.map(a => 확찍힘(a.k)).filter(Boolean), 초 = 찍.length ? Math.round((Math.max(...찍.map(m => m.t)) - Math.min(...찍.map(m => m.t))) / 1000) : 0;
@@ -1644,6 +1645,8 @@
     if (r.열림) card(mine.indexOf(j), 'refresh'); else if (확.row === row) 확.잠금 = r;
   }
   function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); if (b) { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); } $('err3').textContent = 확.바쁨 ? '수정 중에는 받을 수 없어요. 끝나면 새 결과를 받아 주세요.' : `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
+  function 받기열기(b, row, 글) { call('받기', [code, row], b, 'err3', u => { const a = document.createElement('a'); a.href = 주소(u); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 글; a.className = b.className; b.replaceWith(a); a.click(); }); }
+  function PSD받기(b) { 받기열기(b, 확.row, 'PSD 열기 ↗'); }
   function 확강제() {
     const 사유 = (prompt('강제로 여는 사유를 적어 주세요. 기록에 남아요.') || '').trim(), row = 확.row;
     if (!사유) return;
@@ -1895,7 +1898,7 @@
       + `<div id="upc">${업로드칸(j)}</div>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(쌍이름_(j.channel))}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
-      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <a href="${esc(주소(j.folder))}" target="_blank" rel="noopener">드라이브 폴더 ↗</a>` : ''}<br>`
+      + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <button class="lnk" onclick="받기열기(this, ${j.row}, '폴더 열기 ↗')">드라이브 폴더 ↗</button>` : ''}<br>`
       + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 둘째건_(j) !== 쌍보기.has(k);
@@ -2383,7 +2386,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793789834478';
+  const 빌드 = '1793790672013';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
