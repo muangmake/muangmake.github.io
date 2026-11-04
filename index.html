@@ -469,6 +469,17 @@
   #dash .df .rt { display:flex; align-items:center; gap:8px; } #dash .df .mini { width:30px; height:40px; border-radius:5px; background:var(--bar) center / cover; }
   #dash .cl { all:unset; box-sizing:border-box; cursor:pointer; min-width:44px; min-height:34px; padding:0 9px; border-radius:9px; background:var(--bar); border:1.5px solid var(--line); text-align:center; font-size:13px; font-weight:700; } #dash .cl.on { border-color:var(--run); color:var(--run); }
   #dash .빈 { color:var(--dim); font-size:13.5px; padding:14px 0; }
+  
+  #dash .dwrap.표 { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(0,1fr); gap:12px; align-items:start; margin-top:16px; } #dash .dwrap.표 .sheet { margin-top:0; }
+  #dash .ct { background:var(--win); border:1.5px solid var(--line); border-radius:12px; padding:4px 12px 8px; min-width:0; }
+  #dash .cr { all:unset; box-sizing:border-box; cursor:pointer; display:grid; grid-template-columns:minmax(0,1.4fr) 92px 58px 44px 54px; gap:8px; align-items:center; width:100%; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; font-variant-numeric:tabular-nums; }
+  #dash .cr.hd { cursor:default; color:var(--dim); font-size:12px; padding:8px 0 6px; } #dash .cr:last-child { border-bottom:0; } #dash .cr:not(.hd):hover { background:color-mix(in srgb, var(--text) 4%, transparent); }
+  #dash .cr.warn { background:rgba(255,138,138,.09); margin:0 -12px; padding:9px 12px; width:calc(100% + 24px); } #dash .cr .nm { min-width:0; } #dash .cr .nm b { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #dash .cr .nm i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; } #dash .cr .nm small { display:block; color:var(--dim); font-size:12px; } #dash .cr.warn .nm small { color:var(--bad); }
+  #dash .cr u { display:block; height:6px; border-radius:3px; background:var(--bar); overflow:hidden; margin-top:4px; } #dash .cr u i { display:block; height:100%; background:var(--ok); } #dash .cr .am { color:var(--run); }
+  #dash .ct > small { display:block; color:var(--dim); font-size:12px; margin-top:6px; }
+  @media (max-width:900px) { #dash .dwrap.표 { grid-template-columns:minmax(0,1fr); } }
+  @media (max-width:640px) { #dash .cr { grid-template-columns:minmax(0,1fr) 70px 46px 34px; font-size:13px; } #dash .cr > :nth-child(5) { display:none; } }
   @media (max-width:640px) { #dash .dg { grid-template-columns:1fr 1fr; } #dash .dk b { font-size:26px; } } 
   [hidden] { display:none !important; }
 </style>
@@ -580,8 +591,7 @@
     <h1>내 대시보드</h1><span class="cur"></span>
     <p class="sub">업로드 확인은 하루 세 번(8 · 13 · 21시)이에요. 좋아요 · 댓글은 확인된 게시물만, 올린 뒤 24 · 48시간에 다시 재요.</p>
     <div class="chips" id="dacc"></div>
-    <div id="dbox"></div>
-    <div id="dfeed"></div>
+    <div class="dwrap" id="dwrap"><div id="dbox"></div><div id="dfeed"></div></div>
   </div>
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
@@ -800,7 +810,7 @@
     store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; 탭펼침 = false; clearTimeout(찾기틀); 전부 = null; mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true); $('more').hidden = true; $('cards').innerHTML = '';
-    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho', 'dacc', 'dbox', 'dfeed'].forEach(k => $(k).innerHTML = ''); dD = null; 내색 = '';
+    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho', 'dacc', 'dbox', 'dfeed'].forEach(k => $(k).innerHTML = ''); dD = null; 내색 = ''; dAcc = '';
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
@@ -1237,6 +1247,7 @@
   let dD = null, dAcc = '', d순 = 'l', 내색 = '';
   function 이름칩_() {
     $('ch').style.setProperty('--me', 내색 || 'var(--navy2)');
+    $('dash').querySelector('h1').textContent = who.admin ? '전체 대시보드' : '내 대시보드';
     $('chn').innerHTML = '<i></i>' + (who.test ? '시험 계정 · 보기 전용' : esc(who.admin ? '관리자' : who.name || '내 계정')) + '<b>›</b>';
   }
   function dashLoad() {
@@ -1250,10 +1261,22 @@
   const 몫_ = (a, b) => b ? Math.min(100, Math.round(a / b * 100)) : 0;
   function dashDraw() {
     const accs = dD.accs;
-    if (!accs.some(a => a.acc === dAcc)) dAcc = (accs.find(a => a.acc === 표시_()) || accs[0] || {}).acc || '';
-    $('dacc').innerHTML = accs.length > 1 ? accs.map(a => `<span class="chip" role="button" aria-pressed="${a.acc === dAcc}" data-a="${esc(a.acc)}" onclick="dAcc = this.dataset.a; dashDraw()">${esc(a.acc)} ${a.today}/${a.daily}</span>`).join('') : '';
+    const 전체 = !!who.admin;
+    if (!accs.some(a => a.acc === dAcc) && !(전체 && dAcc === '')) dAcc = 전체 ? '' : (accs.find(a => a.acc === 표시_()) || accs[0] || {}).acc || '';
+    const 칩 = (k, 글) => `<span class="chip" role="button" aria-pressed="${k === dAcc}" data-a="${esc(k)}" onclick="dAcc = this.dataset.a; dashDraw()">${글}</span>`;
+    $('dacc').innerHTML = 전체 ? 칩('', '전체') + accs.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : accs.length > 1 ? accs.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : '';
     const a = accs.find(x => x.acc === dAcc);
-    if (!a) $('dbox').innerHTML = '<p class="빈">볼 계정이 아직 없어요.</p>';
+    $('dwrap').classList.toggle('표', 전체 && !a);
+    if (전체 && !a) {
+      const 몫 = (n, d) => d ? n / d : 1, 다음 = (h => h < 8 ? '8시' : h < 13 ? '13시' : h < 21 ? '21시' : '내일 8시')(new Date().getHours());
+      const 평 = x => x.posts.length ? 수_(Math.round(x.posts.reduce((s, p) => s + (+p.l || 0), 0) / x.posts.length)) : '–';
+      const 줄 = accs.slice().sort((x, y) => 몫(x.today, x.daily) - 몫(y.today, y.daily) || 몫(x.tm.맡김, x.daily) - 몫(y.tm.맡김, y.daily));
+      $('dbox').innerHTML = `<div class="ct"><div class="cr hd"><span>계정 · 담당</span><span>오늘</span><span>내일</span><span>준비</span><span>3일 ♥</span></div>${줄.map(x => {
+        const 없음 = x.daily > 0 && !x.today;
+        return `<button class="cr${없음 ? ' warn' : ''}" data-a="${esc(x.acc)}" onclick="dAcc = this.dataset.a; dashDraw(); scrollTo({ top: 0, behavior: 'smooth' })">
+          <span class="nm"><b><i style="background:${/^#[0-9A-F]{6}$/i.test(x.c) ? x.c : '#6E6E76'}"></i>${esc(x.acc)}${x.n ? ' · ' + esc(x.n) : ''}</b>${없음 ? `<small>오늘 0개 · 다음 확인 ${다음}</small>` : ''}</span>
+          <span>${x.today} / ${x.daily}<u><i style="width:${몫_(x.today, x.daily)}%"></i></u></span><span class="${x.tm.맡김 < x.daily ? 'am' : ''}">${x.tm.맡김} / ${x.daily}</span><span>${x.ready}</span><span>${평(x)}</span></button>`; }).join('')}</div>`;
+    } else if (!a) $('dbox').innerHTML = '<p class="빈">볼 계정이 아직 없어요.</p>';
     else {
       const 만듦 = a.tm.맡김 - a.tm.준비, 남 = Math.max(0, a.daily - a.tm.맡김);
       const ps = a.posts.slice().sort((x, y) => d순 === 'l' ? (+y.l || 0) - (+x.l || 0) : y.at - x.at);
@@ -1261,7 +1284,7 @@
       const 카드 = p => `<a class="dc" href="${/^https:\/\/www\.instagram\.com\//.test(p.link) ? esc(p.link) : '#'}" target="_blank" rel="noopener"><span class="th"${p.img ? ` style="background-image:url('${img(p.img)}')"` : ''}></span>${배(p)}<div><b>${esc(p.title || '제목 없음')}</b><small>♥ ${수_(p.l)} · 💬 ${수_(p.c)}${+p.v ? ' · ▶ ' + 수_(p.v) : ''}</small></div></a>`;
       $('dbox').innerHTML = `<div class="d2">
         <div class="dk"><span>오늘</span><b>${a.today}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.today, a.daily)}%;background:var(--ok)"></i></u><em>${a.today >= a.daily ? '오늘 몫 다 올렸어요' : (a.daily - a.today) + '개 더'} · 올릴 준비 끝 ${a.ready}</em></div>
-        <div class="dk"><span>내일</span><b>${a.daily}</b><u><i style="width:${몫_(a.tm.준비, a.daily)}%;background:var(--run)"></i></u><em>준비 끝 ${a.tm.준비}${만듦 ? ' · 만드는 중 ' + 만듦 : ''} · 남은 ${남}</em></div></div>
+        <div class="dk"><span>내일</span><b>${a.tm.맡김}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.tm.맡김, a.daily)}%;background:var(--run)"></i></u><em>준비 끝 ${a.tm.준비}${만듦 ? ' · 만드는 중 ' + 만듦 : ''} · 남은 ${남}</em></div></div>
         <div class="dh"><b>최근 3일 · ${ps.length}개</b><select onchange="d순 = this.value; dashDraw()"><option value="l"${d순 === 'l' ? ' selected' : ''}>좋아요순</option><option value="t"${d순 === 't' ? ' selected' : ''}>최근순</option></select></div>
         ${ps.length ? `<div class="dg">${ps.map(카드).join('')}</div>` : '<p class="빈">최근 3일 동안 확인된 게시물이 아직 없어요.</p>'}`;
     }
@@ -2337,7 +2360,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793782805583';
+  const 빌드 = '1793783639999';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
