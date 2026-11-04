@@ -203,6 +203,30 @@
   @media (max-width:640px) { .cv .미제 { font-size:13px; bottom:32px; } }
   .wh { position:absolute; right:8px; bottom:8px; max-width:calc(100% - 16px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; background:rgba(0,0,0,.74); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); color:#fff; border:1px solid rgba(255,255,255,.18); border-radius:99px; padding:3px 10px; font-size:12px; font-weight:700; } 
   @media (max-width:640px) { .wh { right:5px; bottom:5px; padding:2px 8px; font-size:11px; } }
+  
+  .card.깨짐 { --t:4.2s; border-color:color-mix(in srgb, var(--bad) 55%, var(--line)); animation:깨판 var(--t) var(--d,0s) infinite; }
+  @keyframes 깨판 { 0%,77%,93%,100% { transform:none; } 78% { transform:translate(-5px,2px) rotate(-1.2deg) scale(.985); } 80% { transform:translate(5px,-2px) rotate(1deg); } 82% { transform:translate(-4px,1px) rotate(-.7deg); } 84% { transform:translate(3px,0) rotate(.4deg); } 87% { transform:translate(-2px,0); } 90% { transform:translate(1px,0); } }
+  .깨짐 .cv { background:#030304; }
+  .깨짐 .판 { position:absolute; inset:0; filter:grayscale(.6) brightness(.5) contrast(1.15); }
+  .깨짐 .조 { position:absolute; inset:0; background:var(--img, linear-gradient(150deg,#2A2A30,#101012)) center/cover; animation:깨조 var(--t) var(--d,0s) infinite cubic-bezier(.2,.8,.2,1); }
+  @keyframes 깨조 { 0%,76%,100% { transform:translate(calc(var(--x) * .07), calc(var(--y) * .07)) rotate(calc(var(--r) * .05)); } 78% { transform:translate(calc(var(--x) * .25), calc(var(--y) * .25)) rotate(calc(var(--r) * .2)); } 81% { transform:translate(var(--x), var(--y)) rotate(var(--r)); } 86% { transform:translate(calc(var(--x) * 1.25), calc(var(--y) * 1.25)) rotate(calc(var(--r) * 1.3)); } 91% { transform:translate(calc(var(--x) * -.06), calc(var(--y) * -.06)); } 95% { transform:translate(calc(var(--x) * .1), calc(var(--y) * .1)) rotate(calc(var(--r) * .08)); } }
+  .깨짐 svg { position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none; animation:깨금숨 var(--t) var(--d,0s) infinite; }
+  @keyframes 깨금숨 { 0%,77%,93%,100% { opacity:1; } 79%,90% { opacity:0; } }
+  .깨짐 svg path { fill:none; stroke:#FFB4B4; stroke-width:1.6; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1; filter:drop-shadow(0 0 4px #FF2D55); animation:깨금 .7s .25s cubic-bezier(.7,0,.2,1) forwards; }
+  @keyframes 깨금 { to { stroke-dashoffset:0; } }
+  .깨짐 .섬 { position:absolute; inset:0; z-index:4; pointer-events:none; background:radial-gradient(circle at 48% 40%, #fff 0 6%, rgba(255,140,140,.6) 16%, transparent 46%); opacity:0; mix-blend-mode:screen; animation:깨섬 var(--t) var(--d,0s) infinite; }
+  @keyframes 깨섬 { 0%,76.5%,86%,100% { opacity:0; } 78% { opacity:1; } 80% { opacity:.55; } }
+  .깨짐 .파 { position:absolute; left:48%; top:40%; width:30%; aspect-ratio:1; margin:-15% 0 0 -15%; z-index:4; border-radius:50%; border:2px solid var(--bad); box-shadow:0 0 14px #FF2D55, inset 0 0 10px rgba(255,45,85,.6); opacity:0; animation:깨파 var(--t) var(--d,0s) infinite cubic-bezier(.1,.7,.3,1); }
+  @keyframes 깨파 { 0%,77% { opacity:0; transform:scale(.1); } 78% { opacity:1; transform:scale(.2); } 89%,100% { opacity:0; transform:scale(4.2); } }
+  .깨짐 .부 { position:absolute; z-index:3; aspect-ratio:1; background:#C9C9CF; clip-path:polygon(0 0,100% 35%,30% 100%); opacity:0; animation:깨부 var(--t) var(--d,0s) infinite cubic-bezier(.4,0,.9,.5); }
+  @keyframes 깨부 { 0%,78% { opacity:0; transform:none; } 79% { opacity:.9; transform:none; } 99% { opacity:0; transform:translate(var(--fx), 130px) rotate(260deg); } 100% { opacity:0; } }
+  .깨짐 .깨말 { position:relative; z-index:4; text-align:center; padding:0 10px; animation:깨딱 var(--t) var(--d,0s) infinite cubic-bezier(.3,1.6,.5,1); }
+  @keyframes 깨딱 { 0%,78%,96%,100% { transform:none; } 80% { transform:scale(1.14) rotate(2deg); } 84% { transform:scale(.97) rotate(-1deg); } 89% { transform:scale(1.03); } }
+  .깨말 small { display:block; font-size:10.5px; font-weight:700; letter-spacing:.12em; color:#FFD0D0; text-shadow:0 1px 8px rgba(0,0,0,.95); margin-bottom:8px; }
+  .깨말 b { display:inline-block; max-width:100%; background:var(--bad); color:#2A0008; font-size:19px; font-weight:800; line-height:1.25; padding:6px 12px 7px; border-radius:7px; transform:rotate(-3deg); box-shadow:0 0 0 2px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.6), 0 0 24px rgba(255,45,85,.45); text-wrap:balance; }
+  .깨짐 .wh { z-index:5; }
+  @media (max-width:640px) { .깨말 b { font-size:15px; padding:5px 10px 6px; } .깨말 small { margin-bottom:6px; } }
+  @media (prefers-reduced-motion:reduce) { .card.깨짐, .깨짐 * { animation:none !important; } .깨짐 svg path { stroke-dashoffset:0; } }
   .card p { padding:10px 12px; font-size:13px; display:flex; justify-content:space-between; gap:6px; }
   .card p > span:first-child { min-width:0; } .card .st { flex:none; max-width:46%; }
   .st { font-weight:700; color:var(--navy2); text-align:right; }
@@ -1454,6 +1478,18 @@
     const 글 = m.t ? `<b class="미제">${m.s ? `<small>${esc(m.s)}</small>` : ''}${esc(m.t).replace(/\n/g, '<br>')}</b>` : `<span class="미말">${esc(j.step || '만드는 중')}</span>`;
     return 판 + `<span class="미표${m.bg || m.t ? ' y' : ''}">${esc(표)}</span>` + 글;
   }
+  const 깨조각_ = [['0 25%,0 0,35% 0', -12, -11, -4], ['35% 0,75% 0', 2, -14, 2], ['75% 0,100% 0,100% 35%', 13, -9, 5], ['100% 35%,100% 75%', 15, 4, 3], ['100% 75%,100% 100%,60% 100%', 10, 14, -4], ['60% 100%,25% 100%', -2, 16, 3], ['25% 100%,0 100%,0 65%', -11, 15, -5], ['0 65%,0 25%', -15, 1, 4]]
+    .map(([p, x, y, r]) => `<i class="조" style="clip-path:polygon(48% 40%,${p});--x:${x}px;--y:${y}px;--r:${r}deg"></i>`).join('');
+  const 깨겉_ = '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path pathLength="1" d="M48 40L0 25M48 40L35 0M48 40L75 0M48 40L100 35M48 40L100 75M48 40L60 100M48 40L25 100M48 40L0 65"/></svg><i class="섬"></i><i class="파"></i>'
+    + [[44, 36, 4, 12], [55, 44, 3, -18], [40, 46, 2.5, 24], [52, 33, 3.5, -8]].map(([l, t, w, fx], i) => `<i class="부" style="left:${l}%;top:${t}%;width:${w}%;--fx:${fx}px;animation-delay:calc(var(--d,0s) - ${i * .05}s)"></i>`).join('');
+  const 실패말_ = s => {
+    const t = s.replace(/^실패\s*(·\s*)?/, '');
+    return /블랙리스트/.test(t) ? '블랙리스트 계정' : /비용 한도|예산/.test(t) ? '비용 한도 초과' : /연령 제한/.test(t) ? '연령 제한 게시물' : /^만들지 못했어요/.test(t) || !t ? '제작 오류' : t.split(' — ')[0];
+  };
+  function 깨짐표지(j, f) {
+    const m = j.미리 || {}, 그림 = f ? img(f.id) : m.bg ? img(m.bg) : m.ref ? esc(m.ref.replace(/['"()\\\s]/g, '')) : '';
+    return `<div class="판"${그림 ? ` style="--img:url('${그림}')"` : ''}>${깨조각_}</div>${깨겉_}<div class="깨말"><small>제작 실패</small><b>${esc(실패말_(j.state))}</b></div>`;
+  }
   function 다시표_(j) {
     const qs = j.state === '수정중' ? j.reqs.filter(q => /^반영중 · (경고 고침|AI 검수|관리자 요청)/.test(q.state)) : [];
     if (!qs.length) return null;
@@ -1550,7 +1586,8 @@
     let at = c.firstElementChild;
     r.forEach(j => {
       const f = 둘째건_(j) && ((짝(j.files)[0] || {}).t || {}).f || j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
-      const html = `<div class="card" data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f ? `style="background-image:url('${img(f.id)}')"` : ''}>${f ? '' : 미리표지(j)}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
+      const 깨 = !다 && /^실패/.test(j.state);
+      const html = `<div class="card${깨 ? ' 깨짐' : ''}"${깨 ? ` style="--d:-${j.row % 7 * .6}s"` : ''} data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f && !깨 ? `style="background-image:url('${img(f.id)}')"` : ''}>${깨 ? 깨짐표지(j, f) : f ? '' : 미리표지(j)}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<b class="제"><span class="num">#${칠_(j.row)}</span> ${칠_(카드제목_(j))}</b>`
         + `<p><span>${칠_(j.acc || j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}${j.up && /^(미확인|다른계정)$/.test(j.up.s) ? '<br><b class="upbad">⚠ 업로드 미확인</b>' : j.up && j.up.s === '확인' ? '<br><b class="upok">✓ 업로드 확인</b>' : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
@@ -2239,7 +2276,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793805075921';
+  const 빌드 = '1793805858420';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
