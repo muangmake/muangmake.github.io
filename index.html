@@ -324,6 +324,22 @@
   .hint.bad { color:#FF8A8A; }
   .hint.warn { color:#FFC46B; }
   
+  .dupfx { --g:111,143,224; height:132px; margin-top:8px; border-radius:14px; position:relative; overflow:hidden; background:radial-gradient(120% 90% at 50% 50%, #121521 0%, #0B0B0E 70%); border:1px solid #23232A; transition:box-shadow .8s, border-color .8s; }
+  .dupfx::after { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:inset 0 1px 0 #ffffff0d, inset 0 0 40px #00000080; }
+  .dupfx.run { border-color:rgba(var(--g),.35); animation:dupbr 2.2s ease-in-out infinite; }
+  .dupfx.ok { --g:94,230,168; border-color:rgba(var(--g),.45); box-shadow:0 0 30px -8px rgba(var(--g),.6); }
+  .dupfx.hit { --g:255,196,107; border-color:rgba(var(--g),.5); box-shadow:0 0 30px -8px rgba(var(--g),.7); }
+  @keyframes dupbr { 50% { box-shadow:0 0 28px -6px rgba(var(--g),.55); } }
+  .dupfx canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .dupfx svg { position:absolute; inset:0; margin:auto; width:52px; height:52px; filter:drop-shadow(0 0 6px #5EE6A8) drop-shadow(0 0 18px #5EE6A8aa); }
+  .dupfx path { fill:none; stroke:#E9FFF5; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1; stroke-dashoffset:1; transition:stroke-dashoffset .55s cubic-bezier(.65,0,.25,1); }
+  .dupfx svg.on path { stroke-dashoffset:0; }
+  
+  #go { position:relative; overflow:hidden; }
+  #go.wait:disabled::after { content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 40%,rgba(200,215,255,.16) 50%,transparent 60%) 0 0/220% 100%; animation:dupsh 1.6s linear infinite; }
+  @keyframes dupsh { from { background-position:120% 0; } to { background-position:-120% 0; } }
+  #go.pop { animation:duppop .6s cubic-bezier(.3,1.6,.5,1); } @keyframes duppop { 40% { transform:scale(1.035); } }
+  
   #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
   #dupDlg::backdrop, #blkDlg::backdrop { background:rgba(0,0,0,.6); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
   #dupDlg h2 { font-size:19px; margin-bottom:10px; color:#FFC46B; }
@@ -543,7 +559,7 @@
     <div><label>사용할 티켓</label><div class="chips" id="days"></div></div>
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
-    <button id="go" disabled onclick="go()">제작하기 ▸</button>
+    <button id="go" disabled onclick="go()" onanimationend="this.classList.remove('pop')">제작하기 ▸</button>
     <p class="err" id="err2"></p>
     <p class="note" id="left">완성 파일은 내 드라이브 폴더에 바로 올라가요.</p>
   </div>
@@ -553,6 +569,7 @@
       <div>
         <label>레퍼런스 게시물 링크</label>
         <input type="url" class="ln" placeholder="https://www.instagram.com/p/..." oninput="check()" onchange="tidy(this)">
+        <div class="dupfx" hidden><canvas></canvas></div>
         <p class="hint"></p>
       </div>
       <div>
@@ -1043,7 +1060,8 @@
   function ask(link) {
     if (asked[link]) return;
     asked[link] = 1;
-    const done = r => { known[link] = r; check(); dupPop(link); };
+    const t = Date.now();
+    const done = r => setTimeout(() => { known[link] = r; check(); setTimeout(() => dupPop(link), 1100); }, Math.max(0, 1600 - (Date.now() - t)));
     google.script.run.withSuccessHandler(r => done(r[0] || [])).withFailureHandler(() => done([])).dups(code, [link]);
   }
   const 쌍이름_ = ch => { const l = [...new Set((who.channels || []).filter(c => c.channel === ch).map(이름_))]; return l.length > 1 ? `${ch}(${l.join(' · ')} 쌍둥이)` : ch; };
@@ -1071,11 +1089,71 @@
       : `⚠ ${보임}에서 지금 만드는 중이에요 (${s}) — 끝나면 그 결과를 받아요`,
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
+  const 섞 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t), 색 = (c, a = 1) => `rgba(${c.map(v => v | 0)},${a})`, 번짐들 = {};
+  const 번짐 = c => 번짐들[c] || (번짐들[c] = (() => {
+    const s = document.createElement('canvas'), g = s.getContext('2d'), r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    s.width = s.height = 64; r.addColorStop(0, 색(c)); r.addColorStop(.25, 색(c, .45)); r.addColorStop(1, 색(c, 0)); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return s;
+  })());
+  const 빛띠 = (d, w) => Math.exp(-(d * d) / w), 어둠 = [34, 35, 42], 잔광 = [60, 140, 170], 심 = [240, 255, 255], 하늘 = [110, 235, 255], 초록 = [94, 230, 168], 주황 = [255, 196, 107];
+  function 빛기둥(box) {
+    const cv = box.querySelector('canvas'), x = cv.getContext('2d'), dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight, S = 14, K = 7;
+    cv.width = w * dpr; cv.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    box.className = 'dupfx run'; box.querySelector('svg')?.remove();
+    const W = Math.max(2, Math.floor((w - 30) / S)), H = Math.max(2, Math.floor((h - 24) / S)), ox = (w - (W - 1) * S) / 2, oy = (h - (H - 1) * S) / 2, cells = [];
+    for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) cells.push({ i, j, u: i / (W - 1), d: Math.hypot((i - (W - 1) / 2) / (W / 2), (j - (H - 1) / 2) / (W / 2)), ph: Math.random() * 6.28, tr: 0 });
+    const 최대 = Math.max(...cells.map(k => k.d)), t0 = performance.now();
+    let 답 = '', 답때 = 0, 답p = 0, 끝때 = 0, 목표 = null, 돎 = false;
+    const 돌려 = () => { if (!돎) { 돎 = true; requestAnimationFrame(step); } };
+    const 진행 = now => !답 ? .92 * (1 - Math.exp(-(now - t0) / 1100)) : Math.min(1, 답p + (1 - 답p) * (now - 답때) / 350);
+    const step = now => {
+      if (!box.isConnected || box.hidden || box.빛 !== step) return void (돎 = false);
+      const t = (now - t0) / 1000, p = 진행(now), bx = p * 1.2 - .1;
+      if (p >= 1 && !끝때) { 끝때 = now; box.className = 'dupfx ' + 답;
+        if (답 === 'ok') setTimeout(() => { if (box.빛 !== step || 답 !== 'ok' || !끝때) return; box.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 56 56"><path pathLength="1" d="M15 29l9 9 17-19"/></svg>'); const k = box.querySelector('svg'); requestAnimationFrame(() => requestAnimationFrame(() => k.classList.add('on'))); }, 380); }
+      const e = 끝때 ? Math.min(1, (now - 끝때) / 1100) : 0, 빛칸 = [];
+      x.clearRect(0, 0, w, h);
+      for (const k of cells) {
+        const dd = k.u - bx, 지남 = p >= 1 || dd < 0;
+        let I = p < 1 ? 빛띠(dd, .0025) + (지남 && Math.sin(t * 2.2 + k.ph * 7) > .96 ? .8 : 0) : 0, 번 = I, 번색 = 하늘;
+        k.tr += ((지남 ? 1 : 0) - k.tr) * .06;
+        let c = 섞(어둠, 잔광, k.tr * .6);
+        if (끝때 && 답 === 'ok') { const R = e * (최대 + .5), g = 빛띠(k.d - R, .012); c = 섞(섞(c, [26, 70, 54], Math.min(1, Math.max(0, (R - k.d) * 4))), [200, 255, 230], g * .8); 번 = g * .9; 번색 = 초록; }
+        if (끝때 && 답 === 'hit') { c = 섞(c, [22, 22, 26], e); if (k === 목표) { const a = Math.min(1, e * 3); c = 섞(c, 주황, a); 번 = a * (1.05 + .35 * Math.sin(t * 4)); 번색 = 주황; I = .4 * a; } }
+        x.fillStyle = 색(섞(c, 심, Math.min(1, I)));
+        x.beginPath(); x.arc(ox + k.i * S, oy + k.j * S, K * (1 + Math.min(1, I) * .9) / 2, 0, 7); x.fill();
+        if (번 > .02) 빛칸.push([k, 번, 번색]);
+      }
+      x.globalCompositeOperation = 'lighter';
+      if (p < 1) { const X = ox + bx * (W - 1) * S; [[40, 'rgba(160,245,255,.28)'], [3, 'rgba(255,255,255,.9)']].forEach(([r, c2]) => { const g = x.createLinearGradient(X - r, 0, X + r, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, c2); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - r, 0, r * 2, h); }); }
+      for (const [k, a, c2] of 빛칸) { const z = k === 목표 ? 66 : 30; x.globalAlpha = Math.min(1, a) * .85; x.drawImage(번짐(c2), ox + k.i * S - z / 2, oy + k.j * S - z / 2, z, z); }
+      if (끝때 && 답 === 'hit') for (let q = 0; q < 3; q++) { const f = (t * .7 + q / 3) % 1;
+        x.globalAlpha = (1 - f) * Math.min(1, e * 3) * .9; x.strokeStyle = 색(주황); x.lineWidth = 1.5; x.shadowColor = 색(주황); x.shadowBlur = 10;
+        x.beginPath(); x.arc(ox + 목표.i * S, oy + 목표.j * S, 6 + f * 64, 0, 7); x.stroke(); x.shadowBlur = 0; }
+      x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+      if (!끝때 || 답 === 'hit' || e < 1) requestAnimationFrame(step); else 돎 = false;
+    };
+    box.빛 = step; 돌려();
+    return { 끝(r) {
+      const 안 = cells.filter(k => k.i && k.j && k.i < W - 1 && k.j < H - 1);
+      목표 = 안[Math.random() * 안.length | 0] || cells[0];
+      if (!답) { 답p = 진행(performance.now()); 답때 = performance.now(); } else if (끝때) { 끝때 = 0; box.querySelector('svg')?.remove(); }
+      답 = r; 돌려();
+    } };
+  }
+  const 덜움직임 = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function 확인빛(el, link) {
+    const box = el.querySelector('.dupfx'), d = link && known[link];
+    if (!link || 덜움직임) { box.hidden = true; el.빛 = null; return; }
+    if (!el.빛 || el.빛.link !== link) { box.hidden = false; el.빛 = { link, fx: 빛기둥(box) }; }
+    if (!d) return;
+    const same = d.find(x => x.channel === 채널_()), r = same && !/^실패/.test(same.state) ? 'hit' : 'ok';
+    if (el.빛.r !== r) { el.빛.r = r; el.빛.fx.끝(r); }
+  }
   function check() {
     const ch = (who.channels || []).find(x => x.name === chan), left = !ch ? 0 : 날 === 'fast' ? ch.fast || 0 : 날 === 'tomorrow' ? ch.tomorrow ?? ch.daily : ch.coupon, seen = {};
     drawDays();
     $('form').classList.toggle('fast', 날 === 'fast');
-    let bad = 0;
+    let bad = 0, 확인중 = 0;
     its().forEach((el, i) => {
       el.querySelector('.ihead b').textContent = '제작 건 ' + (i + 1);
       const raw = val(el, '.ln'), link = norm(raw), h = el.querySelector('.hint');
@@ -1083,16 +1161,20 @@
       if (link && !seen[link]) seen[link] = i + 1;
       if (link && !msg && code) ask(link);
       const dup = link && !msg ? dupText(link) : '';
+      확인빛(el, link && !msg && code ? link : '');
       h.textContent = msg || (link ? '✓ ' + link.replace(/^https:\/\/www\./, '') + (dup ? '\n' + dup : '') : '');
       h.className = 'hint' + (msg ? ' bad' : dup && known[link] ? ' warn' : link ? ' ok' : '');
       const rb = val(el, '.rf').split('\n').map(l => l.trim()).filter(Boolean).filter(l => !refLine(l)).length, rh = el.querySelector('.rfh');
       rh.textContent = rb ? `링크가 아닌 줄 ${rb}개` : ''; rh.className = 'hint rfh' + (rb ? ' bad' : '');
       if (!link || msg || rb) bad++;
+      if (link && !msg && asked[link] && !known[link]) 확인중++;
     });
     const n = its().length, over = n > left;
     if (!$('go').dataset.sending) {
-      $('go').disabled = !ch || ch.demo || bad > 0 || over;
-      $('go').textContent = n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      $('go').disabled = !ch || ch.demo || bad > 0 || over || 확인중 > 0;
+      $('go').textContent = 확인중 ? '중복 확인 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      if ($('go').classList.contains('wait') && !확인중 && !$('go').disabled) $('go').classList.add('pop');
+      $('go').classList.toggle('wait', 확인중 > 0);
     }
     $('add').disabled = !ch || ch.demo || n >= left;
     $('add').textContent = ch && !ch.demo && n >= left ? `제작 티켓이 ${left}장이라 더 못 넣어요` : '＋ 제작 건 추가';
@@ -2146,7 +2228,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793791877954';
+  const 빌드 = '1793804474255';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
