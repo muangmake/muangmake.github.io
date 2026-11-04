@@ -754,12 +754,13 @@
     const j = 현황기억_();
     if (j) 현황그림_(j, true);
     if (!who.admin) load(true);
-    else costLoad();
+    else 관리자코드(costLoad);
   }
   function 채움_(r) {
     $('utab')[r.admin ? 'prepend' : 'append']($('utab').querySelector('[data-u=""]'));
     if (!!r.admin !== !!who.admin) 업탭고름(r.admin ? '' : '예정', true);
     who = r;
+    관리자코드();
     이름칩_();
     $('drive').hidden = true;
     $('otpc').hidden = !(r.admin && r.mid);
@@ -1337,10 +1338,10 @@
     if (h && v !== 'detail') type(h);
     scrollTo(0, v === 'list' ? listY : 0);
     if (v === 'list') load();
-    if (v === 'coup') cpLoad();
-    if (v === 'cost') costLoad();
+    if (v === 'coup') 관리자코드(cpLoad);
+    if (v === 'cost') 관리자코드(costLoad);
     if (v === 'ref') refLoad();
-    if (v === 'acc') accLoad();
+    if (v === 'acc') 관리자코드(accLoad);
     if (v === 'dash') dashLoad();
   }
   google.script.history.setChangeHandler(e => {
@@ -2118,111 +2119,20 @@
       refGrid();
     });
   }
+  let 관리자준비 = null;
+  function 관리자코드(then) {
+    if (!who.admin) return;
+    if (관리자준비 === true) { if (then) then(); return; }
+    if (!관리자준비) 관리자준비 = new Promise(res => google.script.run.withSuccessHandler(js => { const s = document.createElement('script'); s.textContent = js; document.body.append(s); 관리자준비 = true; res(true); })
+      .withFailureHandler(e => { 관리자준비 = null; $('err1').textContent = e.message.replace(/^Error:\s*/, ''); res(false); }).관리자화면(code));
+    관리자준비.then(ok => ok && then && then());
+  }
   let cD = null, cCh = '', cOpen = 0, cAll = false;
   const 돈색 = { c: '#6F8FE0', g: '#C4762A', k: '#9A72D8', a: '#1FA085', e: '#6E6E76', s: '#6E6E76' };
   const 천 = n => Math.round(n).toLocaleString('en-US');
   const 띠 = (j, big) => `<span class="mix${big ? ' big' : ''}">${'cgka'.split('').filter(k => j[k]).map(k => `<i style="flex:${j[k]} 1 0;background:${돈색[k]}"></i>`).join('')}</span>`;
   const 게이지칸 = (n, 한) => `<span class="gg ${n >= 한 ? 'bad' : n >= 한 * .8 ? 'warn' : ''}"><i style="width:${Math.min(n / 한, 1) * 100}%"></i></span>`;
-  function costLoad() {
-    if (!cD) $('csub').textContent = '불러오는 중…';
-    const c = code;
-    google.script.run.withSuccessHandler(r => { if (c !== code) return; cD = r; $('csub').textContent = ''; costDraw(); })
-      .withFailureHandler(e => $('err7').textContent = e.message.replace(/^Error:\s*/, '')).budget(code);
-  }
   const 더날 = (d, k) => new Date(Date.parse(d + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10);
-  function 기간칸() {
-    const v = $('cdays').value, 오 = cD.today;
-    $('cpick').hidden = v !== 'pick';
-    if (/^n\d+$/.test(v)) return { n: Number(v.slice(1)) };
-    if (v === 'pick') return { a: $('cfrom').value, b: $('cto').value };
-    if (v === 'last') { const 끝 = 더날(오.slice(0, 8) + '01', -1); return { a: 끝.slice(0, 8) + '01', b: 끝 }; }
-    return { d7: { a: 더날(오, -6), b: 오 }, d30: { a: 더날(오, -29), b: 오 }, today: { a: 오, b: 오 }, yday: { a: 더날(오, -1), b: 더날(오, -1) },
-      week: { a: 더날(오, -((new Date(오 + 'T12:00:00Z').getUTCDay() + 6) % 7)), b: 오 }, month: { a: 오.slice(0, 8) + '01', b: 오 } }[v] || {};
-  }
-  function costDraw() {
-    if (!cD) return;
-    const 한 = cD.예산, 기 = 기간칸(), 들 = (a, b) => d => !!d && (!a || d >= a) && (!b || d <= b);
-    const 모두 = (cAll ? cD.jobs.concat(cD.sheet) : cD.jobs).slice().sort((p, q) => (q.d || '').localeCompare(p.d || '') || q.row - p.row);
-    const 안 = 기.n ? () => true : 들(기.a, 기.b), 기간건 = 기.n ? 모두 : 모두.filter(j => 안(j.d) || !기.a && !기.b);
-    const 채널들 = [...new Set(기간건.map(j => j.ch))];
-    if (cCh && !채널들.includes(cCh)) cCh = '';
-    $('cch').innerHTML = ['', ...채널들].map(c => `<span class="chip ${c === cCh ? 'accent' : ''}" onclick="costCh(${esc(JSON.stringify(c))})">${esc(c || '전체')}</span>`).join('');
-    const 고른이 = $('cwho').value, 사람들 = [...new Set(모두.map(j => j.who))].sort();
-    $('cwho').innerHTML = '<option value="">모든 담당자</option>' + 사람들.map(w => `<option${w === 고른이 ? ' selected' : ''}>${esc(w)}</option>`).join('');
-    const 누구 = $('cwho').value, 맞 = j => (!cCh || j.ch === cCh) && (!누구 || j.who === 누구);
-    let 보임 = 기간건.filter(맞), 앞건 = null, 앞말 = '', 앞안 = null;
-    if (기.n) { 앞건 = 보임.slice(기.n, 기.n * 2); 보임 = 보임.slice(0, 기.n); 앞말 = `앞 ${기.n}건보다`; }
-    else if (기.a && 기.b) { const L = Math.round((Date.parse(기.b) - Date.parse(기.a)) / 864e5) + 1; 앞안 = 들(더날(기.a, -L), 더날(기.a, -1)); 앞건 = 모두.filter(j => 맞(j) && 앞안(j.d)); 앞말 = L === 1 ? '전날보다' : `앞 ${L}일보다`; }
-    const 한도 = j => j.limit || 한, 돈값 = j => j.same ? 0 : j.won || 0;
-    const 상태맞 = { ov: j => 돈값(j) >= 한도(j), nr: j => 돈값(j) >= 한도(j) * .8 && 돈값(j) < 한도(j), rev: j => j.rev > 0, run: j => /^(대기|제작중|수정중)/.test(j.state), fail: j => /^실패/.test(j.state) }[$('cst').value];
-    if (상태맞) { 보임 = 보임.filter(상태맞); if (앞건) 앞건 = 앞건.filter(상태맞); }
-    const 공쓰나 = !cCh && !누구 && !상태맞 && !기.n, 공 = 공쓰나 ? cD.common.filter(x => 안(x.d)) : [], 앞공 = 공쓰나 && 앞안 ? cD.common.filter(x => 앞안(x.d)) : [];
-    const 통 = (건, 공들) => { const 돈 = 건.filter(돈값), 합 = 돈.reduce((a, j) => a + j.won, 0); return { 돈, 합, 공합: 공들.reduce((a, x) => a + x.won, 0), 평: 돈.length ? 합 / 돈.length : 0, 넘: 돈.filter(j => j.won >= 한도(j)).length }; };
-    const 지금 = 통(보임, 공), 앞 = 앞건 && 앞건.some(돈값) ? 통(앞건, 앞공) : null, 돈건 = 지금.돈;
-    const 증 = (n, p) => { if (!앞 || !p) return ''; const r = Math.round((n - p) / p * 100); return ` · ${앞말} <em class="${r > 0 ? 'up' : r < 0 ? 'dn' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : ''}${Math.abs(r)}%</em>`; };
-    const 오늘 = 모두.filter(j => 맞(j) && j.d === cD.today), 오늘돈 = 오늘.filter(돈값), 대기 = 오늘.filter(j => /^(대기|제작중)/.test(j.state) && !j.won).length;
-    $('ckp').innerHTML = `<div><span>${기.n ? `최근 ${기.n}건 비용` : '이 기간 총 비용'}</span><b>${천(지금.합 + 지금.공합)}원</b><small>${돈건.length}건${지금.공합 ? ' + 공통비 ' + 천(지금.공합) + '원' : ''}${앞 ? 증(지금.합 + 지금.공합, 앞.합 + 앞.공합) : ''}</small></div>`
-      + `<div><span>건당 평균</span><b>${천(지금.평)}원</b><small>예산 ${천(한)}원의 ${Math.round(지금.평 / 한 * 100)}%${앞 ? 증(지금.평, 앞.평) : ''}</small></div>`
-      + `<div><span>예산 넘은 건</span><b>${지금.넘}건</b><small>80% 이상 ${돈건.filter(j => j.won >= 한도(j) * .8 && j.won < 한도(j)).length}건 더${앞 ? ` · ${앞말.replace('보다', '')} ${앞.넘}건` : ''}</small></div>`
-      + `<div><span>오늘</span><b>${천(오늘돈.reduce((a, j) => a + j.won, 0))}원</b><small>${오늘돈.length}건${대기 ? ' · ' + 대기 + '건 진행 전' : ''}</small></div>`;
-    const 최근돈 = 모두.filter(j => 맞(j) && 돈값(j)), 몇 = Math.min(20, Math.floor(최근돈.length / 2)), 평_ = a => a.reduce((s, j) => s + j.won, 0) / a.length;
-    const 흐름 = 몇 ? (() => { const n = 평_(최근돈.slice(0, 몇)), p = 평_(최근돈.slice(몇, 몇 * 2)), r = Math.round((n - p) / p * 100);
-      return `<span class="fw">값 흐름 · 최근 ${몇}건 평균 <b>${천(n)}원</b> <em class="${r > 0 ? 'up' : r < 0 ? 'dn' : ''}">${r > 0 ? '▲' : r < 0 ? '▼' : ''}${Math.abs(r)}%</em> · 그 앞 ${몇}건 ${천(p)}원</span>`; })() : '';
-    const 날수 = new Set(돈건.map(j => j.d).concat(공.map(x => x.d)).filter(Boolean)).size, 주로 = 날수 > 31;
-    const 칸 = d => 주로 ? 더날(d, -((new Date(d + 'T12:00:00Z').getUTCDay() + 6) % 7)) : d, 날 = {}, 새 = () => ({ c: 0, g: 0, k: 0, a: 0, e: 0, n: 0 });
-    돈건.forEach(j => { if (!j.d) return; const o = 날[칸(j.d)] = 날[칸(j.d)] || 새(); 'cgka'.split('').forEach(k => o[k] += j[k]); o.n++; });
-    공.forEach(x => { (날[칸(x.d)] = 날[칸(x.d)] || 새()).e += x.won; });
-    const 날들 = Object.keys(날).sort(), 합_ = o => o.c + o.g + o.k + o.a + o.e, top = Math.max(1, ...날들.map(d => 합_(날[d]))), 많 = 날들.length > 14;
-    const 짧_ = d => d.slice(5).replace('-', '/').replace(/^0/, '') + (주로 ? '~' : '');
-    const 평점 = 날들.map((d, i) => 날[d].n ? [i, (합_(날[d]) - 날[d].e) / 날[d].n, d] : null).filter(Boolean), 위 = Math.max(한, ...평점.map(x => x[1])) * 1.15, N = 날들.length;
-    const 띔 = Math.ceil(N / (innerWidth < 640 ? 6 : 12));
-    $('cchart').innerHTML = `<p class="lb"><span>${주로 ? '주마다' : '날마다'} 쓴 돈</span>${흐름}</p><div class="bars">${날들.map((d, i) => { const o = 날[d], 짧 = 짧_(d);
-      return `<div class="co" title="${짧} · ${천(합_(o))}원 · ${o.n}건&#10;${'cgkae'.split('').filter(k => o[k]).map(k => esc(cD.말[k]) + ' ' + 천(o[k]) + '원').join('&#10;')}"><small>${많 ? '' : 천(합_(o))}</small><div class="sb">${'eakgc'.split('').filter(k => o[k] / top * 118 >= 1).map(k => `<i style="height:${o[k] / top * 118}px;background:${돈색[k]}"></i>`).join('')}</div><span>${(N - 1 - i) % 띔 ? '\u00a0' : 짧}</span></div>`; }).join('')}</div>`
-      + (평점.length ? `<div class="avg"><svg viewBox="0 0 ${N} 100" preserveAspectRatio="none"><line x1="0" x2="${N}" y1="${100 - 한 / 위 * 100}" y2="${100 - 한 / 위 * 100}"/><polyline points="${평점.map(x => `${x[0] + .5},${100 - x[1] / 위 * 100}`).join(' ')}"/></svg>`
-        + 평점.map(x => `<i style="left:${(x[0] + .5) / N * 100}%;bottom:${x[1] / 위 * 100}%" title="${짧_(x[2])} 건당 평균 ${천(x[1])}원 · ${날[x[2]].n}건"></i>${많 ? '' : `<small style="left:${(x[0] + .5) / N * 100}%;bottom:${x[1] / 위 * 100}%">${천(x[1])}</small>`}`).join('')
-        + `<em style="bottom:${한 / 위 * 100}%">예산 ${천(한)}</em></div>` : '')
-      + `<div class="lg">${'cgkae'.split('').map(k => `<span><i style="background:${돈색[k]}"></i>${esc(cD.말[k])}</span>`).join('')}<span><i class="ln" style="background:var(--ok)"></i>건당 평균(공통비 빼고)</span></div>`;
-    const 단 = {}, 약 = 돈건.some(j => !j.정확);
-    돈건.forEach(j => (j.단 || []).forEach(x => 단[x[0]] = (단[x[0]] || 0) + x[1]));
-    const 단들 = Object.entries(단).sort((p, q) => q[1] - p[1]), 단합 = 단들.reduce((a, x) => a + x[1], 0), 단큰 = 단들.length ? 단들[0][1] : 1, 반 = Math.ceil(단들.length / 2);
-    const 단줄 = a => `<ul>${a.map(x => `<li><span>${esc(x[0])}</span><u><i style="width:${x[1] / 단큰 * 100}%"></i></u><b>${약 ? '약 ' : ''}${천(x[1])}원 · ${Math.round(x[1] / 단합 * 100)}%</b></li>`).join('')}</ul>`;
-    $('cstage').hidden = !단들.length;
-    $('cstage').innerHTML = `<p class="lb"><span>단계별로 쓴 돈 · ${돈건.length}건</span><span class="fw">건당 약 ${천(단합 / Math.max(1, 돈건.length))}원</span></p><div class="two stg">${단줄(단들.slice(0, 반))}${단줄(단들.slice(반))}</div>${약 ? '<p class="nt">옛 건은 단계 금액을 토큰 비율로 나눈 값이라 약이에요.</p>' : ''}`;
-    const 줄 = 보임.slice(), 정 = $('csort').value;
-    if (정 === 'won') 줄.sort((a, b) => 돈값(b) - 돈값(a));
-    if (정 === 'cheap') 줄.sort((a, b) => (돈값(a) || 1e9) - (돈값(b) || 1e9));
-    if (정 === 'pct') 줄.sort((a, b) => 돈값(b) / 한도(b) - 돈값(a) / 한도(a));
-    if (정 === 'rev') 줄.sort((a, b) => b.rev - a.rev);
-    $('crows').innerHTML = 줄.map(j => { const id = j.row || 's' + j.ch + j.title, on = cOpen === id, won = j.won || 0, 한 = j.limit || cD.예산;
-      const 칸 = j.same ? `<b class="won">${천(won)}원</b><em class="sm">#${j.same} 과 같은 게시물</em>` : won ? `<b class="won">${천(won)}원</b>${won >= 한 ? '<em class="ov">⚠ 예산 넘음</em>' : won >= 한 * .8 ? '<em class="nr">예산 80%+</em>' : ''}` : `<em class="sm">${esc(j.state.split(' ')[0])}</em>`;
-      return `<div class="rw${on ? ' op' : ''}" onclick="costOpen(${esc(JSON.stringify(id))})"><span class="th"${j.th ? ` style="background-image:url('${img(j.th)}')"` : ''}></span>`
-        + `<div class="tt"><b>${j.row ? `<span class="num">#${j.row}</span> ` : ''}${esc(j.title || j.ch + ' 제작 건')}</b><small>${esc(j.ch)} · ${esc(j.who)} · ${esc(j.t)}${j.rev ? ' · 수정 ' + j.rev : ''}${j.pre ? ' · 이미 만든 게시물' : ''}</small></div>`
-        + `${won ? 띠(j) : '<span class="mix"></span>'}<div class="cs">${칸}</div><span class="go">${on ? '⌃' : '⌄'}</span></div>` + (on ? 내역칸(j, 한) : ''); }).join('') || '<p class="note">이 조건에 맞는 제작 건이 없어요.</p>';
-    const 빠짐 = cAll || 기.n ? [] : cD.sheet.filter(j => 안(j.d) && 맞(j));
-    $('cft').innerHTML = (cAll ? `시트 · 시험으로 만든 건까지 보는 중이에요 <a onclick="costAll()">웹앱 건만 보기</a>` : 빠짐.length ? `시트 · 시험으로 만든 ${빠짐.length}건 · ${천(빠짐.reduce((a, j) => a + j.won, 0))}원은 빠져 있어요 <a onclick="costAll()">포함해서 보기</a>` : '')
-      + ` · 금액은 시트 비용 칸 그대로(수정 · 다시 제작에 쓴 돈 포함 · 쓴 때 환율) · 공통비는 레퍼런스 찾기 · 채널 학습처럼 어느 건에도 안 붙는 돈이에요(10/31 부터 기록${공쓰나 ? '' : ' · 채널 · 담당자 · 상태 · 개수로 거를 땐 빠짐'}).`;
-  }
-  function 내역칸(j, 한) {
-    if (!j.won) return `<div class="box"><p class="nt">아직 쓴 돈이 없어요.</p>${j.row ? `<button onclick="costGo(${j.row})">제작 현황 열기 ›</button>` : ''}</div>`;
-    const 큰 = Math.max(1, ...j.단.map(x => x[1]));
-    return `<div class="box"><div class="bh"><b>${천(j.won)}원</b><span>/ 예산 ${천(한)}원</span>${게이지칸(j.won, 한)}</div>${띠(j, true)}<div class="two"><table>${j.서.map(x => `<tr><td><i style="background:${돈색[x[0]]}"></i>${esc(x[1])}</td><td>${esc(x[2])}</td><td>${천(x[3])}원</td></tr>`).join('')}</table>`
-      + `<ul>${j.단.map(x => `<li><span>${esc(x[0])}</span><u><i style="width:${x[1] / 큰 * 100}%"></i></u><b>${j.정확 ? '' : '약 '}${천(x[1])}원</b></li>`).join('')}</ul></div>`
-      + `<p class="nt">${j.same ? `#${j.same} 과 같은 게시물이라 합계에는 한 번만 세요 · ` : ''}수정 · 다시 제작에 쓴 돈까지 모두 포함${j.정확 ? '' : ' · 단계 금액은 토큰 비율로 나눈 값이라 약'}</p>`
-      + (j.row ? `<button onclick="costGo(${j.row})">제작 현황 열기 ›</button>` : '') + '</div>';
-  }
-  function costCh(c) { cCh = c; costDraw(); }
-  function costAll() { cAll = !cAll; costDraw(); }
-  function costOpen(id) { cOpen = cOpen === id ? 0 : id; costDraw(); }
-  function costGo(row) {
-    const 열기 = i => { 부모.detail = 'cost'; card(i); };
-    const i = mine.findIndex(j => j.row === row);
-    if (i >= 0) return 열기(i);
-    google.script.run.withSuccessHandler(r => {
-      if (!r[0]) return;
-      r[0].files.forEach(f => f.name = f.name.normalize('NFC'));
-      mine.push(r[0]); 열기(mine.length - 1);
-    }).withFailureHandler(e => $('err7').textContent = e.message.replace(/^Error:\s*/, '')).jobs(code, { row });
-  }
   let accD = null, accOpen = '';
   const 채널목록_ = () => who.channels.filter(c => !c.demo).map(c => c.name);
   const 채널옵션_ = v => [['', '찾기가 채움'], ['자동', '자동(글마다)']].concat(채널목록_().map(c => [c, c]), v && !['자동', ...채널목록_()].includes(v) ? [[v, v]] : [])
@@ -2230,154 +2140,9 @@
   const 률_ = a => a.수집 ? Math.round(a.채택 / a.수집 * 100) : null;
   const 원_ = n => Number(n).toLocaleString('ko-KR');
   const 칩_ = l => l.length ? l.map(([t, n]) => `<span class="tg">${esc(t)} ${n}</span>`).join('') : '–';
-  function accLoad() {
-    if (!accD) $('ab').innerHTML = '<tr><td colspan="7" class="note">불러오는 중…</td></tr>';
-    google.script.run.withSuccessHandler(accShow).withFailureHandler(e => $('err6').textContent = e.message.replace(/^Error:\s*/, '')).refacc(code);
-  }
-  function accShow(r) {
-    accD = r;
-    const v = $('ach').value;
-    $('ach').innerHTML = '<option value="">우리 채널: 전체</option>' + 채널목록_().map(c => `<option>${esc(c)}</option>`).join('');
-    $('ach').value = v;
-    if (!$('auch').options.length) $('auch').innerHTML = 채널옵션_('');
-    $('ameta').textContent = r.모름 ? `레퍼런스 계정을 모르는 옛 제작 ${r.모름}건은 빠져요` : '';
-    accDraw();
-  }
-  function accDraw() {
-    if (!accD) return;
-    const f = $('ach').value;
-    const l = accD.accs.filter(a => !f || a.ch === f || a.채널.some(([c]) => c === f)), on = l.filter(a => a.listed);
-    const sum = k => l.reduce((s, a) => s + a[k], 0), 수집 = sum('수집'), 채택 = sum('채택'), 비용n = sum('비용n'), 평가n = sum('평가n');
-    $('akpi').innerHTML = [
-      ['레퍼런스 채널', on.length, `자동으로 더한 계정 ${on.filter(a => a.auto).length}개`],
-      ['수집 게시물', 원_(수집), `고른 것 ${원_(채택)}개 · 피드`],
-      ['채택률', 수집 ? Math.round(채택 / 수집 * 100) + '%' : '–', '고른 것 ÷ 수집'],
-      ['만든 게시물', 원_(sum('제작')), (비용n ? `평균 ${원_(Math.round(sum('비용') / 비용n))}원` : '비용 기록 없음') + (평가n ? ` · 평가 ${(sum('평가') / 평가n).toFixed(1)}` : '')],
-    ].map(([a, b, c]) => `<div><span>${a}</span><b>${b}</b><em>${c}</em></div>`).join('');
-    const rk = on.filter(a => a.수집 >= 5).sort((x, y) => 률_(y) - 률_(x) || y.수집 - x.수집), mx = Math.max(1, ...rk.map(률_));
-    $('arank').innerHTML = rk.map(a => {
-      const p = 률_(a), bad = a.수집 >= 10 && p < 25;
-      return `<div class="rk"><span>@${esc(a.u)}</span><div class="bx"><i style="width:${p / mx * 100}%;background:var(${bad ? '--bad' : '--ok'})"></i></div><span>${p}% · ${a.수집}</span></div>`;
-    }).join('') || '<p class="note">수집 5개 넘는 계정이 아직 없어요.</p>';
-    const top = l.filter(a => a.제작).sort((x, y) => y.제작 - x.제작).slice(0, 8), tc = {};
-    top.forEach(a => a.유형.forEach(([t, n]) => tc[t] = (tc[t] || 0) + n));
-    const ts = Object.entries(tc).sort((x, y) => y[1] - x[1]).slice(0, 5).map(x => x[0]);
-    const 셈 = (a, t) => (a.유형.find(x => x[0] === t) || [0, 0])[1], hx = Math.max(1, ...top.flatMap(a => ts.map(t => 셈(a, t))));
-    $('aheat').innerHTML = !ts.length ? '<p class="note">만든 게시물이 아직 없어요.</p>'
-      : `<div class="hm" style="grid-template-columns:104px repeat(${ts.length},1fr)"><span></span>${ts.map(t => `<span style="color:var(--dim)" title="${esc(t)}">${esc(t)}</span>`).join('')}`
-      + top.map(a => `<span class="l">@${esc(a.u)}</span>` + ts.map(t => {
-        const n = 셈(a, t), k = n / hx;
-        return `<span style="background:rgba(94,230,168,${(0.06 + k * 0.75).toFixed(2)});color:${k > .5 ? '#0B0B0C' : 'var(--text)'}">${n || ''}</span>`;
-      }).join('')).join('') + '</div>';
-    const g = { 담당자: 0, AI: 0, 없음: 0 }, kc = {};
-    l.forEach(a => { Object.keys(g).forEach(k => g[k] += a.길[k]); a.꼴.forEach(([t, n]) => kc[t] = (kc[t] || 0) + n); });
-    const gt = g.담당자 + g.AI + g.없음 || 1;
-    $('apath').innerHTML = `<div class="pth"><i style="width:${g.담당자 / gt * 100}%;background:var(--navy2)"></i><i style="width:${g.AI / gt * 100}%;background:var(--eta)"></i></div>
-      <p class="note" style="text-align:left;margin:6px 0 10px">담당자가 고름 ${g.담당자} · AI 가 고름 ${g.AI} · 기록 없음 ${g.없음}</p>` + 칩_(Object.entries(kc).sort((x, y) => y[1] - x[1]).slice(0, 10));
-    const rows = l.slice().sort((x, y) => y.listed - x.listed || y.제작 - x.제작 || y.수집 - x.수집);
-    $('ab').innerHTML = rows.map(a => {
-      const p = 률_(a);
-      return `<tr class="r${a.listed ? '' : ' off'}" onclick="accTog(event, ${esc(JSON.stringify(a.u))})"><td><b>@${esc(a.u)}</b> ${a.auto ? '<span class="tg auto">자동</span>' : ''}${a.listed ? '' : '<span class="tg">목록에 없음</span>'}${a.memo ? `<small>${esc(a.memo)}</small>` : ''}</td>
-        <td>${a.listed ? `<select onchange="accSet(this, ${esc(JSON.stringify(a.u))})">${채널옵션_(a.ch)}</select>` : esc(a.채널.map(x => x[0]).join(' · '))}</td>
-        <td>${a.수집}</td><td style="min-width:110px">${p === null ? '–' : `<div class="rk" style="margin:0"><div class="bx"><i style="width:${p}%;background:var(--ok)"></i></div><span style="width:36px">${p}%</span></div>`}</td>
-        <td>${a.제작}${a.실패 ? ` <small style="display:inline;color:var(--bad)">실패 ${a.실패}</small>` : ''}</td><td>${esc(a.last || '–')}</td>
-        <td>${a.listed ? `<button class="ghost" onclick="accDel(this, ${esc(JSON.stringify(a.u))})">빼기</button>` : `<button class="ghost" onclick="accRun(this, 'add', { u: ${esc(JSON.stringify(a.u))} })">＋ 더하기</button>`}</td></tr>` + (accOpen === a.u ? accX(a) : '');
-    }).join('') || '<tr><td colspan="7" class="note">레퍼런스 채널이 없어요.</td></tr>';
-  }
-  function accX(a) {
-    const 평균 = a.비용n ? 원_(Math.round(a.비용 / a.비용n)) + '원' : '–';
-    return `<tr><td colspan="7" class="x">
-      ${a.listed ? `<p><b>메모</b></p><input value="${esc(a.memo)}" placeholder="이 계정 메모(분야 · 쓸 것 · 안 쓸 것)" onchange="accSet(this, ${esc(JSON.stringify(a.u))})">` : ''}
-      ${a.note ? `<p style="margin-top:10px"><b>핵심</b> ${esc(a.note)}</p>` : ''}
-      <p style="margin-top:10px"><b>마지막 스캔</b> ${esc(a.scan || '–')} ${esc(a.result)} · <b>좋아요 중앙</b> ${a.likes ? 원_(a.likes) : '–'} · <b>고른 것</b> ${a.채택}/${a.수집}
-        · <b>완료</b> ${a.완료} · <b>실패</b> ${a.실패} · <b>평균 비용</b> ${평균} · <b>평가</b> ${a.평가n ? (a.평가 / a.평가n).toFixed(1) + ` (${a.평가n}건)` : '–'}</p>
-      <p><b>제작 유형</b> ${칩_(a.유형)}</p><p><b>꼴</b> ${칩_(a.꼴)}</p><p><b>우리 채널</b> ${칩_(a.채널)}</p>
-      ${a.posts.length ? `<table class="pl">${a.posts.map(x => `<tr><td><a href="${esc(주소(x.link))}" target="_blank" rel="noopener">${esc(x.title || '게시물')}</a></td><td>${esc(x.ch)}</td>
-        <td style="color:var(--dim)">${esc(x.type)}${x.꼴 ? ' · ' + esc(x.꼴) + (x.by === 'AI' ? '(AI)' : '') : ''}</td><td>${x.won ? 원_(x.won) + '원' : ''}</td>
-        <td style="color:var(${x.st === '완료' ? '--ok' : x.st === '실패' ? '--bad' : '--run'})">${x.st}</td></tr>`).join('')}</table>` : '<p>이 계정으로 만든 게시물이 아직 없어요.</p>'}
-    </td></tr>`;
-  }
-  function accTog(e, u) { if (e.target.closest('select,button,a')) return; accOpen = accOpen === u ? '' : u; accDraw(); }
-  function accRun(el, op, v, ok, otp) {
-    el.disabled = true; $('err6').textContent = '';
-    google.script.run.withSuccessHandler(r => { el.disabled = false; accShow(r); ok && ok(); })
-      .withFailureHandler(e => { el.disabled = false; if (/6자리/.test(e.message)) { const c = 코드물음(); if (c) return accRun(el, op, v, ok, c); } $('err6').textContent = e.message.replace(/^Error:\s*/, ''); }).refacc2(code, op, v, otp);
-  }
-  function accSet(el, u) {
-    const a = accD.accs.find(x => x.u === u), v = { u, memo: a.memo, ch: a.ch };
-    v[el.tagName === 'SELECT' ? 'ch' : 'memo'] = el.value;
-    accRun(el, 'set', v);
-  }
-  function accDel(b, u) { if (confirm(`@${u} 를 레퍼런스 채널에서 뺄까요?\n레퍼런스 찾기가 이 계정을 더 훑지 않아요(모은 후보 · 만든 게시물 기록은 그대로).`)) accRun(b, 'del', { u }); }
-  function accAdd(b) {
-    const v = { u: $('au').value.trim(), ch: $('auch').value, memo: $('amemo').value.trim() };
-    if (!v.u) { $('err6').textContent = '계정 이름이나 프로필 주소를 넣어 주세요.'; return; }
-    accRun(b, 'add', v, () => { $('au').value = $('amemo').value = ''; accOpen = ''; });
-  }
   const 팔레트 = ['#FF7A59', '#4DABF7', '#F783AC', '#9775FA', '#38D9A9', '#FFD43B', '#A9E34B', '#FF922B', '#66D9E8', '#E599F7'];
   const 키_ = x => String(x.name).normalize('NFC').replace(/\s+/g, '');
   let cpR = [];
-  function 색고름(b, row) {
-    const td = b.parentNode, 열 = td.querySelector('.pal');
-    if (열) return 열.remove();
-    const x = cpR.find(y => y.row === row), 쓴 = new Set(cpR.filter(y => 키_(y) !== 키_(x)).map(y => y.color));
-    td.insertAdjacentHTML('beforeend', `<div class="pal">${팔레트.map((c, k) => `<button class="${c === x.color ? 'on' : ''}" style="--p:${c}" ${쓴.has(c) ? 'disabled title="다른 담당자가 쓰는 색"' : ''} onclick="색바꿈(this, ${row}, ${k})"></button>`).join('')}</div>`);
-  }
-  function 색바꿈(b, row, k) { call('계정', [code, 'color', { row, c: 팔레트[k] }], b, 'err4', cpDraw); }
-  function cpDraw(r) {
-    const 키 = 키_, 묶음 = {};
-    cpR = r;
-    r.forEach(x => (묶음[키(x)] = 묶음[키(x)] || []).push(x));
-    $('cpb').innerHTML = Object.values(묶음).map(g => g.map((x, k) => `<tr class="${x.demo ? 'off' : ''}${k ? ' more' : ''}">`
-      + (k ? '' : `<td rowspan="${g.length}" class="nm">${esc(x.name)}${x.color ? `<button class="pkc" style="--p:${esc(x.color)}" title="PICK 색 바꾸기" aria-label="PICK 색 바꾸기" onclick="색고름(this, ${x.row})"></button>` : ''}</td>`)
-      + (x.mid ? `<td class="ch">중간관리자</td><td colspan="4" class="ch">모든 채널 · 제작 티켓 안 씀(제작 예산 · 계정 티켓 탭 없음)</td>` : `<td class="ch">${esc(x.channel)}${(l => l ? ' · ' + esc(l) : '')(x.계정 || (g.some(y => y !== x && y.channel === x.channel) ? 첫계정[x.channel] || x.channel : ''))}${x.demo ? '<small>준비 중</small>' : ''}</td>`
-      + `<td><span class="step"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', -1)">−</button><input type="number" min="0" value="${x.coupon}" onchange="cpOp(this, ${x.row}, 'set', this.value)"><button class="ghost" onclick="cpOp(this, ${x.row}, 'add', 1)">＋</button></span><small class="tmr">내일 ${x.tomorrow ?? '-'}</small></td>`
-      + `<td class="dl"><input type="number" min="0" value="${x.daily}" onchange="cpOp(this, ${x.row}, 'daily', this.value)"> 장</td>`
-      + `<td><button class="ghost" onclick="cpOp(this, ${x.row}, 'reset', 0)">리셋</button></td>`
-      + `<td class="ch">${(u => [u.확인 && '확인 ' + u.확인, u.미확인 && `<b class="upbad">미확인 ${u.미확인}</b>`, u.다른계정 && `<b class="upbad">다른 계정 ${u.다른계정}</b>`, u.링크확인중 && '확인 중 ' + u.링크확인중].filter(Boolean).join(' · ') || '-')(x.up || {})}</td>`)
-      + (k ? '' : `<td rowspan="${g.length}"><span class="pwst">${esc(x.pw)}</span>${x.ask ? `<span class="pwst ask">찾기 요청 ${esc(x.ask)}</span>` : ''}${x.lock ? `<span class="pwst ask">${esc(x.lock)}</span><button class="ghost" onclick="pwUnlock(this, ${x.row})">잠금 풀기</button>` : ''}<button class="ghost" onclick="pwReset(this, ${x.row})">임시 비번 발급</button></td>`)
-      + `<td><span class="step">${x.mid ? '' : `<button class="ghost" onclick="acOp(this, 'ready', ${x.row})">${x.demo ? '열기' : '준비 중으로'}</button>`}<button class="ghost" onclick="acDel(this, ${x.row})">삭제</button></span></td></tr>`).join('')).join('');
-    $('acl').innerHTML = [...new Set(r.map(x => x.channel))].map(c => `<option value="${esc(c)}">`).join('');
-  }
-  function 이단계켜끄기(b, e = 'err4') {
-    const 코드 = 글 => (prompt(글) || '').replace(/\s/g, '');
-    call('이단계', [code, '봄'], b, e, r => {
-      if (r.must) return alert('2단계 로그인이 켜져 있어요. 마스터 관리자는 끌 수 없어요.');
-      if (r.on) {
-        if (!confirm('2단계 로그인이 켜져 있어요. 끌까요?')) return;
-        const c = 코드('인증 앱에 지금 뜬 6자리 숫자'); if (!c) return;
-        return call('이단계', [code, '끄기', c], b, e, () => alert('2단계 로그인을 껐어요.'));
-      }
-      if (!confirm('2단계 로그인이 꺼져 있어요(선택). 켤까요?')) return;
-      call('이단계', [code, '켜기'], b, e, k => {
-        const c = 코드(`인증 앱(구글 Authenticator 등)에서 「설정 키 입력」을 골라 이 키를 넣고(이름: 파워페이지 · 시간 기준) 뜬 6자리 숫자를 적어 주세요.\n키: ${k.setup}`); if (!c) return;
-        call('이단계', [code, '켜기', c], b, e, () => alert('2단계 로그인을 켰어요. 다음 로그인부터 인증 앱 숫자가 필요해요.\n휴대폰을 바꾸면 끄고 다시 켜거나, 마스터 관리자가 비밀번호를 초기화해 줘요.'));
-      });
-    });
-  }
-  function 전체끊기(b) {
-    if (!confirm('관리자를 포함해 모든 담당자가 로그아웃돼요. 계속할까요?')) return;
-    call('계정', [code, 'killall'], b, 'err4', () => { store(''); location.reload(); });
-  }
-  function acOp(b, op, row) { call('계정', [code, op, { row }], b, 'err4', cpDraw); }
-  function acDel(b, row) { if (confirm('이 담당자 · 채널 줄을 지울까요?\n그 사람의 마지막 줄이면 로그인도 끝나요(드라이브 폴더 · 지난 제작물은 그대로).')) acOp(b, 'del', row); }
-  function acAdd(b) {
-    const v = { name: $('an').value.trim(), channel: $('ac').value.trim(), email: $('ae').value.trim() };
-    if (!v.name || !v.channel) { $('err4').textContent = '이름과 채널을 넣어 주세요.'; return; }
-    call('계정', [code, 'add', v], b, 'err4', r => { cpDraw(r); $('an').value = $('ac').value = $('ae').value = ''; });
-  }
-  function pwUnlock(b, row) { call('unlock', [code, row], b, 'err4', cpDraw); }
-  function pwReset(b, row) { if (confirm('이 담당자에게 새 임시 비밀번호를 발급할까요?\n그 사람의 로그인이 모두 끝나요. 표에 뜨는 임시 비밀번호는 지금 한 번만 보이니 바로 그 사람에게만 알려 주세요.')) call('pwreset', [code, row], b, 'err4', cpDraw); }
-  function cpLoad() {
-    type($('coup').querySelector('h1'));
-    google.script.run.withSuccessHandler(cpDraw).withFailureHandler(e => $('err4').textContent = e.message.replace(/^Error:\s*/, '')).coupons(code);
-  }
-  function cpOp(el, row, op, n) { call('coupon', [code, row, op, n], el, 'err4', cpDraw); }
-  function cpAll(b) { if (confirm('모든 담당자 오늘 제작 티켓을 하루 제공 장 수로 되돌릴까요?')) call('coupon', [code, 0, 'resetAll', 0], b, 'err4', cpDraw); }
-  function cpEvery(b, sign) {
-    const n = sign * (Number($('cpn').value) || 0);
-    if (n && confirm(`모든 담당자 오늘 제작 티켓을 ${n > 0 ? '+' : ''}${n}장 할까요?`)) call('coupon', [code, 0, 'addAll', n], b, 'err4', cpDraw);
-  }
   function reset() { $('items').innerHTML = ''; $('err2').textContent = ''; addItem(); }
   ['mouseover', 'mouseout', 'click'].forEach(t => $('detail').addEventListener(t, 크게));
   $('detail').addEventListener('input', 확글받기);
@@ -2386,7 +2151,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793790672013';
+  const 빌드 = '1793791091841';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
