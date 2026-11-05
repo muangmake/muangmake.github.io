@@ -381,15 +381,24 @@
   @media (prefers-reduced-motion: reduce) { #go:enabled::after, #go.wait:disabled::after { animation:none; display:none; } }
   #go.pop { animation:duppop .6s cubic-bezier(.3,1.6,.5,1); } @keyframes duppop { 40% { transform:scale(1.035); } }
   
-  #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
-  #dupDlg::backdrop, #blkDlg::backdrop { background:rgba(0,0,0,.6); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
-  #dupDlg h2 { font-size:19px; margin-bottom:10px; color:#FFC46B; }
-  #dupDlg p, #blkDlg p { font-size:14px; line-height:1.6; color:#C9C9CF; white-space:pre-line; }
+  #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  #blkDlg::backdrop { background:rgba(0,0,0,.6); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+  #blkDlg p { font-size:14px; line-height:1.6; color:#C9C9CF; white-space:pre-line; }
   
   #blkDlg { border-color:var(--bad); } #blkDlg h2 { font-size:19px; margin-bottom:10px; color:var(--bad); }
   #blkDlg button { margin-top:18px; width:100%; }
-  #dupDlg .two { display:flex; gap:8px; margin-top:18px; } #dupDlg .two button { margin:0; flex:1; padding:16px 6px; white-space:nowrap; }
-  #dupDlg .two .ghost { background:transparent; border:2px solid var(--line); color:var(--text); }
+  
+  #dupbar { margin-top:26px; animation:dupin .5s cubic-bezier(.3,1.4,.5,1); } @keyframes dupin { from { transform:scaleX(.6); opacity:0; } }
+  #dupbar.band { min-height:58px; border-radius:14px; border:2px solid #FFC46B; background:#FFC46B10; display:flex; align-items:center; gap:8px; padding:8px 8px 8px 16px; box-shadow:0 0 24px -10px #FFC46Bcc; }
+  #dupbar .t { flex:1; min-width:0; } #dupbar .t b { display:block; font-size:14px; color:#FFC46B; } #dupbar .t span { display:block; font-size:12px; color:#C9C9CF; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #dupbar button { width:auto; margin:0; padding:0 14px; height:40px; font-size:14px; border-radius:10px; flex:none; white-space:nowrap; }
+  #dupbar .ghost { background:transparent; border:2px solid var(--line); color:var(--text); }
+  #dupbar .amb { background:#FFC46B; color:#1A1206; }
+  #dupbar .cap { color:#FFC46B; font-size:13px; text-align:center; margin:0 0 8px; }
+  #dupbar .two { display:flex; gap:8px; } #dupbar .two button { flex:1; min-width:0; height:56px; font-size:16px; border-radius:14px; }
+  .item.dup { border-color:#FFC46B66; }
+  .dchip { font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; background:#FFC46B22; color:#FFC46B; margin-left:6px; vertical-align:2px; }
+  #chpick.flash { animation:chflash 1.4s ease-out; } @keyframes chflash { 0%, 40% { box-shadow:0 0 0 2px #FFC46B; border-radius:14px; } }
   .st small.pre, p.pre b { color:#FFC46B; }
   .upc { font-size:13px; line-height:1.6; color:var(--dim); margin:8px 0 4px; } .upc.ok { color:#7FD99A; } .upc.bad { color:#FF8A8A; } .upc a { color:inherit; }
   .upc .row { display:flex; gap:6px; margin-top:6px; } .upc .row input { flex:1; min-width:0; padding:7px 10px; font-size:13px; } .upc .row button { width:auto; margin:0; padding:7px 12px; font-size:13px; }
@@ -601,6 +610,7 @@
     <div id="items"></div>
     <button class="add" id="add" onclick="addItem()">＋ 제작 건 추가</button>
     <button id="go" disabled onclick="go()" onanimationend="this.classList.remove('pop')">제작하기 ▸</button>
+    <div id="dupbar" hidden></div>
     <p class="err" id="err2"></p>
     <p class="note" id="left">완성 파일은 내 드라이브 폴더에 바로 올라가요.</p>
   </div>
@@ -626,8 +636,6 @@
     </div>
   </div></template>
   <div id="zoom"></div>
-  <dialog id="dupDlg"><h2 id="dupH">이미 만든 게시물이에요</h2><p id="dupMsg"></p>
-    <div class="two"><button class="ghost" onclick="dupClear()">링크 지우기</button><button id="dupGo" onclick="dupGo()">제작현황 보기</button></div></dialog>
   <dialog id="blkDlg"><h2>제작할 수 없는 계정이에요</h2><p id="blkMsg"></p>
     <button onclick="$('blkDlg').close()">확인</button></dialog>
   <div class="body done" id="done" hidden>
@@ -1102,32 +1110,39 @@
     if (asked[link]) return;
     asked[link] = 1;
     const t = Date.now();
-    const done = r => setTimeout(() => { known[link] = r; check(); setTimeout(() => dupPop(link), 1800); }, Math.max(0, 3000 - (Date.now() - t)));
+    const done = r => setTimeout(() => { known[link] = r; check(); }, Math.max(0, 3000 - (Date.now() - t)));
     google.script.run.withSuccessHandler(r => done(r[0] || [])).withFailureHandler(() => done([])).dups(code, [link]);
   }
   const 쌍이름_ = ch => { const l = [...new Set((who.channels || []).filter(c => c.channel === ch).map(이름_))]; return l.length > 1 ? `${ch}(${l.join(' · ')} 쌍둥이)` : ch; };
-  let dupLink = '', dupRow = 0, 열건 = 0;
-  function dupGo() {
-    $('dupDlg').close();
-    if (!dupRow) return;
-    열건 = dupRow; $('lq').value = '#' + dupRow; view('list');
-  }
   const 막힘_ = link => (known[link] || []).find(x => x.channel === 채널_() && !/^실패/.test(x.state));
-  function dupPop(link) {
-    const same = 막힘_(link);
-    if (!same || !its().some(el => norm(val(el, '.ln')) === link)) return;
-    dupLink = link; dupRow = same.row || 0;
-    $('dupGo').textContent = dupRow ? '제작현황 보기' : '닫기';
-    const 곳 = `<b>${esc(쌍이름_(채널_()))}</b>`, 소식 = same.state === '같은 소식', 완료 = /^완료/.test(same.state);
-    $('dupH').textContent = 소식 ? '이미 만든 소식이에요' : 완료 ? '이미 만든 게시물이에요' : '지금 만드는 게시물이에요';
-    $('dupMsg').innerHTML = (소식 ? `${곳}에 최근 3일 안에 같은 소식을 이미 만들었어요${same.why ? `(${esc(same.why)})` : ''}.`
-      : 완료 ? `이 게시물은 ${곳}에서 이미 만들었어요(${esc(same.state)}).\n결과는 제작 현황에서 보고, 바꿀 점은 수정 요청으로 보내 주세요.`
-      : `이 게시물은 ${곳}에서 지금 만드는 중이에요(${esc(same.state)}).\n끝나면 제작 현황에서 결과를 볼 수 있어요.`) + `\n<b>같은 ${소식 ? '소식' : '게시물'}은 다시 맡길 수 없어요.</b>`;
-    if (!$('dupDlg').open) $('dupDlg').showModal();
+  let 열건 = 0;
+  function 현황열기(row) { 열건 = row; $('lq').value = '#' + row; view('list'); }
+  function 채널로() { const c = $('chpick'); c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }
+  const 중복건_ = () => its().filter(el => el.dataset.dup);
+  function 중복지우기() {
+    const d = 중복건_();
+    d.forEach((el, i) => its().length > 1 && (its().length > d.length || i) ? el.remove() : (el.querySelector('.ln').value = ''));
+    check();
   }
-  function dupClear() {
-    its().forEach(el => { const l = el.querySelector('.ln'); if (norm(l.value) === dupLink) l.value = ''; });
-    $('dupDlg').close(); check();
+  function 중복건으로() { const el = 중복건_()[0]; if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.querySelector('.ln').focus({ preventScroll: true }); } }
+  function 중복자리(d) {
+    const bar = $('dupbar'), on = d.length > 0;
+    $('go').hidden = on; bar.hidden = !on;
+    if (!on) return void (bar.dataset.k = '');
+    const n = its().length, 번호 = d.map(el => its().indexOf(el) + 1), k = [채널_(), n, 번호, d.map(el => norm(val(el, '.ln')))].join('|');
+    if (bar.dataset.k === k) return;
+    bar.dataset.k = k; bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
+    if (n > 1) {
+      bar.className = 'm2';
+      bar.innerHTML = `<p class="cap">제작 건 ${번호.join(' · ')} — 중복이라 지워야 제작할 수 있어요</p><div class="two"><button class="ghost" onclick="중복건으로()">제작 건 ${번호[0]} 보기</button><button class="amb" onclick="중복지우기()">중복 ${번호.length}건 지우기</button></div>`;
+      return;
+    }
+    const same = 막힘_(norm(val(d[0], '.ln'))), 보임 = 쌍이름_(채널_()), 주제 = same.state === '같은 주제';
+    const t = 주제 ? '같은 주제를 다룬 적이 있어요' : /^완료/.test(same.state) ? '이미 만든 게시물이에요' : '지금 만드는 게시물이에요';
+    const 둘 = same.row ? `<button class="amb" onclick="현황열기(${same.row})">현황 ▸</button>`
+      : new Set((who.channels || []).filter(c => !c.demo).map(c => c.channel)).size > 1 ? '<button class="amb" onclick="채널로()">채널 바꾸기</button>' : '';
+    bar.className = 'band';
+    bar.innerHTML = `<div class="t"><b>⚠ ${esc(t)}</b><span>${esc(보임 + (주제 ? ' · 최근 3일' + (same.why ? ' · ' + same.why : '') : ' · ' + same.state))}</span></div><button class="ghost" onclick="중복지우기()">지우기</button>${둘}`;
   }
   function dupText(link) {
     const d = known[link];
@@ -1135,9 +1150,9 @@
     const ch0 = 채널_(), 보임 = 쌍이름_(ch0), same = d.find(x => x.channel === ch0), other = d.filter(x => x.channel !== ch0);
     const s = same && same.state;
     return [!same ? '' : /^실패/.test(s) ? `${보임}에서 만들다 실패한 게시물이에요 — 다시 만들어요`
-      : s === '같은 소식' ? `⚠ ${보임}에 최근 3일 안에 같은 소식이 있어요${same.why ? ` (${same.why})` : ''} — 제작할 수 없어요`
-      : /^완료/.test(s) ? `⚠ 이미 ${보임}에서 만든 게시물이에요 (${s}) — 제작할 수 없어요 · 결과는 제작 현황에서`
-      : `⚠ ${보임}에서 지금 만드는 중이에요 (${s}) — 제작할 수 없어요 · 끝나면 제작 현황에서`,
+      : s === '같은 주제' ? `⚠ ${보임}에 최근 3일 안에 같은 주제를 다룬 적이 있어요${same.why ? ` (${same.why})` : ''}`
+      : /^완료/.test(s) ? `⚠ 이미 ${보임}에서 만든 게시물이에요 (${s})`
+      : `⚠ ${보임}에서 지금 만드는 중이에요 (${s})`,
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
   const 섞 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t), 색 = (c, a = 1) => `rgba(${c.map(v => v | 0)},${a})`, 번짐들 = {};
@@ -1208,24 +1223,27 @@
     $('form').classList.toggle('fast', 날 === 'fast');
     let bad = 0, 확인중 = 0;
     its().forEach((el, i) => {
-      el.querySelector('.ihead b').textContent = '제작 건 ' + (i + 1);
       const raw = val(el, '.ln'), link = norm(raw), h = el.querySelector('.hint');
       const msg = !raw ? '' : !link ? '인스타 게시물 링크가 아니에요' : seen[link] ? seen[link] + '번째 건과 같은 게시물이에요' : '';
       if (link && !seen[link]) seen[link] = i + 1;
       if (link && !msg && code) ask(link);
+      const 중 = !!(link && !msg && 막힘_(link));
+      el.classList.toggle('dup', 중); el.dataset.dup = 중 ? 1 : '';
+      el.querySelector('.ihead b').innerHTML = '제작 건 ' + (i + 1) + (중 ? '<span class="dchip">중복</span>' : '');
       const dup = link && !msg ? dupText(link) : '';
       확인빛(el, link && !msg && code ? link : '');
       h.textContent = msg || (link ? '✓ ' + link.replace(/^https:\/\/www\./, '') + (dup ? '\n' + dup : '') : '');
       h.className = 'hint' + (msg ? ' bad' : dup && known[link] ? ' warn' : link ? ' ok' : '');
       const rb = val(el, '.rf').split('\n').map(l => l.trim()).filter(Boolean).filter(l => !refLine(l)).length, rh = el.querySelector('.rfh');
       rh.textContent = rb ? `링크가 아닌 줄 ${rb}개` : ''; rh.className = 'hint rfh' + (rb ? ' bad' : '');
-      if (!link || msg || rb || 막힘_(link)) bad++;
+      if (!link || msg || rb || 중) bad++;
       if (link && !msg && asked[link] && !known[link]) 확인중++;
     });
     const n = its().length, over = n > left;
     if (!$('go').dataset.sending) {
       $('go').disabled = !ch || ch.demo || bad > 0 || over || 확인중 > 0;
-      $('go').textContent = 확인중 ? '중복 확인 중…' : its().some(el => 막힘_(norm(val(el, '.ln')))) ? '이미 만든 게시물이 있어요' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      $('go').textContent = 확인중 ? '중복 확인 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      중복자리(확인중 ? [] : 중복건_());
       if ($('go').classList.contains('wait') && !확인중 && !$('go').disabled) $('go').classList.add('pop');
       $('go').classList.toggle('wait', 확인중 > 0);
     }
@@ -2296,7 +2314,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793839207256';
+  const 빌드 = '1793840236043';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
