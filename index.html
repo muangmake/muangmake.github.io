@@ -2175,6 +2175,8 @@
     const 칸들 = () => [...($('dj')?.querySelectorAll('.pp2 > button:first-child') || [])].map(b => b.querySelector('img, .cr'));
     const 숨김 = m => { if (m && m.tagName === 'IMG' && m.style.opacity !== '0') m.style.opacity = '0'; };
     const 받음 = m => m && m.tagName === 'IMG' && m.complete && m.naturalWidth > 0;
+    const 오류 = new WeakSet(), 지켜봄 = new WeakSet();
+    const 지켜 = m => { if (m && m.tagName === 'IMG' && !지켜봄.has(m)) { 지켜봄.add(m); m.addEventListener('error', () => 오류.add(m), { once: true }); } };
     if (!칸들().length) return;
     칸들().forEach(숨김);
     const 끝 = (s, m, 됨) => {
@@ -2217,7 +2219,7 @@
         let 남음 = false, 앞받음 = true;
         ms.forEach((m, i) => {
           const s = 판들[i] || (판들[i] = {});
-          const 이칸받음 = 받음(m);
+          지켜(m); const 이칸받음 = 받음(m);
           if (앞받음 && m && m.tagName === 'IMG' && m.loading !== 'eager') m.loading = 'eager';
           const 다음받기 = 앞받음 && (이칸받음 || s.done || !m);
           if (s.done || !m) { 앞받음 = 다음받기; return; }
@@ -2227,7 +2229,7 @@
           앞받음 = 다음받기;
           if (now < 시작) return;
           s.없음때 = 자료 && m.tagName !== 'IMG' ? s.없음때 || now : 0;
-          if (!s.드러냄 && (s.없음때 && now - s.없음때 > 1500 || m.tagName === 'IMG' && m.complete && !m.naturalWidth || now - 시작 > 30000)) return 끝(s, m, false);
+          if (!s.드러냄 && (s.없음때 && now - s.없음때 > 1500 || 오류.has(m) || now - 시작 > 30000)) return 끝(s, m, false);
           if (!s.t0) s.t0 = 시작;
           let p = (now - s.t0) / T;
           if (p >= 1) {
@@ -2429,7 +2431,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793876458879';
+  const 빌드 = '1793876589903';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
