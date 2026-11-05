@@ -796,7 +796,7 @@
   function 자리참(r) {
     $('code').disabled = false;
     if (r.cut) { 끊기 = true; 코드칸(); $('err1').textContent = `이미 다른 ${r.busy}에서 로그인 중이에요. 그 기기를 끊고 여기로 들어가려면 인증 앱에 새로 뜬 6자리 숫자를 넣고 다시 눌러 주세요.`; return; }
-    $('err1').textContent = `이미 다른 ${r.busy}에서 로그인 중이에요. 관리자 계정은 PC 1대 · 모바일 1대에서만 들어갈 수 있어요(같은 기기의 다른 브라우저 · 시크릿 창도 다른 기기예요). 그 기기에서 로그아웃한 뒤 다시 해 주세요. 기기를 잃어버렸으면 마스터 관리자에게 비밀번호 초기화를 요청해 주세요.`;
+    $('err1').textContent = `이미 다른 ${r.busy} ${r.n || 1}대에서 로그인 중이에요. ${r.n > 1 ? '담당자' : '관리자'} 계정은 PC ${r.n || 1}대 · 모바일 ${r.n || 1}대까지만 들어갈 수 있어요(같은 기기의 다른 브라우저 · 시크릿 창도 다른 기기예요). 쓰던 기기에서 로그아웃한 뒤 다시 해 주세요. 기기를 잃어버렸으면 마스터 관리자에게 비밀번호 초기화를 요청해 주세요.`;
   }
   function 코드칸(키) {
     $('otp').hidden = false; $('otp').value = ''; $('otp').focus();
@@ -2315,7 +2315,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793843167122';
+  const 빌드 = '1793844394253';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
