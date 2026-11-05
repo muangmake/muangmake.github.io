@@ -2170,10 +2170,11 @@
     if (더 > 0) scrollBy({ top: 더, behavior: 'smooth' });
   }
   async function 레퍼스캔들(지연) {
-    const T = 2400, S = 12, K = 6, 줄 = openRow, 섬 = performance.now() + 지연, 판들 = [];
+    const T = 2400, 사이 = 400, S = 12, K = 6, 줄 = openRow, 섬 = performance.now() + 지연, 판들 = [];
     const 고르게 = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2, dpr = devicePixelRatio || 1;
     const 칸들 = () => [...($('dj')?.querySelectorAll('.pp2 > button:first-child') || [])].map(b => b.querySelector('img, .cr'));
     const 숨김 = m => { if (m && m.tagName === 'IMG' && m.style.opacity !== '0') m.style.opacity = '0'; };
+    const 받음 = m => m && m.tagName === 'IMG' && m.complete && m.naturalWidth > 0;
     if (!칸들().length) return;
     칸들().forEach(숨김);
     const 끝 = (s, m, 됨) => {
@@ -2191,23 +2192,20 @@
         for (let j = 0; j < s.H; j++) for (let i = 0; i < s.W; i++) s.cells.push({ i, j, u: i / (s.W - 1), ph: Math.random() * 6.28, tr: 0 });
         s.cv.width = w * dpr; s.cv.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
-      const t = (now - 섬) / 1000, p = s.t0 ? Math.min(1, (now - s.t0) / T) : 0, bx = 고르게(p) * 1.2 - .1, X = s.ox + bx * (s.W - 1) * S;
-      if (p >= 1) return 끝(s, m, true);
+      const t = (now - 섬) / 1000, bx = 고르게(s.p) * 1.2 - .1, X = s.ox + bx * (s.W - 1) * S, 드러냄 = s.드러냄;
       x.clearRect(0, 0, w, h);
-      x.fillStyle = '#0D0E14'; x.fillRect(Math.max(0, X), 0, w, h);
+      x.fillStyle = '#0D0E14'; x.fillRect(드러냄 ? Math.max(0, X) : 0, 0, w, h);
       for (const k of s.cells) {
-        const dd = k.u - bx, 지남 = dd < 0;
-        k.tr += ((지남 ? 1 : 0) - k.tr) * .08;
-        const I = 빛띠(dd, .0025) + (지남 && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0), al = 지남 ? Math.max(0, .9 - k.tr * 1.1) : s.t0 ? .9 : .55 + .35 * Math.sin(t * 4 - k.u * 3);
+        const dd = k.u - bx, 지남 = dd < 0, 꼬리 = 지남 && (드러냄 || dd > -.3);
+        k.tr += ((꼬리 ? 1 : 0) - k.tr) * .08;
+        const I = 빛띠(dd, .0025) + (꼬리 && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0), al = 드러냄 && 지남 ? Math.max(0, .9 - k.tr * 1.1) : .9;
         if (al < .02 && I < .02) continue;
         x.fillStyle = 색(섞(섞(어둠, 잔광, k.tr * .8), 심, Math.min(1, I)), Math.min(1, al + I));
         x.beginPath(); x.arc(s.ox + k.i * S, s.oy + k.j * S, K * (1 + Math.min(1, I) * .9) / 2, 0, 7); x.fill();
       }
-      if (s.t0) {
-        x.globalCompositeOperation = 'lighter';
-        [[34, 'rgba(160,245,255,.32)'], [2.5, 'rgba(255,255,255,.95)']].forEach(([r, c2]) => { const g = x.createLinearGradient(X - r, 0, X + r, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, c2); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - r, 0, r * 2, h); });
-        x.globalCompositeOperation = 'source-over';
-      }
+      x.globalCompositeOperation = 'lighter';
+      [[34, 'rgba(160,245,255,.32)'], [2.5, 'rgba(255,255,255,.95)']].forEach(([r, c2]) => { const g = x.createLinearGradient(X - r, 0, X + r, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, c2); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - r, 0, r * 2, h); });
+      x.globalCompositeOperation = 'source-over';
     };
     await new Promise(done => {
       const f = now => {
@@ -2216,23 +2214,30 @@
           판들.forEach(s => s && s.cv && s.cv.remove()); ms.forEach(m => m && m.style && (m.style.opacity = '')); return done();
         }
         const 왔음 = 대조기억.get(줄), 자료 = 왔음 && (왔음.d || 왔음.끊김), 재기 = ms.map(m => m && m.getBoundingClientRect());
-        let 남음 = false;
+        let 남음 = false, 앞받음 = true;
         ms.forEach((m, i) => {
           const s = 판들[i] || (판들[i] = {});
-          if (s.done || !m) return;
+          const 이칸받음 = 받음(m);
+          if (앞받음 && m && m.tagName === 'IMG' && m.loading !== 'eager') m.loading = 'eager';
+          const 다음받기 = 앞받음 && (이칸받음 || s.done || !m);
+          if (s.done || !m) { 앞받음 = 다음받기; return; }
           남음 = true;
-          if (!s.t0) 숨김(m);
-          if (!i && m.tagName === 'IMG' && m.loading !== 'eager') m.loading = 'eager';
-          if (now < 섬) return;
-          const a = 재기[i], 보임 = (Math.min(a.bottom, innerHeight) - Math.max(a.top, 0)) / (a.height || 1) > .6, 화면 = a.bottom > 0 && a.top < innerHeight;
-          if (!s.t0) {
-            const 받음 = m.tagName === 'IMG' && m.complete && m.naturalWidth > 0;
-            if (보임 && !s.보인때) s.보인때 = now;
-            s.없음때 = 자료 && m.tagName !== 'IMG' ? s.없음때 || now : 0;
-            if (s.없음때 && now - s.없음때 > 1500 || m.tagName === 'IMG' && m.complete && !m.naturalWidth || s.보인때 && now - s.보인때 > 30000) return 끝(s, m, false);
-            if (보임 && 받음) { s.t0 = now; m.style.opacity = ''; }
+          if (!s.드러냄) 숨김(m);
+          const 시작 = 섬 + i * 사이;
+          앞받음 = 다음받기;
+          if (now < 시작) return;
+          s.없음때 = 자료 && m.tagName !== 'IMG' ? s.없음때 || now : 0;
+          if (!s.드러냄 && (s.없음때 && now - s.없음때 > 1500 || m.tagName === 'IMG' && m.complete && !m.naturalWidth || now - 시작 > 30000)) return 끝(s, m, false);
+          if (!s.t0) s.t0 = 시작;
+          let p = (now - s.t0) / T;
+          if (p >= 1) {
+            if (s.드러냄) return 끝(s, m, true);
+            s.t0 += Math.floor(p) * T; p -= Math.floor(p);
+            if (이칸받음) { s.드러냄 = true; m.style.opacity = ''; }
           }
-          if (!화면) { if (s.cv) s.cv.style.display = 'none'; return; }
+          s.p = p;
+          const a = 재기[i];
+          if (!(a.bottom > 0 && a.top < innerHeight)) { if (s.cv) s.cv.style.display = 'none'; return; }
           그리기(s, m, a, now);
         });
         남음 ? requestAnimationFrame(f) : done();
@@ -2424,7 +2429,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793875705183';
+  const 빌드 = '1793876458879';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
