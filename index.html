@@ -366,6 +366,10 @@
   #go.wait:disabled::after { width:90px; margin-left:-45px; background:linear-gradient(90deg, transparent, #A0F5FF40 40%, #fff 49%, #fff 51%, #A0F5FF40 60%, transparent); box-shadow:0 0 24px 4px #6EEBFF33; }
   @keyframes dupgo { from { left:0; } to { left:100%; } }
   @keyframes duptr { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0); } }
+  
+  #go:enabled::after { content:''; position:absolute; top:0; bottom:0; left:0; width:45%; z-index:-1; pointer-events:none; background:linear-gradient(105deg, transparent 15%, #ffffff40 50%, transparent 85%); transform:translateX(-120%); animation:goscan 4.5s cubic-bezier(.45,0,.3,1) infinite; }
+  @keyframes goscan { 0%, 30% { transform:translateX(-120%); } 100% { transform:translateX(250%); } }
+  @media (prefers-reduced-motion: reduce) { #go:enabled::after { animation:none; display:none; } }
   #go.pop { animation:duppop .6s cubic-bezier(.3,1.6,.5,1); } @keyframes duppop { 40% { transform:scale(1.035); } }
   
   #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
@@ -2276,7 +2280,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793805858420';
+  const 빌드 = '1793837378881';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
