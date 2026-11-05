@@ -2216,12 +2216,13 @@
           판들.forEach(s => s && s.cv && s.cv.remove()); ms.forEach(m => m && m.style && (m.style.opacity = '')); return done();
         }
         const 왔음 = 대조기억.get(줄), 자료 = 왔음 && (왔음.d || 왔음.끊김), 재기 = ms.map(m => m && m.getBoundingClientRect());
-        let 남음 = false, 앞받음 = true;
+        let 남음 = false, 앞받음 = true, 앞드러냄 = true;
         ms.forEach((m, i) => {
           const s = 판들[i] || (판들[i] = {});
           지켜(m); const 이칸받음 = 받음(m);
           if (앞받음 && m && m.tagName === 'IMG' && m.loading !== 'eager') m.loading = 'eager';
           const 다음받기 = 앞받음 && (이칸받음 || s.done || !m);
+          const 드러내도 = 앞드러냄; 앞드러냄 = 앞드러냄 && (s.드러냄 || s.done || !m);
           if (s.done || !m) { 앞받음 = 다음받기; return; }
           남음 = true;
           if (!s.드러냄) 숨김(m);
@@ -2235,7 +2236,7 @@
           if (p >= 1) {
             if (s.드러냄) return 끝(s, m, true);
             s.t0 += Math.floor(p) * T; p -= Math.floor(p);
-            if (이칸받음) { s.드러냄 = true; m.style.opacity = ''; }
+            if (이칸받음 && 드러내도) { s.드러냄 = true; m.style.opacity = ''; 앞드러냄 = true; }
           }
           s.p = p;
           const a = 재기[i];
@@ -2431,7 +2432,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793876589903';
+  const 빌드 = '1793876731202';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
