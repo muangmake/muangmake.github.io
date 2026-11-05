@@ -1074,12 +1074,20 @@
     });
     if (n.attributes) [...o.attributes].forEach(({ name }) => 둠(name) || n.hasAttribute(name) || o.removeAttribute(name));
     if (그림) 낱.push(o);
-    const a = [...o.childNodes], b = [...n.childNodes];
+    const 열쇠 = e => e.nodeType === 1 && e.getAttribute('data-re') || '', a = [...o.childNodes], b = [...n.childNodes];
     b.forEach((x, i) => {
-      const y = a[i];
+      const k = 열쇠(x), 남은열쇠 = new Set(b.slice(i).map(열쇠));
+      while (a[i] && 열쇠(a[i]) && 열쇠(a[i]) !== k && !남은열쇠.has(열쇠(a[i]))) a.splice(i, 1)[0].remove();
+      let y = a[i];
+      if (!k && y && 열쇠(y)) { o.insertBefore(x, y); a.splice(i, 0, x); 새.push(x); 낱.push(x); return; }
+      if (k && 열쇠(y || {}) !== k) {
+        const j = a.findIndex((z, m) => m > i && 열쇠(z) === k);
+        if (j > 0) { y = a.splice(j, 1)[0]; o.insertBefore(y, a[i] || null); a.splice(i, 0, y); }
+        else { o.insertBefore(x, a[i] || null); a.splice(i, 0, x); 새.push(x); 낱.push(x); return; }
+      }
       if (y && y.nodeType === x.nodeType && y.nodeName === x.nodeName) return 맞춤(y, x, 새, 낱);
       y ? y.replaceWith(x) : o.append(x);
-      새.push(x); 낱.push(x);
+      a[i] = x; 새.push(x); 낱.push(x);
     });
     a.slice(b.length).forEach(y => y.remove());
   }
@@ -2399,7 +2407,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793874010308';
+  const 빌드 = '1793874405328';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
