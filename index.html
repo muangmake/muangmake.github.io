@@ -361,15 +361,14 @@
   
   #go { position:relative; overflow:hidden; isolation:isolate; }
   #go.wait:disabled { background:radial-gradient(circle, #3C8CAA55 1.3px, transparent 1.8px) 0 0/12px 12px, #1A1C22; color:#9FB4C8; box-shadow:inset 0 0 0 1px #6EEBFF22; }
-  #go.wait:disabled::before, #go.wait:disabled::after { content:''; position:absolute; top:0; bottom:0; left:0; z-index:-1; pointer-events:none; animation:dupgo 3s cubic-bezier(.45,0,.25,1) infinite alternate; }
-  #go.wait:disabled::before { width:100%; background:radial-gradient(circle, #6EEBFF66 1.3px, transparent 1.8px) 0 0/12px 12px; animation-name:duptr; } 
-  #go.wait:disabled::after { width:90px; margin-left:-45px; background:linear-gradient(90deg, transparent, #A0F5FF40 40%, #fff 49%, #fff 51%, #A0F5FF40 60%, transparent); box-shadow:0 0 24px 4px #6EEBFF33; }
-  @keyframes dupgo { from { left:0; } to { left:100%; } }
-  @keyframes duptr { from { clip-path:inset(0 100% 0 0); } to { clip-path:inset(0); } }
   
-  #go:enabled::after { content:''; position:absolute; top:0; bottom:0; left:0; width:45%; z-index:-1; pointer-events:none; background:linear-gradient(105deg, transparent 15%, #ffffff40 50%, transparent 85%); transform:translateX(-120%); animation:goscan 4.5s cubic-bezier(.45,0,.3,1) infinite; }
-  @keyframes goscan { 0%, 30% { transform:translateX(-120%); } 100% { transform:translateX(250%); } }
-  @media (prefers-reduced-motion: reduce) { #go:enabled::after { animation:none; display:none; } }
+  #go.wait:disabled::before, #go.wait:disabled::after { content:''; position:absolute; top:0; bottom:0; left:0; z-index:-1; pointer-events:none; }
+  #go.wait:disabled::before { width:100%; background:radial-gradient(circle, #6EEBFF66 1.3px, transparent 1.8px) 0 0/12px 12px; clip-path:inset(0 calc(100% - var(--scan, 0) * 100%) 0 0); } 
+  #go.wait:disabled::after { left:calc(var(--scan, 0) * 100%); width:90px; margin-left:-45px; background:linear-gradient(90deg, transparent, #A0F5FF40 40%, #fff 49%, #fff 51%, #A0F5FF40 60%, transparent); box-shadow:0 0 24px 4px #6EEBFF33; }
+  
+  #go:enabled::after { content:''; position:absolute; top:0; bottom:0; left:0; width:45%; z-index:-1; pointer-events:none; background:linear-gradient(105deg, transparent 15%, #ffffff40 50%, transparent 85%); transform:translateX(-120%); animation:goscan 12s cubic-bezier(.4,0,.6,1) infinite; }
+  @keyframes goscan { 0% { transform:translateX(-120%); } 75%, 100% { transform:translateX(250%); } }
+  @media (prefers-reduced-motion: reduce) { #go:enabled::after, #go.wait:disabled::after { animation:none; display:none; } }
   #go.pop { animation:duppop .6s cubic-bezier(.3,1.6,.5,1); } @keyframes duppop { 40% { transform:scale(1.035); } }
   
   #dupDlg, #blkDlg { margin:auto; max-width:420px; width:calc(100% - 32px); background:var(--win); color:var(--text); border:2px solid #FFC46B; border-radius:20px; padding:24px 22px 18px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
@@ -617,7 +616,7 @@
     </div>
   </div></template>
   <div id="zoom"></div>
-  <dialog id="dupDlg"><h2>이미 만든 게시물이에요</h2><p id="dupMsg"></p>
+  <dialog id="dupDlg"><h2 id="dupH">이미 만든 게시물이에요</h2><p id="dupMsg"></p>
     <div class="two"><button class="ghost" onclick="dupClear()">링크 지우기</button><button id="dupGo" onclick="dupGo()">제작현황 보기</button></div></dialog>
   <dialog id="blkDlg"><h2>제작할 수 없는 계정이에요</h2><p id="blkMsg"></p>
     <button onclick="$('blkDlg').close()">확인</button></dialog>
@@ -1103,14 +1102,17 @@
     if (!dupRow) return;
     열건 = dupRow; $('lq').value = '#' + dupRow; view('list');
   }
+  const 막힘_ = link => (known[link] || []).find(x => x.channel === 채널_() && !/^실패/.test(x.state));
   function dupPop(link) {
-    const same = (known[link] || []).find(x => x.channel === 채널_());
-    if (!same || /^실패/.test(same.state) || !its().some(el => norm(val(el, '.ln')) === link)) return;
+    const same = 막힘_(link);
+    if (!same || !its().some(el => norm(val(el, '.ln')) === link)) return;
     dupLink = link; dupRow = same.row || 0;
     $('dupGo').textContent = dupRow ? '제작현황 보기' : '닫기';
-    $('dupMsg').innerHTML = /^완료/.test(same.state)
-      ? `이 게시물은 <b>${esc(쌍이름_(채널_()))}</b>에서 이미 만들었어요(${esc(same.state)}).\n제작하기를 누르면 <b>새로 만들지 않고</b> 그때 만든 결과를 바로 받아요. 새로 만들지 않으니 티켓은 돌려드려요. 추가 요청사항 · 템플릿은 반영되지 않아요.\n바꿀 점은 받은 뒤 제작 현황에서 수정 요청으로 보내 주세요.`
-      : `이 게시물은 <b>${esc(쌍이름_(채널_()))}</b>에서 지금 만드는 중이에요(${esc(same.state)}).\n제작하기를 누르면 새로 만들지 않고, 끝나면 그 결과를 받아요.`;
+    const 곳 = `<b>${esc(쌍이름_(채널_()))}</b>`, 소식 = same.state === '같은 소식', 완료 = /^완료/.test(same.state);
+    $('dupH').textContent = 소식 ? '이미 만든 소식이에요' : 완료 ? '이미 만든 게시물이에요' : '지금 만드는 게시물이에요';
+    $('dupMsg').innerHTML = (소식 ? `${곳}에 최근 3일 안에 같은 소식을 이미 만들었어요${same.why ? `(${esc(same.why)})` : ''}.`
+      : 완료 ? `이 게시물은 ${곳}에서 이미 만들었어요(${esc(same.state)}).\n결과는 제작 현황에서 보고, 바꿀 점은 수정 요청으로 보내 주세요.`
+      : `이 게시물은 ${곳}에서 지금 만드는 중이에요(${esc(same.state)}).\n끝나면 제작 현황에서 결과를 볼 수 있어요.`) + `\n<b>같은 ${소식 ? '소식' : '게시물'}은 다시 맡길 수 없어요.</b>`;
     if (!$('dupDlg').open) $('dupDlg').showModal();
   }
   function dupClear() {
@@ -1123,8 +1125,9 @@
     const ch0 = 채널_(), 보임 = 쌍이름_(ch0), same = d.find(x => x.channel === ch0), other = d.filter(x => x.channel !== ch0);
     const s = same && same.state;
     return [!same ? '' : /^실패/.test(s) ? `${보임}에서 만들다 실패한 게시물이에요 — 다시 만들어요`
-      : /^완료/.test(s) ? `⚠ 이미 ${보임}에서 만든 게시물이에요 (${s}) — 새로 만들지 않고 그 결과를 받아요 · 티켓은 돌려드려요 · 추가 요청사항은 반영 안 돼요(받은 뒤 수정 요청으로)`
-      : `⚠ ${보임}에서 지금 만드는 중이에요 (${s}) — 끝나면 그 결과를 받아요`,
+      : s === '같은 소식' ? `⚠ ${보임}에 최근 3일 안에 같은 소식이 있어요${same.why ? ` (${same.why})` : ''} — 제작할 수 없어요`
+      : /^완료/.test(s) ? `⚠ 이미 ${보임}에서 만든 게시물이에요 (${s}) — 제작할 수 없어요 · 결과는 제작 현황에서`
+      : `⚠ ${보임}에서 지금 만드는 중이에요 (${s}) — 제작할 수 없어요 · 끝나면 제작 현황에서`,
       other.length ? '다른 채널에서도 만들었어요: ' + other.map(x => `${x.channel} (${x.state})`).join(' · ') : ''].filter(Boolean).join('\n');
   }
   const 섞 = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t), 색 = (c, a = 1) => `rgba(${c.map(v => v | 0)},${a})`, 번짐들 = {};
@@ -1133,6 +1136,7 @@
     s.width = s.height = 64; r.addColorStop(0, 색(c)); r.addColorStop(.25, 색(c, .45)); r.addColorStop(1, 색(c, 0)); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return s;
   })());
   const 빛띠 = (d, w) => Math.exp(-(d * d) / w), 어둠 = [34, 35, 42], 잔광 = [60, 140, 170], 심 = [240, 255, 255], 하늘 = [110, 235, 255], 초록 = [94, 230, 168], 주황 = [255, 196, 107];
+  const 스캔 = { by: null, at: 0 };
   function 빛기둥(box) {
     const cv = box.querySelector('canvas'), x = cv.getContext('2d'), dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight, S = 14, K = 7;
     cv.width = w * dpr; cv.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -1146,6 +1150,7 @@
     const step = now => {
       if (!box.isConnected || box.hidden || box.빛 !== step) return void (돎 = false);
       const t = (now - t0) / 1000, p = 진행(now), bx = p * 1.2 - .1;
+      if (p < 1 && (스캔.by === step || now - 스캔.at > 100)) { 스캔.by = step; 스캔.at = now; $('go').style.setProperty('--scan', Math.min(1, Math.max(0, bx)).toFixed(4)); }
       if (p >= 1 && !끝때) { 끝때 = now; box.className = 'dupfx ' + 답;
         if (답 === 'ok') setTimeout(() => { if (box.빛 !== step || 답 !== 'ok' || !끝때) return; box.insertAdjacentHTML('beforeend', '<svg viewBox="0 0 56 56"><path pathLength="1" d="M15 29l9 9 17-19"/></svg>'); const k = box.querySelector('svg'); requestAnimationFrame(() => requestAnimationFrame(() => k.classList.add('on'))); }, 380); }
       const e = 끝때 ? Math.min(1, (now - 끝때) / 1100) : 0, 빛칸 = [];
@@ -1204,13 +1209,13 @@
       h.className = 'hint' + (msg ? ' bad' : dup && known[link] ? ' warn' : link ? ' ok' : '');
       const rb = val(el, '.rf').split('\n').map(l => l.trim()).filter(Boolean).filter(l => !refLine(l)).length, rh = el.querySelector('.rfh');
       rh.textContent = rb ? `링크가 아닌 줄 ${rb}개` : ''; rh.className = 'hint rfh' + (rb ? ' bad' : '');
-      if (!link || msg || rb) bad++;
+      if (!link || msg || rb || 막힘_(link)) bad++;
       if (link && !msg && asked[link] && !known[link]) 확인중++;
     });
     const n = its().length, over = n > left;
     if (!$('go').dataset.sending) {
       $('go').disabled = !ch || ch.demo || bad > 0 || over || 확인중 > 0;
-      $('go').textContent = 확인중 ? '중복 확인 중…' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
+      $('go').textContent = 확인중 ? '중복 확인 중…' : its().some(el => 막힘_(norm(val(el, '.ln')))) ? '이미 만든 게시물이 있어요' : n > 1 ? `${n}건 제작하기 ▸` : '제작하기 ▸';
       if ($('go').classList.contains('wait') && !확인중 && !$('go').disabled) $('go').classList.add('pop');
       $('go').classList.toggle('wait', 확인중 > 0);
     }
@@ -2280,7 +2285,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793837378881';
+  const 빌드 = '1793838289885';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
