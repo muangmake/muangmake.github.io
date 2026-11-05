@@ -2162,7 +2162,7 @@
     if (더 > 0) scrollBy({ top: 더, behavior: 'smooth' });
   }
   async function 레퍼스캔(ref, 지연) {
-    const T = 1200, S = 12, K = 6, 칸_ = () => $('dj')?.querySelector('.pp2 > button:first-child :is(img, .cr)');
+    const T = 2400, S = 12, K = 6, 칸_ = () => $('dj')?.querySelector('.pp2 > button:first-child :is(img, .cr)');
     if (!칸_()) return;
     ref.style.visibility = 'hidden';
     await new Promise(ok => setTimeout(ok, 지연));
@@ -2172,7 +2172,7 @@
     cv.style.cssText = 'position:fixed;z-index:8;pointer-events:none;border-radius:6px';
     document.body.append(cv);
     cv.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 310, easing: 멈춤곡선 });
-    let w = 0, h = 0, W, H, ox, oy, cells, t0 = 0, 끝때 = 0, 칸 = null;
+    let w = 0, h = 0, W, H, ox, oy, cells, t0 = 0, 끝때 = 0, 칸 = null, 없음때 = 0;
     const 잼 = () => {
       W = Math.max(2, Math.floor((w - 12) / S)); H = Math.max(2, Math.floor((h - 12) / S)); ox = (w - (W - 1) * S) / 2; oy = (h - (H - 1) * S) / 2; cells = [];
       for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) cells.push({ i, j, u: i / (W - 1), ph: Math.random() * 6.28, tr: 0 });
@@ -2188,8 +2188,9 @@
         Object.assign(cv.style, { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px' });
         if (Math.round(a.width) !== w || Math.round(a.height) !== h) { w = Math.round(a.width); h = Math.round(a.height); 잼(); }
         const 받음 = 칸.tagName === 'IMG' && 칸.complete && 칸.naturalWidth > 0, 보임 = (Math.min(a.bottom, innerHeight) - Math.max(a.top, 0)) / (a.height || 1) > .6;
-        if (!t0 && 보임 && (받음 || now - 섬 > 6000)) t0 = now;
-        if (!t0 && now - 섬 > 20000) return done();
+        const 왔음 = 대조기억.get(openRow); 없음때 = !t0 && 왔음 && (왔음.d || 왔음.끊김) && 칸.tagName !== 'IMG' ? 없음때 || now : 0;
+        if (!t0 && 보임 && 받음) t0 = now;
+        if (!t0 && (now - 섬 > 30000 || 없음때 && now - 없음때 > 1500 || 칸.tagName === 'IMG' && 칸.complete && !칸.naturalWidth)) return done();
         const t = (now - 섬) / 1000, p = t0 ? Math.min(1, (now - t0) / T) : 0, bx = 고르게(p) * 1.2 - .1, X = ox + bx * (W - 1) * S;
         if (p >= 1 && !끝때) 끝때 = now;
         x.clearRect(0, 0, w, h);
@@ -2211,7 +2212,7 @@
       };
       requestAnimationFrame(f);
     });
-    cv.remove();
+    if (끝때) cv.remove(); else cv.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }).finished.then(() => cv.remove());
     if (끝때 && 칸 && !$('detail').hidden) 칸.animate([{ boxShadow: '0 0 0 2px #6EEBFF, 0 0 26px rgba(110,235,255,.5)' }, { boxShadow: '0 0 0 2px transparent, 0 0 26px transparent' }], { duration: 740, easing: 'ease-out' });
   }
   async function 짝펼침(c, 첫칸, b, bg, swap) {
@@ -2398,7 +2399,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793873421641';
+  const 빌드 = '1793874010308';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
