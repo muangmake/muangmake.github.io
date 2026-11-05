@@ -1168,7 +1168,7 @@
     if (asked[link]) return;
     asked[link] = 1;
     const t = Date.now();
-    const done = r => setTimeout(() => { known[link] = r; check(); }, Math.max(0, 3000 - (Date.now() - t)));
+    const done = r => setTimeout(() => { r.forEach(x => x.row = +x.row || 0); known[link] = r; check(); }, Math.max(0, 3000 - (Date.now() - t)));
     google.script.run.withSuccessHandler(r => done(r[0] || [])).withFailureHandler(() => done([])).dups(code, [link]);
   }
   const 쌍이름_ = ch => { const l = [...new Set((who.channels || []).filter(c => c.channel === ch).map(이름_))]; return l.length > 1 ? `${ch}(${l.join(' · ')} 쌍둥이)` : ch; };
@@ -1367,7 +1367,7 @@
     const 나 = 전부 = { 키, t: Date.now(), 받는중: true, r: 전부 && 전부.키 === 키 ? 전부.r : null };
     google.script.run.withSuccessHandler(r => {
       if (전부 !== 나) return;
-      r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
+      r.forEach(j => { j.row = +j.row || 0; j.files.forEach(f => f.name = f.name.normalize('NFC')); });
       Object.assign(나, { r, t: Date.now(), 받는중: false });
     }).withFailureHandler(() => { if (전부 === 나) 나.받는중 = false; }).jobs(code, Object.assign(거르기값_(), { n: 500 }));
   }
@@ -1619,7 +1619,7 @@
       목록나감 = null;
       if (Array.isArray(r)) 현황수 = null; else { 현황수 = r.cnt; r = r.jobs; }
       탭표_();
-      r.forEach(j => j.files.forEach(f => f.name = f.name.normalize('NFC')));
+      r.forEach(j => { j.row = +j.row || 0; j.files.forEach(f => f.name = f.name.normalize('NFC')); });
       현황기억_(r);
       현황그림_(r, quiet, 전환);
       if (열건) { const i = mine.findIndex(j => j.row === 열건); 열건 = 0; if (i >= 0) card(i); }
@@ -2459,7 +2459,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793883345202';
+  const 빌드 = '1793884178785';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
