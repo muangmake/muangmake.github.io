@@ -452,30 +452,46 @@
   @media (prefers-reduced-motion:reduce) { html.sh-on, html.sh-up { transition:none; } }
   
   .cpt { width:100%; border-collapse:collapse; font-size:14px; }
-  .cpt th { text-align:center; color:var(--dim); font-weight:700; font-size:12px; padding:0 6px 8px; border-bottom:2px solid var(--line); }
-  .cpt td { padding:10px 6px; border-bottom:1px solid var(--line); vertical-align:middle; text-align:center; }
-  .cpt th:first-child, .cpt td.who { text-align:left; padding-left:2px; }
+  .cpt th { text-align:left; color:var(--dim); font-weight:700; font-size:12px; padding:0 8px 8px; border-bottom:2px solid var(--line); }
+  .cpt td { padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:middle; }
   .cpt td small { display:block; color:var(--dim); font-size:12px; }
-  .cpt .step { display:inline-flex; align-items:center; justify-content:center; gap:6px; vertical-align:middle; }
-  .cpt input { box-sizing:border-box; width:52px; height:36px; margin:0; background:var(--field); border:2px solid var(--line); border-radius:10px; padding:0 4px; color:var(--text); font:inherit; font-size:16px; line-height:1; text-align:center; outline:none; -moz-appearance:textfield; }
-  .cpt input::-webkit-inner-spin-button, .cpt input::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; } 
+  .cpt .step { display:inline-flex; align-items:center; gap:4px; }
+  .cpt input { width:58px; background:var(--field); border:2px solid var(--line); border-radius:10px; padding:7px 6px; color:var(--text); font:inherit; font-size:16px; text-align:center; outline:none; }
   .cpt input:focus { border-color:var(--navy2); }
-  .cpt button { box-sizing:border-box; width:auto; height:36px; min-height:0; margin:0; padding:0 12px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; line-height:1; border-radius:10px; }
-  .cpt .step .pm { width:36px; padding:0; font-size:18px; font-weight:600; }
-  .cpbar button { width:auto; margin:0; padding:7px 11px; font-size:13px; border-radius:10px; }
+  .cpt button, .cpbar button { width:auto; margin:0; padding:7px 11px; font-size:13px; border-radius:10px; }
   .cpt .ghost, .cpbar .ghost { background:transparent; border:1.5px solid var(--line); color:var(--text); }
-  .cpt .who .nm { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:700; margin-bottom:6px; }
-  .cpt .who .chn { display:inline-flex; align-items:center; gap:6px; height:26px; padding:0 9px; border-radius:7px; background:var(--bar); border:1px solid var(--line); font-size:12.5px; font-weight:600; }
-  .cpt .who .chn i { font-style:normal; font-size:11px; color:var(--dim); }
-  .cpt tr.off .chn { color:var(--dim); }
-  .cpt td.mid { color:var(--dim); font-size:13px; }
-  .cpt .tk { display:inline-flex; flex-direction:column; align-items:center; gap:4px; } .cpt .tk small.tmr { margin:0; }
-  .cpt td.up span { display:block; line-height:1.5; }
-  .cpt .pwc { display:inline-flex; flex-direction:column; align-items:center; gap:6px; } .cpt .pwc .pwst { margin:0; }
-  .cpt .pkc { flex:none; width:18px; height:18px; min-height:0; padding:0; margin:0; border-radius:6px; border:0; background:var(--p); cursor:pointer; font-size:0; }
+  .cpt tr.off td.ch { color:var(--dim); }
+  .cpt td.nm { font-weight:700; vertical-align:top; }
+  .cpt .pkc { display:inline-block; vertical-align:-3px; width:18px; height:18px; min-height:0; padding:0; margin:0 0 0 8px; border-radius:6px; border:0; background:var(--p); cursor:pointer; font-size:0; }
   .cpt .pal { display:grid; grid-template-columns:repeat(5,24px); gap:6px; margin-top:8px; } .cpt .pal button { width:24px; height:24px; min-height:0; padding:0; border:0; border-radius:7px; background:var(--p); font-size:0; } .cpt .pal button.on { outline:2.5px solid #fff; outline-offset:2px; } .cpt .pal button:disabled { opacity:.22; cursor:not-allowed; }
-  .cpt td.who, .cpt td.up, .cpt th, .cpt button, .cpt .step, .cpt .pwst { white-space:nowrap; } 
+  .cpt td.nm, .cpt td.ch, .cpt th, .cpt button { white-space:nowrap; } 
   .cpt tr:has(+ tr.more) td:not([rowspan]) { border-bottom-style:dashed; } 
+  
+  .cpg .cpp { margin-bottom:24px; }
+  .cpg .hd { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:0 0 10px; margin-bottom:12px; border-bottom:2px solid var(--p, var(--line)); }
+  .cpg .hd b { font-size:17px; } .cpg .hd .sp { flex:1; } .cpg .hd .n { color:var(--dim); font-size:12px; font-weight:700; }
+  .cpg .dot { flex:none; width:16px; height:16px; border-radius:5px; background:var(--p, var(--line)); }
+  .cpg .pal { display:grid; grid-template-columns:repeat(10,24px); gap:6px; margin:-4px 0 14px; }
+  .cpg .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:10px; }
+  .cpg .cd { border:1.5px solid var(--line); border-radius:16px; background:var(--bar); padding:14px; display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .cpg .cd .t { display:flex; align-items:center; justify-content:space-between; gap:8px; min-height:24px; } .cpg .cd .t b { font-size:15px; min-width:0; } .cpg .cd .t i { font-style:normal; font-size:11px; font-weight:500; color:var(--dim); margin-left:6px; }
+  .cpg .cd.off .t b { color:var(--dim); }
+  .cpg .up { font-size:12.5px; white-space:nowrap; } .cpg .lab { color:var(--dim); font-size:12px; font-weight:700; }
+  .cpg .big { display:flex; flex-direction:column; align-items:center; gap:6px; padding:10px 0 26px; background:var(--field); border-radius:12px; } .cpg .big .lab { font-size:11px; }
+  .cpg .tk { position:relative; display:inline-flex; } .cpg .tmr { position:absolute; top:100%; left:0; right:0; margin-top:4px; text-align:center; font-size:11px; color:var(--dim); white-space:nowrap; }
+  .cpg .ft { display:flex; align-items:center; justify-content:space-between; gap:6px; } .cpg .ac { display:flex; gap:6px; } .cpg .ac button { flex:1; }
+  .cpg .mid { color:var(--dim); font-size:13px; text-align:center; padding:14px 0; }
+  .cpg .step { display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; }
+  .cpg input { box-sizing:border-box; width:52px; height:36px; margin:0; padding:0 4px; background:var(--field); border:2px solid var(--line); border-radius:10px; color:var(--text); font:inherit; font-size:16px; line-height:1; text-align:center; outline:none; -moz-appearance:textfield; }
+  .cpg input::-webkit-inner-spin-button, .cpg input::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; } 
+  .cpg input:focus { border-color:var(--navy2); }
+  .cpg button { box-sizing:border-box; width:auto; height:36px; min-height:0; margin:0; padding:0 12px; display:inline-flex; align-items:center; justify-content:center; font-size:13px; line-height:1; border-radius:10px; white-space:nowrap; }
+  .cpg .ghost { background:transparent; border:1.5px solid var(--line); color:var(--text); }
+  .cpg .pm { width:36px; padding:0; font-size:18px; font-weight:600; }
+  .cpg .pkc { flex:none; width:16px; height:16px; padding:0; border:0; border-radius:5px; background:var(--p); cursor:pointer; font-size:0; }
+  .cpg .pal button { width:24px; height:24px; padding:0; border:0; border-radius:7px; background:var(--p); font-size:0; } .cpg .pal button.on { outline:2.5px solid #fff; outline-offset:2px; } .cpg .pal button:disabled { opacity:.22; cursor:not-allowed; }
+  .cpg .pwst { margin:0; white-space:nowrap; }
+  @media (max-width:640px) { .cpg button, .cpg input { height:40px; } .cpg .pm { width:40px; } .cpg .grid { grid-template-columns:1fr; } .cpg .pal { grid-template-columns:repeat(5,28px); } }
   .cpbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:-6px 0 18px; }
   .cpbar input { width:64px; background:var(--field); border:2px solid var(--line); border-radius:10px; padding:7px 6px; color:var(--text); font:inherit; text-align:center; }
   .cpbar select { background:var(--field); border:2px solid var(--line); border-radius:10px; padding:7px 8px; color:var(--text); font:inherit; font-size:14px; }
@@ -538,9 +554,9 @@
   .act td.x input { width:100%; text-align:left; font-size:14px; padding:8px 10px; }
   @media (max-width:640px) { .act th:nth-child(3), .act th:nth-child(6), .act tr.r td:nth-child(3), .act tr.r td:nth-child(6) { display:none; } .act td.x { white-space:normal; } } 
   .act .pl { width:100%; border-collapse:collapse; font-size:12.5px; margin-top:6px; } .act .pl td { padding:6px 4px; border-bottom:1px solid var(--line); } .act .pl a { color:var(--navy2); text-decoration:none; }
-  @media (max-width:640px) { .cpt .dl { display:none; } .cpt th:first-child, .cpt td.who { position:sticky; left:0; z-index:1; background:var(--win); padding-right:10px; box-shadow:1px 0 0 var(--line); } } 
+  @media (max-width:640px) { .cpt .dl { display:none; } } 
   @media (max-width:640px) { .cols { grid-template-columns:1fr; gap:0; } .body { padding:20px 18px 24px; } }
-  @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt button, .cpt input { height:40px; } .cpt .step .pm { width:40px; } } 
+  @media (max-width:640px) { .top { margin-bottom:14px; } .chip { padding:8px 11px; font-size:13px; } .cpbar button, .cpt button, .cpbar select, #ref .in select, #chs .chip { min-height:40px; } #chs .chip { display:inline-flex; align-items:center; } .cpt .step button { min-width:40px; } } 
   
   #dash #dacc { margin:16px 0 0; } #dash #dacc .chip { cursor:pointer; } #dash #dacc .chip[aria-pressed="true"] { background:var(--navy); border-color:var(--navy); color:#fff; }
   #dash .d2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; } #dash .dk { background:var(--field); border:1.5px solid var(--line); border-radius:14px; padding:12px 14px; min-width:0; }
@@ -736,7 +752,7 @@
     <p class="sub">담당자 × 채널마다 남은 제작 티켓을 바로 더하고 빼요. <b>하루 제공</b>은 올리는 날마다 주는 장 수예요 — 오늘 제작 티켓(오늘 00:00 ~ 23:59) · 내일 제작 티켓이 따로고, 00:00 이 되면 내일 제작 티켓이 그대로 오늘 제작 티켓이 돼요(남은 오늘 제작 티켓은 사라짐). 여기서 바꾸는 건 오늘 제작 티켓이에요. 시트 담당자 탭에서도 같은 걸 할 수 있어요(± 칸 · 리셋 체크 · 전체 리셋 체크).</p>
     <div class="cpbar"><button onclick="cpAll(this)">전체 리셋</button><span class="note" style="margin:0">모든 담당자를 하루 제공 장 수로</span>
       <span style="flex:1"></span><input type="number" id="cpn" value="1" min="1"><button class="ghost" onclick="cpEvery(this, 1)">모두 +</button><button class="ghost" onclick="cpEvery(this, -1)">모두 −</button></div>
-    <div style="overflow-x:auto"><table class="cpt"><thead><tr><th>담당자 · 채널</th><th>오늘 제작 티켓</th><th class="dl">하루 제공</th><th></th><th>업로드</th><th>비밀번호</th><th>계정</th></tr></thead><tbody id="cpb"></tbody></table></div>
+    <div id="cpb" class="cpg"></div>
     <p class="err" id="err4"></p>
   </div>
 </div>
@@ -2443,7 +2459,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793881864538';
+  const 빌드 = '1793883345202';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
