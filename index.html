@@ -2228,8 +2228,9 @@
       x.globalAlpha = 1 - 걷; x.fillRect(0, 0, Math.min(w, Math.max(0, X)), h); x.globalAlpha = 1;
       for (const k of s.cells) {
         const dd = k.u - bx, 지남 = dd < 0, 꼬리 = 지남 && 훑음 && dd > -.3;
-        k.tr += (((s.허용때 ? 지남 : 꼬리) ? 1 : 0) - k.tr) * .08;
-        const I = (훑음 ? 빛띠(dd, .0025) : 0) + ((s.허용때 ? 지남 : 꼬리) && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0);
+        if (s.허용때 && 지남 && !k.지난때) k.지난때 = now;
+        k.tr += (((s.허용때 ? 지남 : 꼬리) ? 1 : 0) - k.tr) * (s.허용때 ? .24 : .08);
+        const I = (훑음 ? 빛띠(dd, .0025) : 0) + ((s.허용때 ? 지남 && now - k.지난때 < 320 : 꼬리) && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0);
         const al = !지남 ? .9 : s.허용때 ? Math.max(0, .9 - k.tr * 1.1) : 훑음 ? .9 : .55 + .35 * Math.sin(t * 4 - k.u * 3);
         if (al < .02 && I < .02) continue;
         x.fillStyle = 색(섞(섞(어둠, 잔광, k.tr * .8), 심, Math.min(1, I)), Math.min(1, al + I));
@@ -2265,7 +2266,7 @@
           s.없음때 = 자료 && m.tagName !== 'IMG' ? s.없음때 || now : 0;
           if (!s.허용때 && (s.없음때 && now - s.없음때 > 1500 || 오류.has(m) || now - 시작 > 30000)) return 끝(s, m, false);
           s.p = Math.min(1, (now - 시작) / T);
-          if (s.p >= 1 && s.허용때 && now - s.허용때 > 걷힘 + 500 && now - 시작 - T > 450) return 끝(s, m, true);
+          if (s.p >= 1 && s.허용때 && now - s.허용때 > 걷힘 + 170 && now - 시작 - T > 150) return 끝(s, m, true);
           const a = 재기[i];
           if (!(a.bottom > 0 && a.top < innerHeight)) { if (s.cv) s.cv.style.display = 'none'; return; }
           그리기(s, m, a, now);
@@ -2459,7 +2460,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793884178785';
+  const 빌드 = '1793887317441';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
