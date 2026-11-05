@@ -143,6 +143,12 @@
   .sub:empty { margin:0; height:24px; } 
   #detail h1 { font-size:24px; line-height:1.45; } #detail h1 .num { color:var(--navy2); } 
   @media (max-width:640px) { #detail h1 { font-size:20px; } }
+  
+  #detail .tcp { all:unset; cursor:pointer; border-radius:6px; padding:0 4px; margin:0 -4px; background:linear-gradient(rgba(94,230,168,.22),rgba(94,230,168,.22)) no-repeat 0 0/0% 100%; } #detail .tcp:focus-visible { outline:2px solid var(--navy2); }
+  #detail .tcp svg { width:.75em; height:.75em; margin-left:7px; vertical-align:-.04em; color:var(--dim); opacity:0; transition:opacity .2s; } #detail .tcp:hover svg, #detail .tcp:focus-visible svg { opacity:1; } @media (hover:none) { #detail .tcp svg { opacity:.7; } }
+  #detail .tcp.on { animation:tsw .5s ease-out forwards; } @keyframes tsw { to { background-size:100% 100%; } }
+  #detail .tbd { display:inline-flex; align-items:center; gap:5px; vertical-align:6px; margin-left:12px; height:30px; padding:0 13px; border-radius:999px; background:var(--ok); color:#07130D; font-size:14px; font-weight:800; white-space:nowrap; transform:scale(0); opacity:0; transition:transform .35s cubic-bezier(.3,1.6,.5,1), opacity .2s; } #detail .tbd svg { width:15px; height:15px; } #detail .tbd.on { transform:scale(1); opacity:1; }
+  @media (prefers-reduced-motion:reduce) { #detail .tcp.on { animation:none; background-size:100% 100%; } #detail .tbd { transition:none; } }
   .meta { color:var(--dim); font-size:14px; margin-top:12px; } .meta b { color:var(--text); font-weight:600; } #detail .meta + .sub { margin-top:4px; }
   .tagk { display:inline-block; background:var(--bar); border:1px solid var(--line); border-radius:8px; font-size:12px; font-weight:700; padding:2px 8px; color:#C9C9CF; margin-right:6px; }
   label { display:block; font-weight:700; font-size:14px; margin:18px 0 8px; }
@@ -1973,6 +1979,12 @@
     const m = 캡션기억.get(row), 글 = m.글; m.시계 = 0;
     캡션줄 = 캡션줄.then(() => new Promise(끝 => google.script.run.withSuccessHandler(r => { 끝(); if (m.글 === 글) { m.저장중 = false; m.걸림 = r.걸림; } 캡션표시(row, m); }).withFailureHandler(e => { 끝(); $('err3').textContent = e.message; }).캡션저장(code, row, 글)));
   }
+  async function 제목복사(b) {
+    const 글 = b.textContent.trim(), 배지 = b.parentNode.nextElementSibling;
+    try { await navigator.clipboard.writeText(글); } catch (e) { const t = document.createElement('textarea'); t.value = 글; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
+    [b, 배지].forEach(x => { x.classList.remove('on'); void x.offsetWidth; x.classList.add('on'); });
+    clearTimeout(b.시계); b.시계 = setTimeout(() => [b, 배지].forEach(x => x.classList.remove('on')), 1800);
+  }
   async function 캡션복사하기(row) {
     const m = 캡션기억.get(row);
     try { await navigator.clipboard.writeText(m.글); } catch (e) { const t = document.createElement('textarea'); t.value = m.글; document.body.append(t); t.select(); document.execCommand('copy'); t.remove(); }
@@ -2074,7 +2086,8 @@
     const 다 = 다시표_(j), 고침중 = f => 다 && (다.전체 || 다.장.includes(parseInt(f.name)));
     const busy = 다 ? (다.전체 ? ' 지금 보이는 장은 지난 결과예요. 끝나면 새 결과로 바뀌어요.' : ' 표시된 장만 새 결과로 바뀌어요.') + ' 수정 요청은 지금 보내도 끝난 뒤 이어서 고쳐요.' : j.state === '수정중' ? ' 지금 수정을 반영하는 중이에요. 끝나면 이 화면의 그림이 새 결과로 바뀌어요.' : '';
     const html = `<div class="path">POWERPAGE.zip › ${esc(j.acc || j.channel)} › 제작 현황</div>`
-      + `<h1><span class="num">#${j.row}</span> ${esc(j.title || j.channel + ' 제작 건')}</h1>`
+      + `<h1><button class="tcp" title="제목 복사" onclick="제목복사(this)"><span class="num">#${j.row}</span> <span>${esc(j.title || j.channel + ' 제작 건')}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></h1>`
+      + `<span class="tbd" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>복사완료</span>`
       + `<p class="meta">${j.kind ? `<span class="tagk">${esc(j.kind)}</span>` : ''}${esc(j.acc || j.channel)}${의뢰자(j) ? ` · <b>${의뢰자(j)}</b> 의뢰` : ''} · ${j.time} 제작${j.post ? ` · ${esc(j.post)} 게시` : ''}</p>`
       + `<div id="upc">${업로드칸(j)}</div>`
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(쌍이름_(j.channel))}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
@@ -2332,7 +2345,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793862455414';
+  const 빌드 = '1793867685596';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
