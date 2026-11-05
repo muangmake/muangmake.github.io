@@ -2165,7 +2165,9 @@
     const 칸 = ref.querySelector('img, .cr'), T = 1200;
     if (!칸) return;
     ref.style.visibility = 'hidden';
-    await new Promise(ok => setTimeout(ok, 지연));
+    if (칸.tagName === 'IMG') 칸.loading = 'eager';
+    const 받음 = 칸.decode ? 칸.decode().catch(() => {}) : 0;
+    await Promise.all([new Promise(ok => setTimeout(ok, 지연)), Promise.race([받음, new Promise(ok => setTimeout(ok, 1500))])]);
     ref.style.visibility = '';
     if (!칸.isConnected || $('detail').hidden) return;
     const cv = document.createElement('canvas'), x = cv.getContext('2d'), dpr = devicePixelRatio || 1, w = 칸.offsetWidth, h = 칸.offsetHeight, S = 12, K = 6;
@@ -2389,7 +2391,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793872145447';
+  const 빌드 = '1793872990930';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
