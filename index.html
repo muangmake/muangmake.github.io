@@ -75,6 +75,7 @@
     display:flex; flex-direction:column; align-items:center; padding:28px 16px 60px; }
   .top { width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
   .chip { background:var(--chip); border:1.5px solid var(--line); border-radius:999px; padding:8px 14px; font-weight:700; font-size:14px; white-space:nowrap; color:var(--text); text-decoration:none; }
+  .chip.ps { display:inline-flex; align-items:center; gap:6px; } .chip.ps i { width:9px; height:9px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px color-mix(in srgb, var(--ok) 28%, transparent); } .chip.ps.off { cursor:pointer; color:var(--bad); border-color:var(--bad); } .chip.ps.off i { background:var(--bad); box-shadow:0 0 0 3px color-mix(in srgb, var(--bad) 28%, transparent); } 
   .chip.accent { background:var(--navy); color:#fff; border-color:var(--navy); }
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .cpt small.tmr { display:block; font-size:11px; color:var(--dim); margin-top:3px; }
@@ -562,6 +563,7 @@
     <span class="chip namebtn" id="ch"><button id="chn" onclick="view('dash')" title="내 대시보드"></button><button class="lo" onclick="logout()">로그아웃</button></span>
     <span class="chip" id="otpc" hidden onclick="이단계켜끄기(this, 'err0')" title="2단계 로그인(선택)">2단계</span>
     <select class="chip" id="tsel" hidden onchange="시험보기_(this)" title="볼 담당자"></select>
+    <span class="chip ps" id="psc" hidden onclick="if (this.classList.contains('off')) $('err0').textContent = this.title"><i></i><span id="pst"></span></span>
     <span class="chip tkb" id="cpc"><span id="cp" style="display:contents"></span></span>
     <a class="chip" id="drive" href="#" target="_blank" rel="noopener">드라이브 ↗</a>
   </span>
@@ -808,6 +810,20 @@
     if (!confirm(`'${name}' 비밀번호 초기화를 관리자에게 요청할까요?`)) return;
     google.script.run.withSuccessHandler(m => $('err1').textContent = m).withFailureHandler(e => $('err1').textContent = e.message.replace(/^Error:\s*/, '')).비번찾기(name);
   }
+  let 점틀 = 0;
+  function 포토샵점_() {
+    clearTimeout(점틀);
+    if (!code) return;
+    const t = code;
+    google.script.run.withSuccessHandler(r => {
+      if (t !== code) return;
+      const on = r.s === 'ok', c = $('psc');
+      c.hidden = false; c.classList.toggle('off', !on);
+      $('pst').textContent = on ? '포토샵 연결' : '포토샵 끊김';
+      c.title = on ? '작업 맥 포토샵이 연결돼 있어요' : r.t + (r.at ? ` (${r.at}부터)` : '') + ' · 관리자에게 문의해 주세요';
+    }).withFailureHandler(() => {}).ps(t);
+    점틀 = setTimeout(포토샵점_, 60000);
+  }
   function 들어감_(t, r) {
     $('code').disabled = false;
     code = t;
@@ -820,6 +836,7 @@
     google.script.history.replace({ v: home() });
     const j = 현황기억_();
     if (j) 현황그림_(j, true);
+    포토샵점_();
     if (!who.admin) load(true);
     else 관리자코드(costLoad);
   }
@@ -2315,7 +2332,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793846737014';
+  const 빌드 = '1793862455414';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
