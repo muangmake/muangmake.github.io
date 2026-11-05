@@ -2187,8 +2187,9 @@
         const a = 칸.getBoundingClientRect();
         Object.assign(cv.style, { left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px' });
         if (Math.round(a.width) !== w || Math.round(a.height) !== h) { w = Math.round(a.width); h = Math.round(a.height); 잼(); }
-        const 받음 = 칸.tagName === 'IMG' && 칸.complete && 칸.naturalWidth > 0, 보임 = a.top >= 0 && a.bottom <= innerHeight + 2;
-        if (!t0 && (받음 && 보임 || now - 섬 > 6000)) t0 = now;
+        const 받음 = 칸.tagName === 'IMG' && 칸.complete && 칸.naturalWidth > 0, 보임 = (Math.min(a.bottom, innerHeight) - Math.max(a.top, 0)) / (a.height || 1) > .6;
+        if (!t0 && 보임 && (받음 || now - 섬 > 6000)) t0 = now;
+        if (!t0 && now - 섬 > 20000) return done();
         const t = (now - 섬) / 1000, p = t0 ? Math.min(1, (now - t0) / T) : 0, bx = 고르게(p) * 1.2 - .1, X = ox + bx * (W - 1) * S;
         if (p >= 1 && !끝때) 끝때 = now;
         x.clearRect(0, 0, w, h);
@@ -2397,7 +2398,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793873313618';
+  const 빌드 = '1793873421641';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
