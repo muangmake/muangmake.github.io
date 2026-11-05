@@ -264,7 +264,8 @@
   .sent .bad { color:var(--bad); font-style:normal; font-weight:700; }
   .sent .eta, .st small.eta { display:block; margin:2px 0 4px; color:var(--eta); font-size:11px; font-weight:600; }
   .s-wait { color:var(--wait); } .s-run { color:var(--run); } .s-ok { color:var(--ok); }
-  .st.ok { color:var(--ok); } .st.bad { color:var(--bad); } .st.run { color:var(--run); } .st.wait { color:var(--wait); }
+  .st.ok { color:var(--ok); } .st.bad { color:var(--bad); } .st.run { color:var(--run); } .st.wait { color:var(--wait); } .st.drop { color:#8A8A93; }
+  .drop도장 { position:absolute; left:50%; top:46%; transform:translate(-50%,-50%) rotate(-12deg); padding:4px 18px; border:4px double #E5484D; border-radius:10px; color:#E5484D; background:rgba(255,255,255,.82); font-weight:900; font-size:30px; letter-spacing:4px; pointer-events:none; } 
   
   .gauge { --c:var(--run); margin:8px 0 6px; }
   .gauge.wait { --c:var(--wait); }
@@ -1596,7 +1597,7 @@
     r.forEach(j => {
       const f = 둘째건_(j) && ((짝(j.files)[0] || {}).t || {}).f || j.files[0], q = j.reqs.find(x => x.eta), 다 = 다시표_(j);
       const 깨 = !다 && /^실패/.test(j.state);
-      const html = `<div class="card${깨 ? ' 깨짐' : ''}"${깨 ? ` style="--d:-${j.row % 7 * .6}s"` : ''} data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f && !깨 ? `style="background-image:url('${img(f.id)}')"` : ''}>${깨 ? 깨짐표지(j, f) : f ? '' : 미리표지(j)}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
+      const html = `<div class="card${깨 ? ' 깨짐' : ''}"${깨 ? ` style="--d:-${j.row % 7 * .6}s"` : ''} data-row="${j.row}" onclick="card(mine.findIndex(x => x.row === ${j.row}))"><div class="cv${다 ? ' 딤' : ''}" ${f && !깨 ? `style="background-image:url('${img(f.id)}')"` : ''}>${깨 ? 깨짐표지(j, f) : f ? '' : 미리표지(j)}${/^드랍/.test(j.state) ? '<span class="drop도장">드랍</span>' : ''}${다 ? `<div class="띠 ${다.색}"><b>⟳ 다시 제작 중</b><span>${다.출처} · ${esc(다.짧게)}</span></div>` : ''}${의뢰자(j) ? `<span class="wh">${의뢰자(j)}</span>` : ''}</div>`
         + `<b class="제"><span class="num">#${칠_(j.row)}</span> ${칠_(카드제목_(j))}</b>`
         + `<p><span>${칠_(j.acc || j.channel)}<br>${j.time}${j.post ? ` · <b>${esc(j.post)} 게시</b>` : ''}${j.up && /^(미확인|다른계정)$/.test(j.up.s) ? '<br><b class="upbad">⚠ 업로드 미확인</b>' : j.up && j.up.s === '확인' ? '<br><b class="upok">✓ 업로드 확인</b>' : ''}</span><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state.split(' ')[0])}${live(j) && !다 ? `<small>${esc(j.step)}</small>` : ''}${카드예상(j)}${q ? `<small class="eta">${다 ? esc(q.eta.split(' · ')[0]) : '수정 완료 ' + esc(q.eta)}</small>` : ''}${j.확인 && /^완료/.test(j.state) ? (j.확인.열림 ? `<small class="okd">${j.확인.강제 ? '강제 열기' : '확인 완료'}</small>` : '<small class="eta">확인 전</small>') : ''}${j.pre ? '<small class="pre">이미 만든 게시물</small>' : ''}</span></p>`
         + (다 ? '' : 진행게이지(j, q)) + '</div>';
@@ -1624,7 +1625,7 @@
   const 단계말 = { 수정: ['접수', '검토', '다시 제작', '반영'] };
   const 제작칸 = ['접수', '레퍼런스 읽기', '기획', '사진 준비', '포토샵 차례', '포토샵 조립', '드라이브에 올리기'];
   const 수정단계 = q => /^반영중/.test(q.state || '') ? (/검토/.test(q.phase || '') ? 1 : 2) : 0;
-  const stc = s => /^완료/.test(s) ? 'ok' : /^실패/.test(s) ? 'bad' : /^대기/.test(s) ? 'wait' : 'run';
+  const stc = s => /^드랍/.test(s) ? 'drop' : /^완료/.test(s) ? 'ok' : /^실패/.test(s) ? 'bad' : /^대기/.test(s) ? 'wait' : 'run';
   function gauge(kind, n, pct) {
     const w = Math.min(96, Math.max(n / 3 * 100 + 8, (pct || 0) * 100));
     return `<div class="gauge${n ? '' : ' wait'}"><div class="track"><i style="width:${w}%"></i></div><ol>`
@@ -2034,7 +2035,8 @@
       + (j.pre ? `<p class="pre"><b>이미 만든 게시물</b> — ${esc(쌍이름_(j.channel))}에서 ${esc(j.pre.replace(/^이미 만든 게시물 · ?/, '').replace(/.+/, '$&에') || '전에')} 만든 결과를 그대로 받았어요(새로 만들지 않음). 바꿀 점은 아래 수정 요청으로 보내 주세요.</p>` : '')
       + (다 ? 다시알림(j, 다) : '') + 예상칸(j)
       + `<p class="sub"><span class="st ${stc(j.state)}">${다 ? '다시 제작 중' : esc(j.state)}${live(j) && j.si == null ? ' · ' + esc(j.step) : ''}</span> · <a href="${esc(주소(j.link))}" target="_blank" rel="noopener">레퍼런스</a> ${j.folder ? ` · <button class="lnk" onclick="받기열기(this, ${j.row}, '폴더 열기 ↗')">드라이브 폴더 ↗</button>` : ''}<br>`
-      + (j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
+      + (/^드랍/.test(j.state) ? '드랍된 건이에요 — 제작기로 만들기 어려운 콘텐츠라 멈췄어요. 수정 요청은 받지 않아요.</p>'
+        : j.files.length ? `<span class="hl">고칠 장마다 아래 칸에 적고 '모아서 보내기'를 누르면 적은 장만 고쳐요(글 · 사진 · 배치 · 그림 · 썸네일 제목) — 다른 장은 그대로예요. 전체 수정은 게시물을 다시 만들어요. 결과는 같은 폴더에 새로 올라와요.</span>${busy}</p>`
         + `<div id="dj">${대조칸(j)}</div><div class="pages">${장들.map(({ f, t }) => {
           const k = j.row + '|' + 판(f.name), on = !!t && 둘째건_(j) !== 쌍보기.has(k);
           return `<div><div class="ph${on ? ' tw' : ''}${고침중(f) ? ' 고침' : ''}" data-k="${esc(k)}">`
@@ -2285,7 +2287,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793838289885';
+  const 빌드 = '1793839079686';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
