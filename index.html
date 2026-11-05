@@ -2170,7 +2170,7 @@
     if (더 > 0) scrollBy({ top: 더, behavior: 'smooth' });
   }
   async function 레퍼스캔들(지연) {
-    const T = 2400, 사이 = 400, S = 12, K = 6, 줄 = openRow, 섬 = performance.now() + 지연, 판들 = [];
+    const T = 6000, 사이 = 400, 걷힘 = 450, S = 12, K = 6, 줄 = openRow, 섬 = performance.now() + 지연, 판들 = [];
     const 고르게 = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2, dpr = devicePixelRatio || 1;
     const 칸들 = () => [...($('dj')?.querySelectorAll('.pp2 > button:first-child') || [])].map(b => b.querySelector('img, .cr'));
     const 숨김 = m => { if (m && m.tagName === 'IMG' && m.style.opacity !== '0') m.style.opacity = '0'; };
@@ -2194,20 +2194,26 @@
         for (let j = 0; j < s.H; j++) for (let i = 0; i < s.W; i++) s.cells.push({ i, j, u: i / (s.W - 1), ph: Math.random() * 6.28, tr: 0 });
         s.cv.width = w * dpr; s.cv.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
-      const t = (now - 섬) / 1000, bx = 고르게(s.p) * 1.2 - .1, X = s.ox + bx * (s.W - 1) * S, 드러냄 = s.드러냄;
+      const t = (now - 섬) / 1000, p = s.p, 훑음 = p < 1, bx = 훑음 ? 고르게(p) * 1.2 - .1 : 1.2, X = s.ox + bx * (s.W - 1) * S;
+      const 걷 = s.허용때 ? Math.min(1, (now - s.허용때) / 걷힘) : 0;
       x.clearRect(0, 0, w, h);
-      x.fillStyle = '#0D0E14'; x.fillRect(드러냄 ? Math.max(0, X) : 0, 0, w, h);
+      x.fillStyle = '#0D0E14';
+      if (훑음) x.fillRect(Math.max(0, X), 0, w, h);
+      x.globalAlpha = 1 - 걷; x.fillRect(0, 0, Math.min(w, Math.max(0, X)), h); x.globalAlpha = 1;
       for (const k of s.cells) {
-        const dd = k.u - bx, 지남 = dd < 0, 꼬리 = 지남 && (드러냄 || dd > -.3);
-        k.tr += ((꼬리 ? 1 : 0) - k.tr) * .08;
-        const I = 빛띠(dd, .0025) + (꼬리 && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0), al = 드러냄 && 지남 ? Math.max(0, .9 - k.tr * 1.1) : .9;
+        const dd = k.u - bx, 지남 = dd < 0, 꼬리 = 지남 && 훑음 && dd > -.3;
+        k.tr += (((s.허용때 ? 지남 : 꼬리) ? 1 : 0) - k.tr) * .08;
+        const I = (훑음 ? 빛띠(dd, .0025) : 0) + ((s.허용때 ? 지남 : 꼬리) && Math.sin(t * 2.2 + k.ph * 7) > .97 ? .7 : 0);
+        const al = !지남 ? .9 : s.허용때 ? Math.max(0, .9 - k.tr * 1.1) : 훑음 ? .9 : .55 + .35 * Math.sin(t * 4 - k.u * 3);
         if (al < .02 && I < .02) continue;
         x.fillStyle = 색(섞(섞(어둠, 잔광, k.tr * .8), 심, Math.min(1, I)), Math.min(1, al + I));
         x.beginPath(); x.arc(s.ox + k.i * S, s.oy + k.j * S, K * (1 + Math.min(1, I) * .9) / 2, 0, 7); x.fill();
       }
-      x.globalCompositeOperation = 'lighter';
-      [[34, 'rgba(160,245,255,.32)'], [2.5, 'rgba(255,255,255,.95)']].forEach(([r, c2]) => { const g = x.createLinearGradient(X - r, 0, X + r, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, c2); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - r, 0, r * 2, h); });
-      x.globalCompositeOperation = 'source-over';
+      if (훑음) {
+        x.globalCompositeOperation = 'lighter';
+        [[34, 'rgba(160,245,255,.32)'], [2.5, 'rgba(255,255,255,.95)']].forEach(([r, c2]) => { const g = x.createLinearGradient(X - r, 0, X + r, 0); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(.5, c2); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(X - r, 0, r * 2, h); });
+        x.globalCompositeOperation = 'source-over';
+      }
     };
     await new Promise(done => {
       const f = now => {
@@ -2216,29 +2222,24 @@
           판들.forEach(s => s && s.cv && s.cv.remove()); ms.forEach(m => m && m.style && (m.style.opacity = '')); return done();
         }
         const 왔음 = 대조기억.get(줄), 자료 = 왔음 && (왔음.d || 왔음.끊김), 재기 = ms.map(m => m && m.getBoundingClientRect());
-        let 남음 = false, 앞받음 = true, 앞드러냄 = true;
+        let 남음 = false, 앞받음 = true, 앞허용 = true;
         ms.forEach((m, i) => {
           const s = 판들[i] || (판들[i] = {});
           지켜(m); const 이칸받음 = 받음(m);
           if (앞받음 && m && m.tagName === 'IMG' && m.loading !== 'eager') m.loading = 'eager';
-          const 다음받기 = 앞받음 && (이칸받음 || s.done || !m);
-          const 드러내도 = 앞드러냄; 앞드러냄 = 앞드러냄 && (s.드러냄 || s.done || !m);
-          if (s.done || !m) { 앞받음 = 다음받기; return; }
-          남음 = true;
-          if (!s.드러냄) 숨김(m);
-          const 시작 = 섬 + i * 사이;
+          const 다음받기 = 앞받음 && (이칸받음 || s.done || !m), 허용해도 = 앞허용;
           앞받음 = 다음받기;
+          if (s.done || !m) return;
+          남음 = true;
+          const 시작 = 섬 + i * 사이;
+          if (!s.허용때 && 이칸받음 && 허용해도 && now >= 시작) { s.허용때 = now; m.style.opacity = ''; }
+          앞허용 = 앞허용 && !!s.허용때;
+          if (!s.허용때) 숨김(m);
           if (now < 시작) return;
           s.없음때 = 자료 && m.tagName !== 'IMG' ? s.없음때 || now : 0;
-          if (!s.드러냄 && (s.없음때 && now - s.없음때 > 1500 || 오류.has(m) || now - 시작 > 30000)) return 끝(s, m, false);
-          if (!s.t0) s.t0 = 시작;
-          let p = (now - s.t0) / T;
-          if (p >= 1) {
-            if (s.드러냄) return 끝(s, m, true);
-            s.t0 += Math.floor(p) * T; p -= Math.floor(p);
-            if (이칸받음 && 드러내도) { s.드러냄 = true; m.style.opacity = ''; 앞드러냄 = true; }
-          }
-          s.p = p;
+          if (!s.허용때 && (s.없음때 && now - s.없음때 > 1500 || 오류.has(m) || now - 시작 > 30000)) return 끝(s, m, false);
+          s.p = Math.min(1, (now - 시작) / T);
+          if (s.p >= 1 && s.허용때 && now - s.허용때 > 걷힘 + 500 && now - 시작 - T > 450) return 끝(s, m, true);
           const a = 재기[i];
           if (!(a.bottom > 0 && a.top < innerHeight)) { if (s.cv) s.cv.style.display = 'none'; return; }
           그리기(s, m, a, now);
@@ -2432,7 +2433,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793876731202';
+  const 빌드 = '1793877492026';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
