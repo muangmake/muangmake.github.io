@@ -710,7 +710,7 @@
   <div class="body" id="ref" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 레퍼런스</div>
     <h1>제작 후보</h1><span class="cur"></span>
-    <p class="sub">레퍼런스 채널들의 최근 2일 피드예요(릴스 · 광고 뺌 · 반응 큰 순 · 매일 8시 · 13시에 저절로 찾아요). 만들 계정 · 사용할 티켓을 고르고 후보를 체크한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
+    <p class="sub">레퍼런스 채널들의 최근 24시간 피드 중 반응 큰 150개예요(릴스 · 광고 뺌 · 매일 8시 · 13시에 저절로 찾아요). 만들 계정 · 사용할 티켓을 고르고 후보를 체크한 뒤 아래 <b>제작하기</b>. <span id="rmeta"></span></p>
     <div id="rpick"><label class="chlab">만들 채널</label><div class="chips" id="rchs"></div></div>
     <div><label>사용할 티켓</label><div class="chips" id="rdays"></div></div>
     <div id="rbox" hidden><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span class="ri"><span id="rstate" class="scan"></span><span id="rlast"></span></span>
@@ -2430,7 +2430,7 @@
         <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
         ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${픽들_(j).map(b => `<div class="rs${산_(b.s) ? '' : ' bad'}" style="--p:${esc(b.p)}">${esc(픽_(b))} PICK · ${esc(b.c)} <span class="${b.s === '완료' ? 'ok' : ''}">${esc(b.s)}</span>${b.t ? `<small>${esc(b.t)}</small>` : ''}</div>`).join('')}</div></div>`;
     };
-    $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 2일 후보가 없어요 — 새 후보는 매일 8시 · 13시에 들어와요.'}</p>`
+    $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 24시간 후보가 없어요 — 새 후보는 매일 8시 · 13시에 들어와요.'}</p>`
       : 밝.map(카드).join('') + (어.length ? `<p class="rsec">같은 채널 동료가 맡은 후보 ${어.length}개</p>` + 어.map(카드).join('') : '');
     refSum();
   }
@@ -2493,7 +2493,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793979258104';
+  const 빌드 = '1793979766265';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
