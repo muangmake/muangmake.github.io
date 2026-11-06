@@ -1871,7 +1871,7 @@
     if (r.열림) card(mine.indexOf(j), 'refresh'); else if (확.row === row) 확.잠금 = r;
   }
   function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); if (b) { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); } $('err3').textContent = 확.바쁨 ? '수정 중에는 받을 수 없어요. 끝나면 새 결과를 받아 주세요.' : `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
-  function 받기열기(b, row, 글) { call('받기', [code, row], b, 'err3', u => { const a = document.createElement('a'); a.href = 주소(u); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 글; a.className = b.className; b.replaceWith(a); a.click(); }); }
+  function 받기열기(b, row, 글) { call('받기', [code, row], b, 'err3', u => { const a = document.createElement('a'); a.href = 주소(u); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 글; a.title = '링크는 20분 동안 열려요 — 지나면 받기를 다시 눌러 주세요'; a.className = b.className; b.replaceWith(a); a.click(); }); }
   function PSD받기(b) { 받기열기(b, 확.row, 'PSD 열기 ↗'); }
   function 확강제() {
     const 사유 = (prompt('강제로 여는 사유를 적어 주세요. 기록에 남아요.') || '').trim(), row = 확.row;
@@ -2460,7 +2460,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793935839398';
+  const 빌드 = '1793945919450';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
