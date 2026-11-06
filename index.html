@@ -575,14 +575,21 @@
   
   #dash .dwrap.표 { display:grid; grid-template-columns:minmax(0,1.8fr) minmax(0,1fr); gap:12px; align-items:start; margin-top:16px; } #dash .dwrap.표 .sheet { margin-top:0; }
   #dash .ct { background:var(--win); border:1.5px solid var(--line); border-radius:12px; padding:4px 12px 8px; min-width:0; }
-  #dash .cr { all:unset; box-sizing:border-box; cursor:pointer; display:grid; grid-template-columns:minmax(0,1.4fr) 92px 58px 44px 54px; gap:8px; align-items:center; width:100%; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; font-variant-numeric:tabular-nums; }
+  #dash .cr { all:unset; box-sizing:border-box; cursor:pointer; display:grid; grid-template-columns:minmax(0,1.4fr) 40px 92px 58px 44px 54px; gap:8px; align-items:center; width:100%; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; font-variant-numeric:tabular-nums; }
   #dash .cr.hd { cursor:default; color:var(--dim); font-size:12px; padding:8px 0 6px; } #dash .cr:last-child { border-bottom:0; } #dash .cr:not(.hd):hover { background:color-mix(in srgb, var(--text) 4%, transparent); }
   #dash .cr.warn { background:rgba(255,138,138,.09); margin:0 -12px; padding:9px 12px; width:calc(100% + 24px); } #dash .cr .nm { min-width:0; } #dash .cr .nm b { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #dash .cr .nm i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; } #dash .cr .nm small { display:block; color:var(--dim); font-size:12px; } #dash .cr.warn .nm small { color:var(--bad); }
   #dash .cr u { display:block; height:6px; border-radius:3px; background:var(--bar); overflow:hidden; margin-top:4px; } #dash .cr u i { display:block; height:100%; background:var(--ok); } #dash .cr .am { color:var(--run); }
   #dash .ct > small { display:block; color:var(--dim); font-size:12px; margin-top:6px; }
+  #dash .cg { display:flex; align-items:center; gap:7px; padding:14px 0 4px; border-bottom:1px solid var(--line); font-size:13px; } #dash .cg i { width:9px; height:9px; border-radius:50%; flex:none; } #dash .cg small { color:var(--dim); font-size:12px; margin-left:auto; } 
+  #dash .cr .nm { padding-left:16px; } #dash .cr .yd { color:var(--dim); }
+  
+  #dash .뼈 { width:96px; height:40px; padding:0; border-color:transparent; } #dash .뼈, #dash .뼈판 i { background:linear-gradient(90deg, var(--bar) 30%, color-mix(in srgb, var(--text) 20%, var(--bar)) 50%, var(--bar) 70%) 0 0 / 200% 100%; animation:flow 1.4s linear infinite; }
+  #dash .뼈판 { margin-top:0; } #dash .뼈줄 { display:grid; grid-template-columns:minmax(0,1.4fr) 92px 58px; gap:14px; align-items:center; padding:15px 0; border-bottom:1px solid var(--line); } #dash .뼈줄:last-child { border-bottom:0; }
+  #dash .뼈줄.피 { grid-template-columns:30px minmax(0,1fr); } #dash .뼈줄.피 i:first-child { width:30px !important; height:30px; border-radius:50%; } #dash .뼈판 i { display:block; height:12px; border-radius:6px; }
+  #dash .dwrap:not(.표) .뼈판.ct { margin-top:16px; }
   @media (max-width:900px) { #dash .dwrap.표 { grid-template-columns:minmax(0,1fr); } }
-  @media (max-width:640px) { #dash .cr { grid-template-columns:minmax(0,1fr) 70px 46px 34px; font-size:13px; } #dash .cr > :nth-child(5) { display:none; } }
+  @media (max-width:640px) { #dash .cr { grid-template-columns:minmax(0,1fr) 30px 70px 46px 34px; font-size:13px; } #dash .cr > :nth-child(6) { display:none; } #dash .cr .nm { padding-left:6px; } }
   @media (max-width:640px) { #dash .dg { grid-template-columns:1fr 1fr; } #dash .dk b { font-size:26px; } } 
   [hidden] { display:none !important; }
 </style>
@@ -1476,7 +1483,13 @@
   }
   function dashLoad() {
     const c = code;
-    if (!dD) $('dbox').innerHTML = '<p class="빈">불러오는 중…</p>';
+    if (!dD) {
+      const 막대 = w => `<i style="width:${w}%"></i>`;
+      $('dwrap').classList.toggle('표', !!who.admin);
+      $('dacc').innerHTML = '<span class="chip 뼈"></span>'.repeat(who.admin ? 7 : 2);
+      $('dbox').innerHTML = `<div class="ct 뼈판">${[62, 48, 70, 55, 40, 66].map(w => `<div class="뼈줄">${막대(w)}${막대(80)}${막대(70)}</div>`).join('')}</div>`;
+      $('dfeed').innerHTML = `<div class="sheet 뼈판">${[70, 52, 64].map(w => `<div class="뼈줄 피">${막대(100)}${막대(w)}</div>`).join('')}</div>`;
+    }
     google.script.run.withSuccessHandler(r => { if (c !== code) return; dD = r; 내색 = /^#[0-9A-F]{6}$/i.test(r.me.c) ? r.me.c : ''; 이름칩_(); dashDraw(); })
       .withFailureHandler(e => { if (c === code) $('dbox').innerHTML = `<p class="err">${esc(e.message.replace(/^Error:\s*/, ''))}</p>`; }).dash(code);
   }
@@ -1487,19 +1500,24 @@
     const accs = dD.accs;
     const 전체 = !!who.admin;
     if (!accs.some(a => a.acc === dAcc) && !(전체 && dAcc === '')) dAcc = 전체 ? '' : (accs.find(a => a.acc === 표시_()) || accs[0] || {}).acc || '';
+    const 몫 = (n, d) => d ? n / d : 1, 순 = (x, y) => 몫(x.today, x.daily) - 몫(y.today, y.daily) || 몫(x.tm.맡김, x.daily) - 몫(y.tm.맡김, y.daily);
+    const 맨뒤 = g => g.some(x => x.acc === '뉴페이지');
+    const 묶음 = Object.values(accs.reduce((o, x) => ((o[x.n] = o[x.n] || []).push(x), o), {})).map(g => g.sort(순)).sort((g, h) => 맨뒤(g) - 맨뒤(h) || 순(g[0], h[0]));
+    const 차례 = 묶음.flat();
     const 칩 = (k, 글) => `<span class="chip" role="button" aria-pressed="${k === dAcc}" data-a="${esc(k)}" onclick="dAcc = this.dataset.a; dashDraw()">${글}</span>`;
-    $('dacc').innerHTML = 전체 ? 칩('', '전체') + accs.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : accs.length > 1 ? accs.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : '';
+    $('dacc').innerHTML = 전체 ? 칩('', '전체') + 차례.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : accs.length > 1 ? 차례.map(a => 칩(a.acc, `${esc(a.acc)} ${a.today}/${a.daily}`)).join('') : '';
     const a = accs.find(x => x.acc === dAcc);
     $('dwrap').classList.toggle('표', 전체 && !a);
     if (전체 && !a) {
-      const 몫 = (n, d) => d ? n / d : 1, 다음 = (h => h < 8 ? '8시' : h < 13 ? '13시' : h < 21 ? '21시' : '내일 8시')(new Date().getHours());
+      const 다음 = (h => h < 8 ? '8시' : h < 13 ? '13시' : h < 21 ? '21시' : '내일 8시')(new Date().getHours());
       const 평 = x => x.posts.length ? 수_(Math.round(x.posts.reduce((s, p) => s + (+p.l || 0), 0) / x.posts.length)) : '–';
-      const 줄 = accs.slice().sort((x, y) => 몫(x.today, x.daily) - 몫(y.today, y.daily) || 몫(x.tm.맡김, x.daily) - 몫(y.tm.맡김, y.daily));
-      $('dbox').innerHTML = `<div class="ct"><div class="cr hd"><span>계정 · 담당</span><span>오늘</span><span>내일</span><span>준비</span><span>3일 ♥</span></div>${줄.map(x => {
+      const 색_ = c => /^#[0-9A-F]{6}$/i.test(c) ? c : '#6E6E76';
+      const 머리 = g => `<div class="cg"><i style="background:${색_(g[0].c)}"></i><b>${esc(g[0].n || '담당 없음')}</b><small>채널 ${g.length}개 · 오늘 ${g.reduce((s, x) => s + x.today, 0)} / ${g.reduce((s, x) => s + x.daily, 0)}</small></div>`;
+      $('dbox').innerHTML = `<div class="ct"><div class="cr hd"><span>계정 · 담당</span><span>어제</span><span>오늘</span><span>내일</span><span>준비</span><span>3일 ♥</span></div>${묶음.map(g => 머리(g) + g.map(x => {
         const 없음 = x.daily > 0 && !x.today;
         return `<button class="cr${없음 ? ' warn' : ''}" data-a="${esc(x.acc)}" onclick="dAcc = this.dataset.a; dashDraw(); scrollTo({ top: 0, behavior: 'smooth' })">
-          <span class="nm"><b><i style="background:${/^#[0-9A-F]{6}$/i.test(x.c) ? x.c : '#6E6E76'}"></i>${esc(x.acc)}${x.n ? ' · ' + esc(x.n) : ''}</b>${없음 ? `<small>오늘 0개 · 다음 확인 ${다음}</small>` : ''}</span>
-          <span>${x.today} / ${x.daily}<u><i style="width:${몫_(x.today, x.daily)}%"></i></u></span><span class="${x.tm.맡김 < x.daily ? 'am' : ''}">${x.tm.맡김} / ${x.daily}</span><span>${x.ready}</span><span>${평(x)}</span></button>`; }).join('')}</div>`;
+          <span class="nm"><b>${esc(x.acc)}</b>${없음 ? `<small>오늘 0개 · 다음 확인 ${다음}</small>` : ''}</span>
+          <span class="yd">${x.yday || 0}</span><span>${x.today} / ${x.daily}<u><i style="width:${몫_(x.today, x.daily)}%"></i></u></span><span class="${x.tm.맡김 < x.daily ? 'am' : ''}">${x.tm.맡김} / ${x.daily}</span><span>${x.ready}</span><span>${평(x)}</span></button>`; }).join('')).join('')}</div>`;
     } else if (!a) $('dbox').innerHTML = '<p class="빈">볼 계정이 아직 없어요.</p>';
     else {
       const 만듦 = a.tm.맡김 - a.tm.준비, 남 = Math.max(0, a.daily - a.tm.맡김);
@@ -1507,7 +1525,7 @@
       const 배 = p => p.x == null ? '' : `<em class="bd ${p.x >= 1.2 ? 'ok' : p.x < .8 ? 'bad' : ''}">${p.x >= .8 && p.x < 1.2 ? '평균' : p.x + '배'}</em>`;
       const 카드 = p => `<a class="dc" href="${/^https:\/\/www\.instagram\.com\//.test(p.link) ? esc(p.link) : '#'}" target="_blank" rel="noopener"><span class="th"${p.img ? ` style="background-image:url('${img(p.img)}')"` : ''}></span>${배(p)}<div><b>${esc(p.title || '제목 없음')}</b><small>♥ ${수_(p.l)} · 💬 ${수_(p.c)}${+p.v ? ' · ▶ ' + 수_(p.v) : ''}</small></div></a>`;
       $('dbox').innerHTML = `<div class="d2">
-        <div class="dk"><span>오늘</span><b>${a.today}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.today, a.daily)}%;background:var(--ok)"></i></u><em>${a.today >= a.daily ? '오늘 몫 다 올렸어요' : (a.daily - a.today) + '개 더'} · 올릴 준비 끝 ${a.ready}</em></div>
+        <div class="dk"><span>오늘</span><b>${a.today}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.today, a.daily)}%;background:var(--ok)"></i></u><em>${a.today >= a.daily ? '오늘 몫 다 올렸어요' : (a.daily - a.today) + '개 더'} · 어제 ${a.yday || 0} · 올릴 준비 끝 ${a.ready}</em></div>
         <div class="dk"><span>내일</span><b>${a.tm.맡김}<small> / ${a.daily}</small></b><u><i style="width:${몫_(a.tm.맡김, a.daily)}%;background:var(--run)"></i></u><em>준비 끝 ${a.tm.준비}${만듦 ? ' · 만드는 중 ' + 만듦 : ''} · 남은 ${남}</em></div></div>
         <div class="dh"><b>최근 3일 · ${ps.length}개</b><select onchange="d순 = this.value; dashDraw()"><option value="l"${d순 === 'l' ? ' selected' : ''}>좋아요순</option><option value="t"${d순 === 't' ? ' selected' : ''}>최근순</option></select></div>
         ${ps.length ? `<div class="dg">${ps.map(카드).join('')}</div>` : '<p class="빈">최근 3일 동안 확인된 게시물이 아직 없어요.</p>'}`;
@@ -2460,7 +2478,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793945919450';
+  const 빌드 = '1793948932330';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
