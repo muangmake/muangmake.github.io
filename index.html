@@ -1501,6 +1501,7 @@
   const 몫_ = (a, b) => b ? Math.min(100, Math.round(a / b * 100)) : 0;
   function dashDraw() {
     const accs = dD.accs;
+    accs.forEach(x => { ['today', 'yday', 'daily', 'ready'].forEach(k => x[k] = +x[k] || 0); x.tm = x.tm || {}; x.tm.맡김 = +x.tm.맡김 || 0; ['made', 'pil', 'gone'].forEach(k => { x[k] = x[k] || {}; x[k].t = +x[k].t || 0; x[k].y = +x[k].y || 0; }); });
     const 전체 = !!who.admin;
     if (!accs.some(a => a.acc === dAcc) && !(전체 && dAcc === '')) dAcc = 전체 ? '' : (accs.find(a => a.acc === 표시_()) || accs[0] || {}).acc || '';
     const 몫 = (n, d) => d ? n / d : 1, 순 = (x, y) => 몫(x.today, x.daily) - 몫(y.today, y.daily) || 몫(x.tm.맡김, x.daily) - 몫(y.tm.맡김, y.daily);
@@ -2484,7 +2485,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793950370117';
+  const 빌드 = '1793958707508';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
