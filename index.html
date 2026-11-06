@@ -1876,17 +1876,23 @@
     const 보임 = 확손댐(k) || 확.상.열림[k]; 장칸('add').hidden = !보임; 장칸('adb').hidden = !!보임;
     확저장(확.row);
   }
-  let 확줄 = Promise.resolve(), 확남음 = 0;
+  let 확줄 = Promise.resolve(), 확남음 = 0, 확모음 = null;
   function 확한장(k) { const 칸 = $('dj').querySelector(`[data-c="${k}"]`); if (칸) 칸.outerHTML = 확카드(확장(k)); $('dj').querySelector('[data-re=lockb]').outerHTML = 확막대(); const z = $('dj').querySelector('[data-re=zs]'); if (z) z.outerHTML = 확.띠(); $('dj').querySelector('[data-re=snd]').innerHTML = 확끝글(확합()); 누끼붙이기(); }
   function 확찍기(k, on) {
     const row = 확.row, 잠 = 확.잠금, 전 = 잠.장[k];
     if (on) 잠.장[k] = { f: 확.파일이름[k], n: who.name, t: Date.now() }; else delete 잠.장[k];
     확한장(k); $('err3').textContent = ''; 확남음++;
-    확줄 = 확줄.then(() => new Promise(끝 => google.script.run.withSuccessHandler(r => { 끝(); 확남음--; 확받음(row, r); }).withFailureHandler(e => {
-      끝(); 확남음--;
-      if (전) 잠.장[k] = 전; else delete 잠.장[k];
-      if (openRow === row && 확.row === row) { 확한장(k); $('err3').textContent = e.message; }
-    }).담당자확인(code, row, k, on)));
+    if (확모음 && 확모음.row === row) { 확모음.바꿈.push([k, on, 전]); return; }
+    const 묶음 = 확모음 = { row, 바꿈: [[k, on, 전]] };
+    확줄 = 확줄.then(() => new Promise(끝 => {
+      if (확모음 === 묶음) 확모음 = null;
+      const n = 묶음.바꿈.length;
+      google.script.run.withSuccessHandler(r => { 끝(); 확남음 -= n; 확받음(row, r); }).withFailureHandler(e => {
+        끝(); 확남음 -= n;
+        묶음.바꿈.slice().reverse().forEach(([k, , 전]) => { if (전) 잠.장[k] = 전; else delete 잠.장[k]; });
+        if (openRow === row && 확.row === row) { 묶음.바꿈.forEach(([k]) => 확한장(k)); $('err3').textContent = e.message; }
+      }).담당자확인(code, row, 묶음.바꿈.map(([k, on]) => [k, on]));
+    }));
   }
   function 확받음(row, r) {
     const j = mine.find(x => x.row === row);
@@ -1895,7 +1901,7 @@
     if (openRow !== row) return;
     if (r.열림) card(mine.indexOf(j), 'refresh'); else if (확.row === row) 확.잠금 = r;
   }
-  function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); if (b) { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); } $('err3').textContent = 확.바쁨 ? '수정 중에는 받을 수 없어요. 끝나면 새 결과를 받아 주세요.' : `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
+  function 확잠김() { const 끝 = 확.장.filter(a => 확찍힘(a.k)).length, b = $('dj').querySelector('[data-re=lockb]'); if (b) { b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); } $('err3').textContent = 확.바쁨 ? '수정 중에는 받을 수 없어요. 끝나면 새 결과를 받아 주세요.' : 확남음 ? '확인을 저장하는 중이에요 — 몇 초 뒤 열려요.' : `담당자 확인이 끝나면 열려요 · ${끝} / ${확.장.length}장`; }
   function 받기열기(b, row, 글) { call('받기', [code, row], b, 'err3', u => { const a = document.createElement('a'); a.href = 주소(u); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 글; a.title = '링크는 20분 동안 열려요 — 지나면 받기를 다시 눌러 주세요'; a.className = b.className; b.replaceWith(a); a.click(); }); }
   function PSD받기(b) { 받기열기(b, 확.row, 'PSD 열기 ↗'); }
   function 확강제() {
@@ -2485,7 +2491,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1793958707508';
+  const 빌드 = '1793958906908';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
