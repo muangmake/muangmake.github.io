@@ -2475,7 +2475,8 @@
   function refGrid() {
     const f = $('rch').value;
     const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !j.ch : j.ch === f)));
-    const 밝 = l.filter(j => !어둡_(j)).sort((a, b) => !!b.fill - !!a.fill), 어 = l.filter(어둡_)
+    const 밝 = l.filter(j => !어둡_(j)).sort((a, b) => !!b.fill - !!a.fill), 어 = l.filter(어둡_),
+      숨 = $('rnew').checked ? refs.length - refs.filter(안만든_).length : 0;
     어.forEach(j => delete sel[j.link]);
     $('rcnt').textContent = `후보 ${l.length}개`;
     $('rhide').textContent = 숨 ? `숨김 ${숨}` : '';
@@ -2549,7 +2550,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1794045369116';
+  const 빌드 = '1794047541031';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
