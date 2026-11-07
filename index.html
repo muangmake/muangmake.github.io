@@ -534,6 +534,20 @@
   #ref .in select { width:100%; margin-top:8px; background:var(--bar); border:1.5px solid var(--line); border-radius:8px; color:var(--text); padding:6px; font:inherit; font-size:12.5px; }
   #ref .in select:invalid { color:var(--dim); border-style:dashed; }
   #ref .scan { color:var(--run); font-weight:700; }
+  #ref .fill { display:inline-block; margin-top:6px; font-size:11.5px; font-weight:800; color:var(--run); border:1.5px dashed var(--run); border-radius:7px; padding:2px 7px; }
+  
+  #gap .gl { display:flex; gap:14px; flex-wrap:wrap; font-size:12.5px; color:var(--dim); margin:0 0 12px; align-items:center; } #gap .gl i { display:inline-block; width:13px; height:13px; border-radius:4px; vertical-align:-2px; margin-right:5px; }
+  .gt { border-collapse:separate; border-spacing:4px; font-size:12.5px; min-width:720px; width:100%; }
+  .gt th { color:var(--dim); font-weight:600; padding:4px; text-align:center; white-space:nowrap; } .gt th small { display:block; font-size:11px; font-weight:400; opacity:.75; }
+  .gt th.r { text-align:left; color:var(--text); font-weight:600; cursor:pointer; position:sticky; left:0; background:var(--win); } .gt tr.sub th.r { font-weight:400; color:var(--dim); padding-left:16px; cursor:default; }
+  .gt td { height:34px; border-radius:7px; position:relative; overflow:hidden; text-align:center; min-width:76px; background:var(--field); font-variant-numeric:tabular-nums; }
+  .gt td i { position:absolute; top:0; bottom:0; left:0; } .gt td i.k { background:var(--ok); } .gt td i.y { background:rgba(94,230,168,.28); }
+  .gt td b { position:relative; font-weight:800; text-shadow:0 1px 3px #000, 0 0 2px #000; } .gt td small { position:relative; color:#C9C9CF; margin-left:4px; text-shadow:0 1px 2px #000; }
+  .gt td.z { background:none; color:#3A3A40; } .gt td.lk { border:1.5px dashed rgba(255,138,138,.75); color:var(--bad); cursor:pointer; background:none; font-size:12px; } .gt td.lk:hover { background:rgba(255,138,138,.08); }
+  .gt td.in { border:1.5px solid var(--run); color:var(--run); background:rgba(255,196,107,.08); }
+  .gb { margin-top:14px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:12px 14px; border:1.5px dashed var(--line); border-radius:12px; font-size:13px; color:var(--dim); }
+  .gb .bt { display:inline-flex; gap:6px; align-items:center; padding:5px 6px 5px 11px; border-radius:99px; background:var(--bar); border:1px solid var(--run); color:var(--run); font-size:12.5px; font-weight:700; }
+  .gb .bt a { cursor:pointer; color:var(--navy2); font-weight:700; } .gb .bt button { all:unset; cursor:pointer; color:var(--dim); padding:0 6px; }
   
   #acc h3 { font-size:13px; color:var(--dim); font-weight:700; margin:0 0 12px; }
   #acc h3.sec { font-size:16px; color:var(--text); margin:28px 0 14px; }
@@ -725,7 +739,7 @@
     <div id="rpick"><label class="chlab">만들 채널</label><div class="chips" id="rchs"></div></div>
     <div><label>사용할 티켓</label><div class="chips" id="rdays"></div></div>
     <div id="rbox" hidden><button id="rscan" onclick="refScan(this)">⟳ 레퍼런스 찾기</button><span class="ri"><span id="rstate" class="scan"></span><span id="rlast"></span></span>
-      <span style="flex:1"></span><button id="racc" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button></div>
+      <span style="flex:1"></span><button id="rgap" hidden onclick="view('gap')">유형 현황 ›</button><button id="racc" onclick="view('acc')">레퍼런스 채널 · 분석 ›</button></div>
     <div class="cpbar rhd"><b id="rcnt"></b><small id="rsel"></small><span style="flex:1"></span><select id="rch" onchange="refGrid()"></select><label class="note" style="margin:0"><input type="checkbox" id="rnew" checked onchange="refGrid()" style="width:auto"> <span id="rnewt">안 만든 것만</span></label><small id="rhide"></small></div>
     <div class="cards" id="rcards"></div>
     <p class="err" id="err5"></p>
@@ -745,6 +759,15 @@
     <div class="cpbar"><input id="au" placeholder="@계정 또는 프로필 주소" style="flex:1;min-width:170px;text-align:left"><select id="auch"></select><input id="amemo" placeholder="메모(선택)" style="width:170px;text-align:left"><button onclick="accAdd(this)">＋ 더하기</button></div>
     <p class="err" id="err6"></p>
     <div style="overflow-x:auto"><table class="cpt act"><thead><tr><th>계정</th><th>우리 채널</th><th>수집</th><th>채택률</th><th>만든 것</th><th>마지막 제작</th><th></th></tr></thead><tbody id="ab"></tbody></table></div>
+  </div>
+  <div class="body" id="gap" hidden>
+    <div class="path">POWERPAGE.zip › 전체 › 레퍼런스 › 유형 현황</div>
+    <h1>유형 현황</h1><span class="cur"></span>
+    <p class="sub">제작기 완료 건을 채널 × 큰 갈래로 셌어요(숫자 = 그 채널 안 비중 · 확인/제작). 빨간 점선 = 그 채널 유형 사전에 있는 갈래인데 5% 미만이에요. 빨간 칸을 누르면 <b>바구니</b>에 담겨요 — 담긴 채널 · 갈래는 레퍼런스 탭 후보 중 캡션이 그 갈래로 보이는 것에 '부족 채우기' 꼬리표가 붙어 맨 앞에 떠요(그 채널 담당자도 봐요). 그 갈래 건이 하나 완료되면 바구니에서 저절로 빠져요. 갈래 이름을 누르면 안쪽 유형이 펼쳐져요.</p>
+    <div class="gl"><span><i style="background:var(--ok)"></i>담당자 확인</span><span><i style="background:rgba(94,230,168,.28)"></i>제작 · 확인 전</span><span><i style="border:1.5px dashed var(--bad)"></i>사전에 있는데 부족</span><span style="margin-left:auto" id="gmeta"></span></div>
+    <div style="overflow-x:auto"><table class="gt" id="gtab"></table></div>
+    <div class="gb" id="gbas"></div>
+    <p class="err" id="err9"></p>
   </div>
   <div class="body" id="cost" hidden>
     <div class="path">POWERPAGE.zip › 전체 › 제작 예산</div>
@@ -909,6 +932,7 @@
     $('rnewt').textContent = r.admin ? '아무도 안 만든 것만' : '내가 PICK한 것 빼기';
     $('rnew').checked = !r.admin;
     $('rbox').hidden = !r.admin;
+    $('rgap').hidden = !r.admin || !!r.mid;
     $('lf').hidden = !r.admin;
     $('tkn').textContent = r.admin ? '관리자는 제작 티켓을 쓰지 않아요 · 완성 파일은 그 채널 담당자 폴더에 올라가요.' : '한 건에 제작 티켓 1장 · 오늘 제작 티켓은 오늘 23:59까지 · 00:00에 내일 제작 티켓이 오늘 제작 티켓으로 넘어가요.';
     if (r.admin) 거르기칸_(r);
@@ -962,7 +986,7 @@
     store(''); code = '';
     await 터짐_();
     who = {}; cur = ''; 탭펼침 = false; clearTimeout(찾기틀); 전부 = null; mine = []; 보일 = 30; 목록나감 = null; 현황차례++; 현황수 = null; 업탭고름('예정', true); $('more').hidden = true; $('cards').innerHTML = '';
-    cD = accD = null; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho', 'dacc', 'dbox', 'dfeed'].forEach(k => $(k).innerHTML = ''); dD = null; 내색 = ''; dAcc = '';
+    cD = accD = gD = null; $('gtab').innerHTML = $('gbas').innerHTML = ''; refs = []; sel = {}; refJ = ''; ['cpb', 'crows', 'ckp', 'cchart', 'cstage', 'ab', 'rcards', 'fch', 'fwho', 'dacc', 'dbox', 'dfeed'].forEach(k => $(k).innerHTML = ''); dD = null; 내색 = ''; dAcc = '';
     $('make').hidden = $('me').hidden = true; $('login').hidden = false; $('code').value = $('pw').value = '';
     $('login').getAnimations().forEach(x => x.cancel());
     google.script.history.replace({});
@@ -1489,8 +1513,8 @@
     if (!탭펼침 && /^(coup|cost)$/.test(cur)) view(home());
   }
   const home = () => who.admin ? 'list' : 'form';
-  const 제목 = { dash: '내 대시보드', form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널' };
-  const 부모 = { done: 'form', detail: 'list', acc: 'ref' };
+  const 제목 = { dash: '내 대시보드', form: '새 제작', done: '제작 접수', list: '제작 현황', detail: '제작 결과', coup: '계정 · 티켓 관리', cost: '제작 예산', ref: '레퍼런스', acc: '레퍼런스 채널', gap: '유형 현황' };
+  const 부모 = { done: 'form', detail: 'list', acc: 'ref', gap: 'ref' };
   let dD = null, dAcc = '', d순 = 'l', 내색 = '';
   function 이름칩_() {
     $('ch').style.setProperty('--me', 내색 || 'var(--navy2)');
@@ -1575,12 +1599,12 @@
     if (cur === 'list') listY = scrollY;
     타자끝 = 0;
     cur = v;
-    ['form', 'done', 'list', 'detail', 'coup', 'cost', 'ref', 'acc', 'dash'].forEach(k => $(k).hidden = k !== v);
+    ['form', 'done', 'list', 'detail', 'coup', 'cost', 'ref', 'acc', 'gap', 'dash'].forEach(k => $(k).hidden = k !== v);
     $('t-form').classList.toggle('on', v === 'form' || v === 'done');
     $('t-list').classList.toggle('on', v === 'list' || v === 'detail' && 부모.detail === 'list');
     $('t-cost').classList.toggle('on', v === 'cost' || v === 'detail' && 부모.detail === 'cost');
     $('t-cp').classList.toggle('on', v === 'coup');
-    $('t-ref').classList.toggle('on', v === 'ref' || v === 'acc');
+    $('t-ref').classList.toggle('on', v === 'ref' || v === 'acc' || v === 'gap');
     $('ttl').textContent = 부모[v] ? 제목[v] : who.admin && v !== 'form' ? '전체 현황' : 표시_();
     $('back').hidden = !부모[v]; $('back').textContent = 제목[부모[v]] || ''; $('dots').hidden = !!부모[v];
     const h = $(v).querySelector('h1');
@@ -1591,13 +1615,14 @@
     if (v === 'cost') 관리자코드(costLoad);
     if (v === 'ref') refLoad();
     if (v === 'acc') 관리자코드(accLoad);
+    if (v === 'gap') 관리자코드(gapLoad);
     if (v === 'dash') dashLoad();
   }
   google.script.history.setChangeHandler(e => {
     const s = e.state || {};
     if (!code) return;
     const i = s.v === 'detail' ? mine.findIndex(j => j.row === s.row) : -1;
-    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : (!who.admin && /^(coup|cost|acc)$/.test(s.v) || (who.mid || !탭펼침) && /^(coup|cost)$/.test(s.v)) ? home() : s.v || home());
+    i >= 0 ? card(i, 'pop') : show(s.v === 'detail' ? 'list' : (!who.admin && /^(coup|cost|acc|gap)$/.test(s.v) || (who.mid || !탭펼침) && /^(coup|cost)$/.test(s.v) || who.mid && s.v === 'gap') ? home() : s.v || home());
   });
   let timer = 0, openRow = 0;
   const live = j => j.step && /^(대기|제작중|수정중)/.test(j.state);
@@ -2450,14 +2475,14 @@
   function refGrid() {
     const f = $('rch').value;
     const l = refs.filter(j => (!$('rnew').checked || 안만든_(j)) && (!f || (f === '-' ? !j.ch : j.ch === f)));
-    const 밝 = l.filter(j => !어둡_(j)), 어 = l.filter(어둡_), 숨 = $('rnew').checked ? refs.length - refs.filter(안만든_).length : 0;
+    const 밝 = l.filter(j => !어둡_(j)).sort((a, b) => !!b.fill - !!a.fill), 어 = l.filter(어둡_)
     어.forEach(j => delete sel[j.link]);
     $('rcnt').textContent = `후보 ${l.length}개`;
     $('rhide').textContent = 숨 ? `숨김 ${숨}` : '';
     const 카드 = j => {
       const i = refs.indexOf(j), on = j.link in sel, dk = 어둡_(j), t = 픽띠_(j), 동료 = j.by.find(b => 산_(b.s) && !나_(b) && 후보채널_().includes(b.ch));
       return `<div class="card${on ? ' on' : ''}${dk ? ' dk' : ''}${t.p ? ' pk' : ''}"${t.p ? ` style="--p:${esc(t.p)}"` : ''}>${t.hd}<div class="cv"${dk ? '' : ` onclick="refPick(${i})"`}>${j.img ? `<img src="${esc(j.img)}" referrerpolicy="no-referrer" loading="lazy" onerror="this.remove()">` : '미리보기 없음'}${dk ? `<span class="dkt">같은 채널 · ${esc((동료 || j).ch)}<small> — ${동료 ? esc(동료.n) + '님이 맡음' : '시트에서 제작'}</small></span>` : `<span class="ck">${on ? '✓' : ''}</span>`}${j.kind && !dk ? `<span class="kd">${esc(j.kind)}</span>` : ''}</div>
-        <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>
+        <div class="in"><b><a href="${esc(주소(j.link))}" target="_blank" rel="noopener">${esc(j.acc || '직접 넣은 링크')}</a><small>${esc(j.time)}</small></b><div class="cap">${esc(j.cap)}</div>${j.fill ? `<span class="fill">🧺 부족 채우기 · ${esc(j.fill)}</span>` : ''}
         ${j.likes !== '' ? `<div class="num">♥ ${esc(j.likes)} · 💬 ${esc(j.comments)}</div>` : ''}${픽들_(j).map(b => `<div class="rs${산_(b.s) ? '' : ' bad'}" style="--p:${esc(b.p)}">${esc(픽_(b))} PICK · ${esc(b.c)} <span class="${b.s === '완료' ? 'ok' : ''}">${esc(b.s)}</span>${b.t ? `<small>${esc(b.t)}</small>` : ''}</div>`).join('')}</div></div>`;
     };
     $('rcards').innerHTML = !l.length ? `<p class="note">${who.admin ? '후보가 없어요 — 위 ⟳ 레퍼런스 찾기를 눌러 보세요.' : '최근 24시간 후보가 없어요 — 새 후보는 매일 8시 · 13시에 들어와요.'}</p>`
@@ -2506,6 +2531,7 @@
   const 게이지칸 = (n, 한) => `<span class="gg ${n >= 한 ? 'bad' : n >= 한 * .8 ? 'warn' : ''}"><i style="width:${Math.min(n / 한, 1) * 100}%"></i></span>`;
   const 더날 = (d, k) => new Date(Date.parse(d + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10);
   let accD = null, accOpen = '';
+  let gD = null, gOpen = '';
   const 채널목록_ = () => who.channels.filter(c => !c.demo).map(c => c.name);
   const 채널옵션_ = v => [['', '찾기가 채움'], ['자동', '자동(글마다)']].concat(채널목록_().map(c => [c, c]), v && !['자동', ...채널목록_()].includes(v) ? [[v, v]] : [])
     .map(([k, t]) => `<option value="${esc(k)}"${k === v ? ' selected' : ''}>${esc(t)}</option>`).join('');
@@ -2523,7 +2549,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1794041648305';
+  const 빌드 = '1794042699659';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
