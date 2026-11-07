@@ -2156,13 +2156,11 @@
     const g = 시안상태[j.row] = 시안상태[j.row] || { i: 0, off: new Set(), memo: {} }, S = j.sian, 안 = S.시안[g.i] || S.시안[0];
     const 이름 = k => (안.묶 && 안.묶[k] || []).map(n => S.구성[n]).filter(Boolean).map(x => x.이름).join(' · ');
     const 남 = 안.장.length - [...g.off].filter(k => k < 안.장.length).length, 추가 = S.구성.filter(x => x.추가);
-    const 관 = typeof who !== 'undefined' && who && who.admin;
-    return `<div class="sianw" id="sianw"><h2>${관 ? '시안 1~3 선택하기' : '시안 3개 준비됨'}</h2><p class="why">${관 ? esc(S.이유 || '') : '관리자가 시안을 고르면 PSD 제작을 시작해요.'}</p>`
-      + `
+    return `<div class="sianw" id="sianw"><h2>시안 1~3 선택하기</h2>${S.이유 ? `<p class="why">${esc(S.이유)}</p>` : ''}
       <div class="stabs">${S.시안.map((x, n) => `<button class="${n === g.i ? 'on' : ''}" onclick="시안탭(${j.row}, ${n})"><img src="${img(x.장[0])}" alt=""><span style="min-width:0"><b>시안 ${n + 1}</b><small>${esc(x.이름)} · ${x.장.length}장</small></span></button>`).join('')}</div>
       <div class="sgrid">${안.장.map((id, k) => `<div class="scell${g.off.has(k) ? ' off' : ''}"><img src="${img(id)}" alt="${esc(이름(k))}" loading="lazy">
-        ${관 ? `<div class="ft"><input value="${esc(g.memo[k] || '')}" placeholder="${k + 1}장 메모" maxlength="200" oninput="시안상태[${j.row}].memo[${k}] = this.value"><button onclick="시안빼기(${j.row}, ${k})">${g.off.has(k) ? '되살리기' : '빼기'}</button></div>` : ''}</div>`).join('')}</div>
-      ${관 ? `<div class="sbar"><span class="t">시안 ${g.i + 1} · ${esc(안.이름)}<small>${남}장${추가.length ? ' · 더한 제품 ' + esc(추가.map(x => x.이름).join(' · ')) : ''}</small></span><button onclick="시안의뢰(this, ${j.row})">PSD 제작 의뢰</button></div>` : ''}</div>`;
+        <div class="ft"><input value="${esc(g.memo[k] || '')}" placeholder="${k + 1}장 메모" maxlength="200" oninput="시안상태[${j.row}].memo[${k}] = this.value"><button onclick="시안빼기(${j.row}, ${k})">${g.off.has(k) ? '되살리기' : '빼기'}</button></div></div>`).join('')}</div>
+      <div class="sbar"><span class="t">시안 ${g.i + 1} · ${esc(안.이름)}<small>${남}장${추가.length ? ' · 더한 제품 ' + esc(추가.map(x => x.이름).join(' · ')) : ''}</small></span><button onclick="시안의뢰(this, ${j.row})">PSD 제작 의뢰</button></div></div>`;
   }
   function 시안다시(row) { const j = mine.find(x => x.row === row), w = $('sianw'); if (j && w) w.outerHTML = 시안판(j); }
   function 시안탭(row, n) { const g = 시안상태[row]; if (g.i !== n) { g.i = n; g.off = new Set(); g.memo = {}; } 시안다시(row); }
@@ -2525,7 +2523,7 @@
   addItem();
   try { localStorage.removeItem('pp_name'); } catch (e) {}
   if (saved()) { $('code').disabled = true; enter(true); }
-  const 빌드 = '1794040416265';
+  const 빌드 = '1794041648305';
   if (공개판) {
     let 새판 = false;
     const 씀 = () => document.querySelector('[data-sending]') || [...document.querySelectorAll('input, textarea')]
